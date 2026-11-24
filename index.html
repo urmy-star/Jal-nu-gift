@@ -59,7 +59,8 @@
       min-height: 100vh;
       min-height: 100dvh;
       overflow: hidden;
-      background-color: #050608;
+      background-color: #1b6ebf;
+      transition: background-color 0.8s ease;
       color: var(--text-primary);
       font-family: var(--font-main);
       position: fixed;
@@ -1524,21 +1525,23 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
+    renderer.setClearColor('#1b6ebf', 1.0);
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2('#6dafe8', 0.007);
+    scene.background = new THREE.Color('#1b6ebf');
+    scene.fog = new THREE.FogExp2('#6dafe8', 0.003);
 
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 2.3, 8.8);
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1200);
+    camera.position.set(0, 2.3, 9.8);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.minDistance = 4.2;
-    controls.maxDistance = 18.0;
+    controls.maxDistance = 22.0;
     controls.maxPolarAngle = Math.PI / 2 - 0.04; // Cannot dip below ground
     controls.minPolarAngle = 0.3;
-    controls.target.set(0, 1.25, 0.45);
+    controls.target.set(0, 1.25, 1.4);
     let isAutoRotateEnabled = true;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.38;
@@ -1565,7 +1568,7 @@
     const ambientFillLight = new THREE.AmbientLight('#dbeaf8', 1.15);
     scene.add(ambientFillLight);
 
-    const dirLight = new THREE.DirectionalLight('#fff5df', 1.25);
+    const dirLight = new THREE.DirectionalLight('#fff5df', 1.35);
     dirLight.position.set(14, 18, 12);
     dirLight.castShadow = true;
     dirLight.shadow.mapSize.width = 1024;
@@ -1583,14 +1586,14 @@
     // Placed directly behind the characters pointing forward to illuminate their backs, hair, and shoulders
     // with the exact dynamic sky horizon colors across morning, afternoon, sunset, and night
     const backAtmosphereLight = new THREE.DirectionalLight('#ffe4cb', 1.85);
-    backAtmosphereLight.position.set(0, 2.8, -4.8);
-    backAtmosphereLight.target.position.set(0, 1.0, 0.45);
+    backAtmosphereLight.position.set(0, 2.8, -3.8);
+    backAtmosphereLight.target.position.set(0, 1.0, 1.4);
     scene.add(backAtmosphereLight);
     scene.add(backAtmosphereLight.target);
 
     // Seasonal Upward Bounce Light from Picnic Blanket / Grass
     const seasonalBounceLight = new THREE.PointLight('#ffe8f0', 1.25, 6.0, 1.2);
-    seasonalBounceLight.position.set(0, 0.25, 0.35);
+    seasonalBounceLight.position.set(0, 0.25, 1.4);
     scene.add(seasonalBounceLight);
 
     // Dynamic 4-Step Toon Gradient Map for Cel-Shaded Anime Aesthetics
@@ -1619,18 +1622,19 @@
 
     // Warm Focus Lighting on Character Faces and Hair (keeps expressions charming even at night)
     const faceFocusLight = new THREE.PointLight('#ffe8d0', 1.85, 7.0, 1.3);
-    faceFocusLight.position.set(0, 1.65, 1.65);
+    faceFocusLight.position.set(0, 1.65, 2.5);
     scene.add(faceFocusLight);
 
     // Warm Romantic Lantern Point Light beside the couple
     const lanternLight = new THREE.PointLight('#ffa737', 2.2, 7.5, 1.8);
-    lanternLight.position.set(0.9, 0.95, 0.65);
+    lanternLight.position.set(0.88, 1.1, 1.95);
     lanternLight.castShadow = true;
     lanternLight.shadow.bias = -0.002;
     scene.add(lanternLight);
 
     /**
      * Dynamic Anime Sky Dome (Canvas Texture Gradient - Dreamy & Vibrant)
+     * Renders seamlessly with no culling or clipping artifacts
      */
     const skyCanvas = document.createElement('canvas');
     skyCanvas.width = 32;
@@ -1651,12 +1655,12 @@
     }
     renderSkyTexture('#1b6ebf', '#4ea2e4', '#fed2a0'); // Initial cute morning anime gradient
 
-    const skyGeo = new THREE.SphereGeometry(240, 32, 24);
-    skyGeo.scale(-1, 1, 1);
+    const skyGeo = new THREE.SphereGeometry(450, 32, 24);
     const skyMat = new THREE.MeshBasicMaterial({
       map: skyTexture,
       side: THREE.BackSide,
-      depthWrite: false
+      depthWrite: false,
+      fog: false
     });
     const skyMesh = new THREE.Mesh(skyGeo, skyMat);
     scene.add(skyMesh);
@@ -2030,9 +2034,10 @@
 
     /**
      * The Couple Beneath the Tree (High-Fidelity Cute Anime Characters)
+     * Positioned comfortably forward from the tree trunk onto the lush picnic blanket
      */
     const coupleGroup = new THREE.Group();
-    coupleGroup.position.set(0, 0.84, 0.45);
+    coupleGroup.position.set(0, 0.84, 1.4);
     scene.add(coupleGroup);
 
     // ====================================================================
@@ -2399,72 +2404,86 @@
       return tex;
     }
 
-    // Material Declarations using Cel-Shaded MeshToonMaterial
+    // High-Craft Anime Materials with Soft PBR Shading (Warm, Radiant & Cel-Inspired)
     const girlFaceTex = createGirlFaceTexture();
-    const girlSkinMat = new THREE.MeshToonMaterial({
+    const girlSkinMat = new THREE.MeshStandardMaterial({
       map: girlFaceTex,
       color: '#ffffff',
-      gradientMap: toonGradient
+      roughness: 0.55,
+      metalness: 0.02
     });
-    const girlPlainSkinMat = new THREE.MeshToonMaterial({
+    const girlPlainSkinMat = new THREE.MeshStandardMaterial({
       color: '#ffece2',
-      gradientMap: toonGradient
+      roughness: 0.55,
+      metalness: 0.02
     });
 
     const boyFaceTex = createBoyFaceTexture();
-    const boySkinMat = new THREE.MeshToonMaterial({
+    const boySkinMat = new THREE.MeshStandardMaterial({
       map: boyFaceTex,
       color: '#ffffff',
-      gradientMap: toonGradient
+      roughness: 0.55,
+      metalness: 0.02
     });
-    const boyPlainSkinMat = new THREE.MeshToonMaterial({
-      color: '#feddc8',
-      gradientMap: toonGradient
-    });
-
-    // Hair Materials
-    const girlHairMat = new THREE.MeshToonMaterial({
-      color: '#3e2417',
-      gradientMap: toonGradient
-    });
-    const boyHairMat = new THREE.MeshToonMaterial({
-      color: '#241e1b',
-      gradientMap: toonGradient
+    const boyPlainSkinMat = new THREE.MeshStandardMaterial({
+      color: '#fedec9',
+      roughness: 0.55,
+      metalness: 0.02
     });
 
-    // Clothing Materials
-    const girlDressMat = new THREE.MeshToonMaterial({
-      color: '#fca5b8',
-      gradientMap: toonGradient
+    // Hair Materials (Rich natural tones with warm highlights - never flat black)
+    const girlHairMat = new THREE.MeshStandardMaterial({
+      color: '#462b1e', // Warm milk chocolate hair with chestnut undertones
+      roughness: 0.72,
+      metalness: 0.04
     });
-    const girlRibbonMat = new THREE.MeshToonMaterial({
-      color: '#ea5c7b',
-      gradientMap: toonGradient
-    });
-    const girlLaceMat = new THREE.MeshToonMaterial({
-      color: '#ffffff',
-      gradientMap: toonGradient
-    });
-    const girlShoeMat = new THREE.MeshToonMaterial({
-      color: '#fff1f4',
-      gradientMap: toonGradient
+    const boyHairMat = new THREE.MeshStandardMaterial({
+      color: '#38261c', // Warm dark espresso brown hair
+      roughness: 0.72,
+      metalness: 0.04
     });
 
-    const boyShirtMat = new THREE.MeshToonMaterial({
-      color: '#ffffff',
-      gradientMap: toonGradient
+    // Clothing Materials (Pastel sweet dress & handsome stylish knitwear)
+    const girlDressMat = new THREE.MeshStandardMaterial({
+      color: '#ff9eb5', // Sweet sakura blossom pink
+      roughness: 0.75,
+      metalness: 0.02
     });
-    const boyCardiganMat = new THREE.MeshToonMaterial({
-      color: '#26364a',
-      gradientMap: toonGradient
+    const girlRibbonMat = new THREE.MeshStandardMaterial({
+      color: '#f25c84', // Vibrant cherry blossom ribbon
+      roughness: 0.6,
+      metalness: 0.02
     });
-    const boyPantsMat = new THREE.MeshToonMaterial({
-      color: '#1e2229',
-      gradientMap: toonGradient
+    const girlLaceMat = new THREE.MeshStandardMaterial({
+      color: '#ffffff', // Scalloped white lace trim
+      roughness: 0.65,
+      metalness: 0.0
     });
-    const boyShoeMat = new THREE.MeshToonMaterial({
-      color: '#3c281e',
-      gradientMap: toonGradient
+    const girlShoeMat = new THREE.MeshStandardMaterial({
+      color: '#fff1f4', // Dainty pastel flats
+      roughness: 0.5,
+      metalness: 0.05
+    });
+
+    const boyShirtMat = new THREE.MeshStandardMaterial({
+      color: '#ffffff', // Crisp clean white shirt
+      roughness: 0.65,
+      metalness: 0.0
+    });
+    const boyCardiganMat = new THREE.MeshStandardMaterial({
+      color: '#c99b6d', // Elegant cozy honey-camel knit cardigan (handsome & bright, NOT black!)
+      roughness: 0.8,
+      metalness: 0.02
+    });
+    const boyPantsMat = new THREE.MeshStandardMaterial({
+      color: '#6b7280', // Tailored slate-khaki trousers (NOT black!)
+      roughness: 0.8,
+      metalness: 0.02
+    });
+    const boyShoeMat = new THREE.MeshStandardMaterial({
+      color: '#8b5a3c', // Warm saddle cognac leather shoes
+      roughness: 0.45,
+      metalness: 0.05
     });
 
     // ==========================================
@@ -2581,11 +2600,18 @@
     boyHeadMesh.castShadow = true;
     boyHeadPivot.add(boyHeadMesh);
 
-    // Boy Layered Anime Hair (Espresso sculpted haircut with swept locks)
-    const boyHairCapGeo = new THREE.SphereGeometry(0.184, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.72);
+    // Boy Crown & Back Hair Shell (covers crown and back skull only, leaving front face completely open and bright)
+    const boyHairCapGeo = new THREE.SphereGeometry(0.178, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.48);
     const boyHairCap = new THREE.Mesh(boyHairCapGeo, boyHairMat);
-    boyHairCap.position.y = 0.02;
+    boyHairCap.position.set(0, 0.03, -0.04);
     boyHeadPivot.add(boyHairCap);
+
+    // Boy Back Hair Mass (covering back of the head seamlessly)
+    const boyBackHairGeo = new THREE.SphereGeometry(0.178, 20, 16, Math.PI * 0.48, Math.PI * 1.04, 0, Math.PI * 0.72);
+    const boyBackHair = new THREE.Mesh(boyBackHairGeo, boyHairMat);
+    boyBackHair.position.set(0, 0.01, -0.035);
+    boyBackHair.rotation.y = Math.PI / 2;
+    boyHeadPivot.add(boyBackHair);
 
     // Swept bangs and temple locks using TubeGeometry
     boyHeadPivot.add(createCurvedHairStrand([
@@ -2765,11 +2791,18 @@
     girlHeadMesh.castShadow = true;
     girlHeadPivot.add(girlHeadMesh);
 
-    // Girl Gorgeous Layered Hair (Chestnut chocolate anime hair)
-    const girlHairCapGeo = new THREE.SphereGeometry(0.176, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.74);
+    // Girl Crown & Back Hair Shell (covers crown and back skull only, leaving front face completely open and bright)
+    const girlHairCapGeo = new THREE.SphereGeometry(0.174, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.48);
     const girlHairCap = new THREE.Mesh(girlHairCapGeo, girlHairMat);
-    girlHairCap.position.y = 0.02;
+    girlHairCap.position.set(0, 0.03, -0.04);
     girlHeadPivot.add(girlHairCap);
+
+    // Girl Back Hair Mass (covering back of the head seamlessly)
+    const girlBackHairGeo = new THREE.SphereGeometry(0.174, 20, 16, Math.PI * 0.48, Math.PI * 1.04, 0, Math.PI * 0.75);
+    const girlBackHair = new THREE.Mesh(girlBackHairGeo, girlHairMat);
+    girlBackHair.position.set(0, 0.01, -0.035);
+    girlBackHair.rotation.y = Math.PI / 2;
+    girlHeadPivot.add(girlBackHair);
 
     // Soft Curved Front Bangs with gentle anime parting
     girlHeadPivot.add(createCurvedHairStrand([
@@ -2938,7 +2971,7 @@
      * Cozy Stone-Ring Campfire (Night & Sunset Fireplace with Smoke Particles)
      */
     const campfireGroup = new THREE.Group();
-    campfireGroup.position.set(1.35, 0.86, 1.25);
+    campfireGroup.position.set(1.45, 0.86, 1.95);
     islandGroup.add(campfireGroup);
 
     // Stone ring around fire pit
@@ -3078,16 +3111,16 @@
     }
 
     /**
-     * Glowing Fireflies (Summer / Night Mode)
+     * Glowing Fireflies (Summer / Night Mode) - Delicate, Tiny Fairy-Tale Sparkles
      */
-    const fireflyCount = 45;
+    const fireflyCount = 14;
     const fireflyGeo = new THREE.BufferGeometry();
     const fireflyPositions = new Float32Array(fireflyCount * 3);
     const fireflyData = [];
     for (let i = 0; i < fireflyCount; i++) {
-      const fx = (Math.random() - 0.5) * 6;
-      const fy = 0.8 + Math.random() * 2.5;
-      const fz = (Math.random() - 0.5) * 6;
+      const fx = (Math.random() - 0.5) * 5;
+      const fy = 0.8 + Math.random() * 2.2;
+      const fz = 1.4 + (Math.random() - 0.5) * 5;
       fireflyPositions[i * 3] = fx;
       fireflyPositions[i * 3 + 1] = fy;
       fireflyPositions[i * 3 + 2] = fz;
@@ -3099,8 +3132,8 @@
     }
     fireflyGeo.setAttribute('position', new THREE.BufferAttribute(fireflyPositions, 3));
     const fireflyMat = new THREE.PointsMaterial({
-      color: '#caff70',
-      size: 0.35,
+      color: '#d4ff78',
+      size: 0.10,
       transparent: true,
       opacity: 0.0, // active at night
       blending: THREE.AdditiveBlending
@@ -3123,7 +3156,7 @@
         hemiSky: '#70b4f8',
         hemiGround: '#48753a',
         dirColor: '#fff5df',
-        dirIntensity: 1.25,
+        dirIntensity: 1.35,
         dirPos: [14, 18, 12],
         backAtmoColor: '#ffe4cb',
         backAtmoIntensity: 1.85,
@@ -3131,8 +3164,8 @@
         ambientFillIntensity: 1.15,
         toonSteps: ['#c8b8dc', '#ded6eb', '#f2eff9', '#ffffff'],
         fogColor: '#6dafe8',
-        fogDensity: 0.007,
-        lanternIntensity: 0.15,
+        fogDensity: 0.003,
+        lanternIntensity: 0.0,
         starOpacity: 0.0,
         celestialColor: '#fff3cb',
         celestialPos: [32, 42, -30],
@@ -3146,7 +3179,7 @@
         hemiSky: '#80c4ff',
         hemiGround: '#3e6a32',
         dirColor: '#ffffff',
-        dirIntensity: 1.35,
+        dirIntensity: 1.45,
         dirPos: [4, 24, 6],
         backAtmoColor: '#cce6ff',
         backAtmoIntensity: 1.7,
@@ -3154,7 +3187,7 @@
         ambientFillIntensity: 1.2,
         toonSteps: ['#b8d4ee', '#d6e8f8', '#f2f8fd', '#ffffff'],
         fogColor: '#549ce0',
-        fogDensity: 0.006,
+        fogDensity: 0.002,
         lanternIntensity: 0.0,
         starOpacity: 0.0,
         celestialColor: '#ffffff',
@@ -3169,7 +3202,7 @@
         hemiSky: '#b84860',
         hemiGround: '#2c1c1a',
         dirColor: '#ff6b3d',
-        dirIntensity: 1.7,
+        dirIntensity: 1.8,
         dirPos: [-18, 6, -8],
         backAtmoColor: '#ff7d45',
         backAtmoIntensity: 2.6,
@@ -3177,7 +3210,7 @@
         ambientFillIntensity: 1.35,
         toonSteps: ['#d87268', '#f0988a', '#fad0c4', '#ffffff'],
         fogColor: '#4e2236',
-        fogDensity: 0.009,
+        fogDensity: 0.004,
         lanternIntensity: 2.5,
         starOpacity: 0.35,
         celestialColor: '#ff7036',
@@ -3185,22 +3218,22 @@
         isNight: false
       },
       night: {
-        skyTop: '#02040b',
-        skyMid: '#070e24',
-        skyBot: '#0f1a38',
+        skyTop: '#04091a',
+        skyMid: '#0b1638',
+        skyBot: '#152452',
         cloudColor: '#121b2d',
-        hemiSky: '#162444',
-        hemiGround: '#0b1016',
-        dirColor: '#708eb8',
-        dirIntensity: 0.45,
+        hemiSky: '#223668',
+        hemiGround: '#0f1826',
+        dirColor: '#8ba6d4',
+        dirIntensity: 0.65,
         dirPos: [-12, 18, -10],
         backAtmoColor: '#7092dc',
         backAtmoIntensity: 1.75,
-        ambientFillColor: '#54668e',
-        ambientFillIntensity: 0.95,
+        ambientFillColor: '#60729e',
+        ambientFillIntensity: 1.05,
         toonSteps: ['#425884', '#6884bc', '#a4c0f2', '#ffffff'],
-        fogColor: '#050814',
-        fogDensity: 0.012,
+        fogColor: '#0a1226',
+        fogDensity: 0.005,
         lanternIntensity: 3.4,
         starOpacity: 0.95,
         celestialColor: '#fdf6c7',
@@ -3218,7 +3251,7 @@
         grassColor: '#4e8b45',
         girlDressColor: '#ff9eb5',
         girlRibbonColor: '#f25c84',
-        boyCardiganColor: '#2b3f5c',
+        boyCardiganColor: '#5b84b8',
         blanketColor: '#fdfbf7',
         bounceColor: '#ffe8f0'
       },
@@ -3230,7 +3263,7 @@
         grassColor: '#3f8238',
         girlDressColor: '#ff7e95',
         girlRibbonColor: '#e04868',
-        boyCardiganColor: '#245275',
+        boyCardiganColor: '#3d769e',
         blanketColor: '#fff9e6',
         bounceColor: '#f0ffe0'
       },
@@ -3242,7 +3275,7 @@
         grassColor: '#5c4d28',
         girlDressColor: '#d65d40',
         girlRibbonColor: '#e68a20',
-        boyCardiganColor: '#4c3325',
+        boyCardiganColor: '#b36b3b',
         blanketColor: '#f0dec5',
         bounceColor: '#ffe6cc'
       },
@@ -3254,7 +3287,7 @@
         grassColor: '#d2e4f0',
         girlDressColor: '#b82a48',
         girlRibbonColor: '#8a1832',
-        boyCardiganColor: '#222834',
+        boyCardiganColor: '#354d6d',
         blanketColor: '#edf2f7',
         bounceColor: '#eaf6ff'
       }
@@ -3269,6 +3302,10 @@
       const t = TIME_PRESETS[mode] || TIME_PRESETS.afternoon;
 
       renderSkyTexture(t.skyTop, t.skyMid, t.skyBot);
+      scene.background.set(t.skyTop);
+      renderer.setClearColor(t.skyTop, 1.0);
+      document.body.style.backgroundColor = t.skyTop;
+
       cloudMat.color.set(t.cloudColor);
       scene.fog.color.set(t.fogColor);
       scene.fog.density = t.fogDensity;
