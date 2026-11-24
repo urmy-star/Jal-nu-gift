@@ -1047,16 +1047,22 @@
      * ====================================================================
      */
     function triggerFullscreen() {
-      const docEl = document.documentElement;
-      if (docEl.requestFullscreen) {
-        docEl.requestFullscreen().catch(() => { });
-      } else if (docEl.webkitRequestFullscreen) {
-        docEl.webkitRequestFullscreen().catch(() => { });
-      } else if (docEl.mozRequestFullScreen) {
-        docEl.mozRequestFullScreen().catch(() => { });
-      } else if (docEl.msRequestFullscreen) {
-        docEl.msRequestFullscreen().catch(() => { });
-      }
+      try {
+        const docEl = document.documentElement;
+        let p;
+        if (docEl.requestFullscreen) {
+          p = docEl.requestFullscreen();
+        } else if (docEl.webkitRequestFullscreen) {
+          p = docEl.webkitRequestFullscreen();
+        } else if (docEl.mozRequestFullScreen) {
+          p = docEl.mozRequestFullScreen();
+        } else if (docEl.msRequestFullscreen) {
+          p = docEl.msRequestFullscreen();
+        }
+        if (p && typeof p.catch === 'function') {
+          p.catch(() => { });
+        }
+      } catch (_) { }
     }
 
     /**
@@ -1297,7 +1303,6 @@
       }).catch(() => { });
     });
 
-    let isUserSeeking = false;
     let seekTargetTime = 0;
 
     function getScrubberSeekData(clientX) {
