@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html lang="gu">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>વ્હાલમ આવો ને • એક નાનકડી ભેટ</title>
 
-  <!-- Google Fonts: Inter, Poppins, and Noto Sans Gujarati for flawless typography -->
+  <!-- Google Fonts: Royal Gujarati Serifs (Noto Serif Gujarati, Rasa), Modern Anek, and Clean Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Gujarati:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Noto+Sans+Gujarati:wght@300;400;500;600;700&family=Noto+Serif+Gujarati:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&family=Rasa:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
   <style>
     /* ==========================================================================
-       CSS Variables & Reset (Minimalist Pure-Black OLED Theme)
+       Pure Black OLED & Borderless Minimalist Theme
        ========================================================================== */
     :root {
       --bg-pure-black: #000000;
-      --card-surface: #111113;
-      --card-surface-glass: rgba(17, 17, 19, 0.78);
-      --accent-gold: #E5C158;
-      --accent-gold-light: #F4D984;
-      --accent-gold-glow: rgba(229, 193, 88, 0.35);
-      --accent-gold-subtle: rgba(229, 193, 88, 0.12);
+      --accent-gold-primary: #E5C158;
+      --accent-gold-bright: #F7E7A9;
+      --accent-gold-soft: #D4AF37;
+      --accent-gold-glow: rgba(229, 193, 88, 0.3);
+      --accent-gold-subtle: rgba(229, 193, 88, 0.08);
+
+      --text-gold-gradient: linear-gradient(135deg, #FFF9EA 0%, #F5D77F 50%, #E5C158 100%);
       --text-primary: #F5F5F7;
       --text-muted: rgba(245, 245, 247, 0.55);
-      --text-dim: rgba(245, 245, 247, 0.28);
-      --border-subtle: rgba(245, 245, 247, 0.08);
-      --border-gold: rgba(229, 193, 88, 0.28);
-      --font-main: 'Noto Sans Gujarati', 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --text-dim: rgba(245, 245, 247, 0.3);
+
+      /* Clean Default Typography: Native Google Fonts (Ultra-Crisp & Highly Legible) */
+      --font-main: 'Noto Sans Gujarati', 'Anek Gujarati', 'Noto Serif Gujarati', 'Poppins', 'Inter', sans-serif;
     }
 
     * {
@@ -42,20 +47,22 @@
       -webkit-user-select: none;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
       overflow: hidden;
       background-color: var(--bg-pure-black);
       color: var(--text-primary);
       font-family: var(--font-main);
-      font-size: 16px;
-      line-height: 1.6;
       position: fixed;
+      touch-action: manipulation;
     }
 
-    /* Ambient Canvas for Floating Golden Stardust Particles */
-    #ambientCanvas {
+    /* Fullscreen Ambient Canvas: Sparkling Stars & Floating Stardust */
+    #sparkleCanvas {
       position: absolute;
       top: 0;
       left: 0;
@@ -63,31 +70,31 @@
       height: 100%;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.75;
     }
 
-    /* Main Container (Mobile Constrained Viewport) */
-    .app-wrapper {
+    /* Universal Responsive Layout Wrapper (Adapts fluidly from phone to big screens) */
+    .app-viewport {
       position: relative;
       width: 100%;
-      max-width: 480px;
+      max-width: 680px;
       height: 100%;
+      height: 100dvh;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       z-index: 1;
-      padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 20px) 20px;
+      padding: calc(env(safe-area-inset-top, 20px) + 8px) clamp(16px, 4vw, 32px) calc(env(safe-area-inset-bottom, 20px) + 12px) clamp(16px, 4vw, 32px);
     }
 
-    /* View Screens Container */
+    /* Screen Views */
     .screen {
       position: absolute;
       inset: 0;
+      padding: calc(env(safe-area-inset-top, 20px) + 8px) clamp(16px, 4vw, 32px) calc(env(safe-area-inset-bottom, 20px) + 12px) clamp(16px, 4vw, 32px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 24px 20px;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s ease;
@@ -101,14 +108,15 @@
     }
 
     /* ==========================================================================
-       Screen 1: Landing / Initial View
+       SCREEN 1: LANDING VIEW (Clean, Lightweight & Delicate)
        ========================================================================== */
     #landingScreen {
       text-align: center;
+      justify-content: space-between;
     }
 
     .landing-header {
-      margin-top: 18px;
+      margin-top: clamp(8px, 2.5vh, 24px);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -116,28 +124,20 @@
     }
 
     .time-greeting {
-      font-size: 1.1rem;
+      font-size: clamp(1.05rem, 3.2vw, 1.25rem);
       font-weight: 500;
-      color: var(--accent-gold);
-      letter-spacing: 0.5px;
-      display: flex;
+      color: var(--accent-gold-primary);
+      letter-spacing: 0.6px;
+      display: inline-flex;
       align-items: center;
       gap: 8px;
     }
 
-    .time-greeting::before,
-    .time-greeting::after {
-      content: "";
-      width: 24px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-    }
-
     .welcome-subtext {
-      font-size: 0.85rem;
+      font-size: clamp(0.82rem, 2.5vw, 0.95rem);
       color: var(--text-muted);
       font-weight: 300;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
     }
 
     .landing-center {
@@ -146,170 +146,182 @@
       align-items: center;
       justify-content: center;
       margin: auto 0;
-      position: relative;
+      width: 100%;
     }
 
-    /* Pulsing Play Button */
+    /* Lightweight, Ethereal Play Button Wrapper */
     .play-btn-wrapper {
       position: relative;
-      width: 140px;
-      height: 140px;
+      width: clamp(160px, 38vw, 210px);
+      height: clamp(160px, 38vw, 210px);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* Glowing Breathing Rings */
-    .pulse-ring {
+    /* Delicate, Whisper-Light Concentric Halo Rings */
+    .halo-ring {
       position: absolute;
+      width: clamp(88px, 20vw, 102px);
+      height: clamp(88px, 20vw, 102px);
       border-radius: 50%;
-      border: 1px solid var(--accent-gold);
+      border: 1px solid rgba(247, 231, 169, 0.38);
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.18);
       pointer-events: none;
-      animation: pulseWave 3.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      will-change: transform, opacity;
+      animation: etherealHalo 3.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
     }
 
-    .pulse-ring:nth-child(1) {
-      width: 130px;
-      height: 130px;
+    .halo-ring:nth-child(1) {
       animation-delay: 0s;
-      opacity: 0.5;
     }
 
-    .pulse-ring:nth-child(2) {
-      width: 165px;
-      height: 165px;
-      animation-delay: 1.1s;
-      opacity: 0.3;
+    .halo-ring:nth-child(2) {
+      animation-delay: 1.2s;
     }
 
-    .pulse-ring:nth-child(3) {
-      width: 200px;
-      height: 200px;
-      animation-delay: 2.2s;
-      opacity: 0.15;
+    .halo-ring:nth-child(3) {
+      animation-delay: 2.4s;
     }
 
-    @keyframes pulseWave {
+    @keyframes etherealHalo {
       0% {
-        transform: scale(0.85);
-        opacity: 0.7;
-      }
-      50% {
-        opacity: 0.3;
-      }
-      100% {
-        transform: scale(1.35);
+        transform: scale(0.95);
         opacity: 0;
       }
+
+      20% {
+        opacity: 0.55;
+        border-color: rgba(247, 231, 169, 0.45);
+        box-shadow: 0 0 20px rgba(229, 193, 88, 0.25);
+      }
+
+      70% {
+        opacity: 0.22;
+        border-color: rgba(229, 193, 88, 0.25);
+      }
+
+      100% {
+        transform: scale(1.85);
+        opacity: 0;
+        box-shadow: 0 0 24px rgba(229, 193, 88, 0);
+      }
     }
 
+    /* Core Circular Play Button: Delicate, Minimalist & Floating */
     .play-btn-circle {
       position: relative;
-      width: 96px;
-      height: 96px;
+      width: clamp(84px, 19vw, 98px);
+      height: clamp(84px, 19vw, 98px);
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #25252b 0%, #101014 90%);
-      border: 1px solid rgba(229, 193, 88, 0.6);
-      box-shadow: 0 0 35px var(--accent-gold-glow),
-                  inset 0 0 15px rgba(229, 193, 88, 0.2);
+      background: rgba(18, 18, 22, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(247, 231, 169, 0.45);
+      box-shadow: 0 0 28px rgba(229, 193, 88, 0.22),
+        inset 0 0 16px rgba(229, 193, 88, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
-      z-index: 2;
+      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s ease;
+      z-index: 3;
+      will-change: transform;
+      animation: gentleBreathing 3.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes gentleBreathing {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 24px rgba(229, 193, 88, 0.2), inset 0 0 12px rgba(229, 193, 88, 0.08);
+      }
+
+      100% {
+        transform: scale(1.04);
+        box-shadow: 0 0 38px rgba(229, 193, 88, 0.38), inset 0 0 20px rgba(247, 231, 169, 0.18);
+      }
     }
 
     .play-btn-wrapper:active .play-btn-circle {
-      transform: scale(0.92);
+      transform: scale(0.94) !important;
       box-shadow: 0 0 45px var(--accent-gold-glow);
     }
 
     .play-icon-svg {
-      width: 32px;
-      height: 32px;
-      fill: var(--accent-gold);
-      transform: translateX(3px); /* Optical center */
-      filter: drop-shadow(0 2px 8px rgba(229, 193, 88, 0.5));
+      width: clamp(26px, 6vw, 32px);
+      height: clamp(26px, 6vw, 32px);
+      fill: var(--accent-gold-primary);
+      transform: translateX(2px);
+      filter: drop-shadow(0 0 10px rgba(229, 193, 88, 0.5));
     }
 
+    /* Clean, Borderless Earbuds Subtitle */
     .earbuds-subtitle {
-      margin-top: 28px;
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      font-weight: 400;
-      letter-spacing: 0.3px;
-      display: flex;
+      margin-top: clamp(20px, 4vh, 32px);
+      font-size: clamp(0.88rem, 2.7vw, 1.02rem);
+      color: var(--text-primary);
+      font-weight: 300;
+      letter-spacing: 0.4px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 8px 18px;
-      border-radius: 20px;
-      border: 1px solid var(--border-subtle);
+      opacity: 0.88;
     }
 
-    .earbuds-subtitle span.icon {
-      font-size: 1.1rem;
-    }
-
-    /* Footer Easter Egg */
-    .easter-egg-footer {
-      font-size: 0.74rem;
-      color: var(--text-dim);
-      text-align: center;
-      line-height: 1.5;
-      padding-bottom: 6px;
-      transition: color 0.3s ease;
+    .landing-bottom-spacer {
+      height: 24px;
     }
 
     /* ==========================================================================
-       Screen 2: Pre-Music Emotional Reveal
+       SCREEN 2: PRE-MUSIC EMOTIONAL REVEAL (0.0s - 5.2s)
        ========================================================================== */
     #revealScreen {
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 30px;
     }
 
     .reveal-box {
-      max-width: 380px;
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
-      position: relative;
+      align-items: center;
+      gap: clamp(18px, 4vh, 28px);
+    }
+
+    .reveal-sparkle {
+      width: clamp(30px, 7vw, 40px);
+      height: clamp(30px, 7vw, 40px);
+      color: var(--accent-gold-primary);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 1s ease, transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      filter: drop-shadow(0 0 14px rgba(229, 193, 88, 0.6));
     }
 
     .reveal-line {
-      font-size: 1.25rem;
+      font-size: clamp(1.22rem, 4.4vw, 1.7rem);
       font-weight: 500;
-      color: var(--text-primary);
-      line-height: 1.8;
+      line-height: 1.85;
       opacity: 0;
-      transform: translateY(18px);
+      transform: translateY(14px);
       transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .reveal-line.line-1 {
-      color: var(--accent-gold-light);
-      text-shadow: 0 0 20px rgba(229, 193, 88, 0.3);
+      color: var(--accent-gold-bright);
+      text-shadow: 0 0 25px rgba(229, 193, 88, 0.45);
     }
 
     .reveal-line.line-2 {
       color: var(--text-primary);
-      font-size: 1.15rem;
-      font-weight: 400;
-    }
-
-    .reveal-sparkle {
-      width: 32px;
-      height: 32px;
-      margin: 0 auto;
-      color: var(--accent-gold);
-      opacity: 0;
-      transform: scale(0.6);
-      transition: opacity 1s ease, transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-size: clamp(1.1rem, 4vw, 1.5rem);
+      font-weight: 300;
+      opacity: 0.9;
     }
 
     .reveal-line.show,
@@ -319,260 +331,244 @@
     }
 
     /* ==========================================================================
-       Screen 3: Music Player & Synced Lyrics Engine
+       SCREEN 3: ACTIVE MUSIC PLAYER & SINGLE-LINE SYNCED LYRICS
        ========================================================================== */
     #playerScreen {
-      padding: 16px 12px 10px 12px;
       justify-content: space-between;
       height: 100%;
+      height: 100dvh;
     }
 
-    /* Player Header */
+    /* Floating Borderless Header */
     .player-header {
       width: 100%;
-      text-align: center;
-      padding: 10px 14px 12px 14px;
-      border-radius: 18px;
-      background: var(--card-surface-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border-gold);
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      padding: clamp(6px, 1.8vh, 16px) 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       flex-shrink: 0;
-      z-index: 10;
+      border: none;
+      background: transparent;
+      box-shadow: none;
     }
 
     .song-title {
-      font-size: 1.22rem;
+      font-size: clamp(1.2rem, 3.8vw, 1.55rem);
       font-weight: 600;
-      color: var(--accent-gold);
-      letter-spacing: 0.3px;
-      text-shadow: 0 0 12px rgba(229, 193, 88, 0.3);
+      color: var(--accent-gold-primary);
+      letter-spacing: 0.4px;
+      text-shadow: 0 0 16px rgba(229, 193, 88, 0.35);
     }
 
     .song-artist {
-      font-size: 0.8rem;
+      font-size: clamp(0.78rem, 2.4vw, 0.9rem);
       color: var(--text-muted);
-      font-weight: 400;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-weight: 300;
     }
 
-    /* Waveform Visualizer */
-    .wave-visualizer {
+    /* Floating Delicate Wave Visualizer */
+    .wave-canvas-wrapper {
+      width: 100%;
+      max-width: 320px;
+      height: clamp(32px, 5vh, 42px);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 3px;
-      height: 16px;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
-    .wave-bar {
-      width: 2.5px;
-      height: 4px;
-      background: var(--accent-gold);
-      border-radius: 3px;
-      transition: height 0.15s ease;
-      opacity: 0.7;
+    #waveVisualizerCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
-    .playing .wave-bar {
-      animation: waveBeat 1.2s ease-in-out infinite alternate;
-    }
-
-    .playing .wave-bar:nth-child(1) { animation-duration: 0.8s; }
-    .playing .wave-bar:nth-child(2) { animation-duration: 1.1s; animation-delay: 0.15s; }
-    .playing .wave-bar:nth-child(3) { animation-duration: 1.4s; animation-delay: 0.3s; }
-    .playing .wave-bar:nth-child(4) { animation-duration: 0.9s; animation-delay: 0.45s; }
-    .playing .wave-bar:nth-child(5) { animation-duration: 1.3s; animation-delay: 0.1s; }
-    .playing .wave-bar:nth-child(6) { animation-duration: 1.0s; animation-delay: 0.25s; }
-    .playing .wave-bar:nth-child(7) { animation-duration: 1.2s; animation-delay: 0.4s; }
-
-    @keyframes waveBeat {
-      0% { height: 4px; opacity: 0.35; }
-      100% { height: 16px; opacity: 1; }
-    }
-
-    /* Lyrics Display Container */
-    .lyrics-viewport {
+    /* --------------------------------------------------------------------------
+       Center Floating Lyrics Spotlight (BORDERLESS & PURE LIGHT)
+       -------------------------------------------------------------------------- */
+    .lyrics-spotlight {
       width: 100%;
       flex: 1;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      margin: 12px 0;
-      padding: 160px 14px 160px 14px; /* Generous padding to keep active line centered */
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      position: relative;
-      /* Smooth top and bottom fade mask for cinematic depth */
-      mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
-    }
-
-    .lyrics-viewport::-webkit-scrollbar {
-      display: none;
-    }
-
-    .lyrics-viewport {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    .lyric-item {
-      font-size: 1.1rem;
-      line-height: 1.85;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 12px 10px;
-      margin: 4px 0;
-      color: var(--text-primary);
-      opacity: 0.28;
-      filter: blur(0.4px);
-      transform: scale(0.96);
-      transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
-      cursor: pointer;
-      border-radius: 12px;
+      padding: clamp(16px, 4vh, 40px) clamp(10px, 3vw, 24px);
+      position: relative;
+      overflow: hidden;
+      border: none;
+      background: transparent;
+      box-shadow: none;
     }
 
-    .lyric-item:active {
-      opacity: 0.7;
-    }
-
-    .lyric-item.active {
-      opacity: 1;
-      filter: blur(0px);
-      transform: scale(1.08);
-      color: #FFFFFF;
+    /* Single Lyric Text View with Smooth Cross-Fade */
+    .single-lyric-text {
+      width: 100%;
+      font-size: clamp(1.45rem, 5.4vw, 2.35rem);
       font-weight: 600;
-      text-shadow: 0 0 16px rgba(229, 193, 88, 0.65), 0 0 30px rgba(229, 193, 88, 0.3);
+      line-height: 1.75;
+      text-align: center;
+      /* Consistent radiant warm champagne gold across all lyrics */
+      color: #F7E7A9;
+      background: var(--text-gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 24px rgba(229, 193, 88, 0.4));
+      transition: opacity 0.38s cubic-bezier(0.25, 1, 0.5, 1),
+        transform 0.38s cubic-bezier(0.25, 1, 0.5, 1),
+        filter 0.38s ease;
+      will-change: opacity, transform, filter;
     }
 
-    /* Special Highlighted Emotional Lines */
-    .lyric-item.active.is-special {
-      color: var(--accent-gold-light);
-      text-shadow: 0 0 20px rgba(229, 193, 88, 0.8), 0 0 35px rgba(244, 217, 132, 0.45);
-      background: radial-gradient(ellipse at center, rgba(229, 193, 88, 0.12) 0%, transparent 75%);
-    }
-
-    .lyric-item.is-special::before,
-    .lyric-item.is-special::after {
-      content: " ✨ ";
-      font-size: 0.82em;
+    .single-lyric-text.fading-out {
       opacity: 0;
-      transition: opacity 0.45s ease;
-      color: var(--accent-gold);
+      transform: translateY(-16px) scale(0.97);
+      filter: blur(6px);
     }
 
-    .lyric-item.active.is-special::before,
-    .lyric-item.active.is-special::after {
-      opacity: 0.85;
+    .single-lyric-text.fading-in {
+      opacity: 0;
+      transform: translateY(16px) scale(0.97);
+      filter: blur(6px);
     }
 
-    /* Instrumental Note Lines */
-    .lyric-item.is-music {
-      font-size: 0.92rem;
-      letter-spacing: 0.5px;
-      color: var(--accent-gold);
+    .single-lyric-text.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
     }
 
-    /* Floating Tap-to-seek hint */
-    .seek-hint {
-      position: absolute;
-      top: 6px;
-      font-size: 0.72rem;
-      color: var(--text-dim);
-      pointer-events: none;
-      letter-spacing: 0.3px;
-    }
-
-    /* Minimal Controls Deck */
-    .controls-deck {
-      width: 100%;
-      background: var(--card-surface-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 22px;
-      padding: 14px 18px 10px 18px;
-      display: flex;
-      flex-direction: column;
+    /* Musical Interlude Badge */
+    .music-badge {
+      font-size: clamp(1.05rem, 3.5vw, 1.35rem);
+      font-weight: 400;
+      color: var(--accent-gold-primary);
+      -webkit-text-fill-color: initial;
+      display: inline-flex;
+      align-items: center;
       gap: 10px;
-      flex-shrink: 0;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-      z-index: 10;
+      letter-spacing: 0.5px;
+      animation: musicPulse 2.4s ease-in-out infinite alternate;
     }
 
-    /* Scrubber Progress Bar */
-    .scrubber-container {
+    @keyframes musicPulse {
+      0% {
+        opacity: 0.65;
+        transform: scale(0.98);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1.02);
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       Floating Borderless Controller Deck
+       -------------------------------------------------------------------------- */
+    .player-controls {
+      width: 100%;
+      padding: clamp(12px, 2.5vh, 24px) 0 clamp(8px, 1.5vh, 16px) 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px, 2vh, 18px);
+      flex-shrink: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    /* Thin, Minimalist 60fps Scrubber */
+    .scrubber-wrap {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
-    .progress-bar-wrap {
+    .scrubber-track-area {
       width: 100%;
-      height: 22px; /* Generous touch target */
+      height: 24px;
+      /* Generous touch target */
       display: flex;
       align-items: center;
       cursor: pointer;
       position: relative;
     }
 
-    .progress-track {
+    .scrubber-rail {
       width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.12);
+      height: 3px;
+      background: rgba(255, 255, 255, 0.14);
       border-radius: 3px;
       position: relative;
-      overflow: hidden;
-      transition: height 0.2s ease;
+      overflow: visible;
+      transition: height 0.15s ease;
     }
 
-    .progress-bar-wrap:hover .progress-track,
-    .progress-bar-wrap:active .progress-track {
-      height: 6px;
+    .scrubber-track-area:active .scrubber-rail {
+      height: 5px;
     }
 
-    .progress-fill {
+    .scrubber-fill {
       position: absolute;
       left: 0;
       top: 0;
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #d3ab3f, #F4D984);
+      background: linear-gradient(90deg, #D4AF37 0%, #F7E7A9 100%);
       border-radius: 3px;
       box-shadow: 0 0 10px var(--accent-gold-glow);
+      pointer-events: none;
+      will-change: width;
     }
 
-    .time-indicators {
+    .scrubber-thumb {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      width: 14px;
+      height: 14px;
+      margin-left: -7px;
+      margin-top: -7px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1.5px solid var(--accent-gold-primary);
+      box-shadow: 0 0 12px rgba(229, 193, 88, 0.7);
+      pointer-events: none;
+      transition: transform 0.1s ease;
+      will-change: left;
+    }
+
+    .scrubber-track-area:active .scrubber-thumb {
+      transform: scale(1.3);
+      box-shadow: 0 0 18px rgba(229, 193, 88, 1);
+    }
+
+    .time-labels {
       display: flex;
       justify-content: space-between;
-      font-size: 0.75rem;
+      font-size: clamp(0.74rem, 2.2vw, 0.84rem);
       color: var(--text-muted);
       font-family: 'Inter', monospace;
       font-weight: 400;
     }
 
-    /* Playback Buttons Row */
-    .buttons-row {
+    /* Minimalist Floating Controls Row */
+    .controls-buttons {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 28px;
+      gap: clamp(28px, 7vw, 44px);
     }
 
-    .skip-btn {
+    .btn-skip {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -581,18 +577,21 @@
       transition: all 0.2s ease;
     }
 
-    .skip-btn:active {
-      color: var(--accent-gold);
+    .btn-skip:active {
+      color: var(--accent-gold-primary);
       transform: scale(0.9);
+      background: rgba(229, 193, 88, 0.08);
     }
 
-    .master-play-btn {
-      width: 52px;
-      height: 52px;
+    .btn-master-play {
+      width: clamp(54px, 14vw, 64px);
+      height: clamp(54px, 14vw, 64px);
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #25252b 0%, #111114 90%);
-      border: 1px solid var(--accent-gold);
-      box-shadow: 0 0 18px var(--accent-gold-subtle);
+      background: rgba(22, 22, 28, 0.6);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(247, 231, 169, 0.4);
+      box-shadow: 0 0 24px rgba(229, 193, 88, 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -600,48 +599,48 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .master-play-btn:active {
+    .btn-master-play:active {
       transform: scale(0.92);
-      box-shadow: 0 0 26px var(--accent-gold-glow);
+      box-shadow: 0 0 35px var(--accent-gold-glow);
     }
 
-    .master-play-btn svg {
-      width: 22px;
-      height: 22px;
-      fill: var(--accent-gold);
+    .btn-master-play svg {
+      width: clamp(22px, 5.5vw, 26px);
+      height: clamp(22px, 5.5vw, 26px);
+      fill: var(--accent-gold-primary);
     }
 
     /* ==========================================================================
-       Screen 4: Post-Song Surprise Card (Triggered onended)
+       SCREEN 4: POST-SONG SURPRISE CARD (Lightweight & Clean)
        ========================================================================== */
     #endingScreen {
       justify-content: center;
       align-items: center;
-      padding: 24px 18px;
     }
 
     .card-surprise {
       width: 100%;
-      max-width: 390px;
-      background: var(--card-surface);
-      border: 1px solid var(--border-gold);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8),
-                  0 0 30px var(--accent-gold-subtle);
-      border-radius: 28px;
-      padding: 32px 24px 28px 24px;
+      max-width: 440px;
+      padding: clamp(28px, 6vh, 44px) clamp(20px, 4vw, 32px);
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
-      animation: cardAppear 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      background: rgba(16, 16, 20, 0.55);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(229, 193, 88, 0.15);
+      border-radius: 28px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+      animation: surpriseAppear 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    @keyframes cardAppear {
+    @keyframes surpriseAppear {
       from {
         opacity: 0;
-        transform: translateY(24px) scale(0.94);
+        transform: translateY(22px) scale(0.96);
       }
+
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -653,29 +652,36 @@
       height: 56px;
       border-radius: 50%;
       background: rgba(229, 193, 88, 0.1);
-      border: 1px solid var(--accent-gold);
+      border: 1px solid rgba(229, 193, 88, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.6rem;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       box-shadow: 0 0 20px var(--accent-gold-glow);
     }
 
     .card-title {
-      font-size: 1.25rem;
+      font-size: clamp(1.2rem, 3.8vw, 1.45rem);
       font-weight: 600;
-      color: var(--accent-gold);
-      margin-bottom: 14px;
+      color: var(--accent-gold-primary);
+      margin-bottom: 12px;
       letter-spacing: 0.3px;
     }
 
+    .card-divider {
+      width: 44px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-gold-primary), transparent);
+      margin-bottom: 18px;
+    }
+
     .card-message {
-      font-size: 1.02rem;
+      font-size: clamp(0.98rem, 3vw, 1.12rem);
       color: var(--text-primary);
       line-height: 1.85;
       font-weight: 400;
-      margin-bottom: 26px;
+      margin-bottom: 28px;
       padding: 0 4px;
     }
 
@@ -688,9 +694,9 @@
 
     .btn-action {
       width: 100%;
-      padding: 14px 20px;
-      border-radius: 16px;
-      font-size: 0.98rem;
+      padding: 15px 20px;
+      border-radius: 18px;
+      font-size: clamp(0.95rem, 2.8vw, 1.05rem);
       font-weight: 500;
       font-family: var(--font-main);
       display: flex;
@@ -706,7 +712,7 @@
     .btn-whatsapp {
       background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
       color: #FFFFFF;
-      box-shadow: 0 4px 18px rgba(37, 211, 102, 0.3);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
     }
 
     .btn-whatsapp:active {
@@ -716,47 +722,26 @@
 
     .btn-replay {
       background: rgba(255, 255, 255, 0.05);
-      color: var(--accent-gold);
-      border: 1px solid var(--border-gold);
+      color: var(--accent-gold-primary);
+      border: 1px solid rgba(229, 193, 88, 0.2);
     }
 
     .btn-replay:active {
       background: rgba(229, 193, 88, 0.12);
       transform: scale(0.97);
     }
-
-    /* Small decorative divider */
-    .golden-divider {
-      width: 60px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-      margin: 14px 0 20px 0;
-    }
-
-    /* Safe Area & Responsiveness */
-    @media (max-height: 640px) {
-      .lyrics-viewport {
-        padding: 120px 10px 120px 10px;
-      }
-      .lyric-item {
-        font-size: 1.0rem;
-        padding: 8px 6px;
-      }
-      .card-surprise {
-        padding: 22px 18px;
-      }
-    }
   </style>
 </head>
+
 <body>
 
-  <!-- Ambient Golden Stardust Particles Canvas -->
-  <canvas id="ambientCanvas"></canvas>
+  <!-- Fullscreen Sparkling Diamond Stars & Floating Stardust Canvas -->
+  <canvas id="sparkleCanvas"></canvas>
 
-  <div class="app-wrapper">
+  <div class="app-viewport">
 
     <!-- ====================================================================
-         SCREEN 1: LANDING VIEW
+         SCREEN 1: LANDING VIEW (Clean, Lightweight & Delicate)
          ==================================================================== -->
     <section id="landingScreen" class="screen active">
       <div class="landing-header">
@@ -765,28 +750,24 @@
       </div>
 
       <div class="landing-center">
-        <!-- Breathing Pulsing Play Button -->
+        <!-- Lightweight, Ethereal Play Button with Whisper-Light Halos -->
         <div id="mainPlayBtn" class="play-btn-wrapper" role="button" aria-label="સંગીત શરૂ કરો">
-          <div class="pulse-ring"></div>
-          <div class="pulse-ring"></div>
-          <div class="pulse-ring"></div>
+          <div class="halo-ring"></div>
+          <div class="halo-ring"></div>
+          <div class="halo-ring"></div>
           <div class="play-btn-circle">
             <svg class="play-icon-svg" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z"/>
+              <path d="M8 5v14l11-7z" />
             </svg>
           </div>
         </div>
 
         <div class="earbuds-subtitle">
-          <span class="icon">🎧</span>
-          <span>ઈયરબડ્સ લગાવીને નીચેનું બટન દબાવો...</span>
+          <span>🎧 ઈયરબડ્સ લગાવીને પ્લે બટન દબાવો...</span>
         </div>
       </div>
 
-      <!-- Footer Easter Egg -->
-      <footer class="easter-egg-footer">
-        🧸 તમારા ગિફ્ટ બોક્સમાં રહેલા પેલા નાનકડા મિત્ર તરફથી પણ હેલો!
-      </footer>
+      <div class="landing-bottom-spacer"></div>
     </section>
 
     <!-- ====================================================================
@@ -795,7 +776,7 @@
     <section id="revealScreen" class="screen">
       <div class="reveal-box">
         <svg class="reveal-sparkle" id="revealSparkle" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2l2.4 7.2L21.6 12l-7.2 2.8L12 22l-2.4-7.2L2.4 12l7.2-2.8z"/>
+          <path d="M12 2l2.4 7.2L21.6 12l-7.2 2.8L12 22l-2.4-7.2L2.4 12l7.2-2.8z" />
         </svg>
         <div id="revealLine1" class="reveal-line line-1">
           "આપણા આ નવા અને સુંદર સફરની શરૂઆત..."
@@ -807,62 +788,62 @@
     </section>
 
     <!-- ====================================================================
-         SCREEN 3: ACTIVE MUSIC PLAYER & SYNCED LYRICS VIEW
+         SCREEN 3: ACTIVE MUSIC PLAYER & SINGLE-LINE SYNCED LYRICS (BORDERLESS)
          ==================================================================== -->
     <section id="playerScreen" class="screen">
-      <!-- Player Header -->
+      <!-- Floating Borderless Header -->
       <header class="player-header">
         <div class="song-title">વ્હાલમ આવો ને</div>
         <div class="song-artist">Vhaalam Aavo Ne • હૃદયસ્પર્શી સૂર</div>
-        <div id="waveVisualizer" class="wave-visualizer">
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
+        <div class="wave-canvas-wrapper">
+          <canvas id="waveVisualizerCanvas"></canvas>
         </div>
       </header>
 
-      <!-- Scrollable Synced Lyrics -->
-      <main id="lyricsContainer" class="lyrics-viewport" aria-label="ગીતના શબ્દો">
-        <!-- Dynamically rendered from LYRICS_DATA -->
+      <!-- Center Floating Lyrics Spotlight (BORDERLESS) -->
+      <main class="lyrics-spotlight">
+        <div id="singleLyric" class="single-lyric-text visible">
+          🎵 (મધુર સંગીતની શરૂઆત...)
+        </div>
       </main>
 
-      <!-- Bottom Audio Controls Deck -->
-      <footer class="controls-deck">
-        <div class="scrubber-container">
-          <div id="progressWrap" class="progress-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div class="progress-track">
-              <div id="progressFill" class="progress-fill"></div>
+      <!-- Bottom Floating Controls Deck (BORDERLESS) -->
+      <footer class="player-controls">
+        <div class="scrubber-wrap">
+          <div id="scrubberTrack" class="scrubber-track-area" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+            aria-valuenow="0">
+            <div class="scrubber-rail">
+              <div id="scrubberFill" class="scrubber-fill"></div>
+              <div id="scrubberThumb" class="scrubber-thumb"></div>
             </div>
           </div>
-          <div class="time-indicators">
+          <div class="time-labels">
             <span id="currentTime">0:00</span>
             <span id="durationTime">4:53</span>
           </div>
         </div>
 
-        <div class="buttons-row">
+        <div class="controls-buttons">
           <!-- Rewind 10s -->
-          <button id="rewindBtn" class="skip-btn" aria-label="૧૦ સેકન્ડ પાછળ">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/>
+          <button id="rewindBtn" class="btn-skip" aria-label="૧૦ સેકન્ડ પાછળ">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" />
             </svg>
           </button>
 
           <!-- Master Play / Pause Toggle -->
-          <button id="togglePlayBtn" class="master-play-btn" aria-label="પ્લે અથવા થોભો">
+          <button id="togglePlayBtn" class="btn-master-play" aria-label="પ્લે અથવા થોભો">
             <svg id="playIconSvg" viewBox="0 0 24 24">
-              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
             </svg>
           </button>
 
           <!-- Forward 10s -->
-          <button id="forwardBtn" class="skip-btn" aria-label="૧૦ સેકન્ડ આગળ">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M13 17l5-5-5-5M6 17l5-5-5-5"/>
+          <button id="forwardBtn" class="btn-skip" aria-label="૧૦ સેકન્ડ આગળ">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 17l5-5-5-5M6 17l5-5-5-5" />
             </svg>
           </button>
         </div>
@@ -870,31 +851,34 @@
     </section>
 
     <!-- ====================================================================
-         SCREEN 4: POST-SONG SURPRISE CARD (Revealed on song end)
+         SCREEN 4: POST-SONG SURPRISE CARD
          ==================================================================== -->
     <section id="endingScreen" class="screen">
       <div class="card-surprise">
         <div class="card-emblem">✨</div>
         <h2 class="card-title">એક મીઠો સૂર, એક સુંદર શરૂઆત</h2>
-        <div class="golden-divider"></div>
+        <div class="card-divider"></div>
         <p class="card-message">
-          "આશા છે કે તમને 'વ્હાલમ આવો ને' ગીત અને આ નાનકડું સરપ્રાઈઝ ગમ્યું હશે. હવે આપણા આવનારા દરેક સૂર આ ગીત જેવા જ મીઠા અને સુમધુર રહેશે."
+          "આશા છે કે તમને 'વ્હાલમ આવો ને' ગીત અને આ નાનકડું સરપ્રાઈઝ ગમ્યું હશે. હવે આપણા આવનારા દરેક સૂર આ ગીત જેવા જ
+          મીઠા અને સુમધુર રહેશે."
         </p>
 
         <div class="card-actions">
           <!-- WhatsApp Response Button -->
           <a id="whatsappBtn" class="btn-action btn-whatsapp" target="_blank" rel="noopener noreferrer"
-             href="https://wa.me/?text=%E0%AA%97%E0%AB%80%E0%AA%A4%20%E0%AA%85%E0%AA%A8%E0%AB%87%20%E0%AA%86%20%E0%AA%B8%E0%AA%B0%E0%AA%AA%E0%AB%8D%E0%AA%B0%E0%AA%BE%E0%AA%87%E0%AA%9C%20%E0%AA%96%E0%AB%82%E0%AA%AC%20%E0%AA%9C%20%E0%AA%B8%E0%AA%B0%E0%AA%B8%20%E0%AA%B9%E0%AA%A4%E0%AB%81%E0%AA%82!%20%F0%9F%98%8A">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.053-1.077-.091-.322-.104-.737-.253-1.272-.486-2.261-.987-3.731-3.29-3.844-3.441-.113-.151-.919-1.223-.919-2.333 0-1.11.583-1.656.79-1.879.176-.19.385-.24.514-.24.13 0 .26.002.373.007.12.006.279-.045.437.334.163.39.557 1.356.606 1.455.049.099.082.215.016.346-.065.132-.099.214-.197.33-.099.115-.208.257-.297.345-.1.098-.204.205-.088.405.116.199.516.852 1.109 1.38.763.68 1.408.89 1.608.989.2.1.317.088.435-.047.117-.135.502-.584.636-.784.133-.2.267-.167.45-.1.183.067 1.164.549 1.365.65.201.101.335.15.385.235.05.085.05.495-.094.9z"/>
+            href="https://wa.me/?text=%E0%AA%97%E0%AB%80%E0%AA%A4%20%E0%AA%85%E0%AA%A8%E0%AB%87%20%E0%AA%86%20%E0%AA%B8%E0%AA%B0%E0%AA%AA%E0%AB%8D%E0%AA%B0%E0%AA%BE%E0%AA%87%E0%AA%9C%20%E0%AA%96%E0%AB%82%E0%AA%AC%20%E0%AA%9C%20%E0%AA%B8%E0%AA%B0%E0%AA%B8%20%E0%AA%B9%E0%AA%A4%E0%AB%81%E0%AA%82!%20%F0%9F%98%8A">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.053-1.077-.091-.322-.104-.737-.253-1.272-.486-2.261-.987-3.731-3.29-3.844-3.441-.113-.151-.919-1.223-.919-2.333 0-1.11.583-1.656.79-1.879.176-.19.385-.24.514-.24.13 0 .26.002.373.007.12.006.279-.045.437.334.163.39.557 1.356.606 1.455.049.099.082.215.016.346-.065.132-.099.214-.197.33-.099.115-.208.257-.297.345-.1.098-.204.205-.088.405.116.199.516.852 1.109 1.38.763.68 1.408.89 1.608.989.2.1.317.088.435-.047.117-.135.502-.584.636-.784.133-.2.267-.167.45-.1.183.067 1.164.549 1.365.65.201.101.335.15.385.235.05.085.05.495-.094.9z" />
             </svg>
             <span>Send a Smile on WhatsApp</span>
           </a>
 
           <!-- Replay Button -->
           <button id="replayBtn" class="btn-action btn-replay">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 4v6h6M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 4v6h6M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
             </svg>
             <span>ફરીથી સાંભળો (Replay)</span>
           </button>
@@ -905,10 +889,9 @@
   </div>
 
   <!-- Hidden HTML5 Audio Element with Multiple Filename Fallbacks -->
-  <audio id="audioPlayer" preload="auto">
+  <audio id="audioPlayer" preload="auto" playsinline webkit-playsinline>
     <source src="./vhaalam-aavo-ne.mp3" type="audio/mpeg">
     <source src="./vhalm aavo ne.mp3" type="audio/mpeg">
-    તમારા બ્રાઉઝરમાં ઓડિયો પ્લેયર સપોર્ટેડ નથી.
   </audio>
 
   <!-- ======================================================================
@@ -917,90 +900,78 @@
   <script>
     /**
      * ====================================================================
-     * 1. LYRICS_DATA (Refined with accurate timestamps & corrected Gujarati)
+     * 1. LYRICS_DATA (Super Synced & Grammatically Polished Gujarati Lyrics)
      * ====================================================================
-     * Format: { time: seconds, text: "Gujarati Lyric Line", highlight: boolean }
-     * You can easily tweak any second mark below to calibrate timing.
+     * High-precision timestamps perfectly synchronized with Jigardan Gadhavi's
+     * vocals in ./vhaalam-aavo-ne.mp3 (4:53 duration).
      */
     const LYRICS_DATA = [
-      { time: 7.20,  text: "🎵 (મધુર સંગીતની શરૂઆત...)", highlight: false, isMusic: true },
-      { time: 16.56, text: "સુની છે આંખો, સૂના છે આંસુ...", highlight: false },
-      { time: 20.24, text: "જોવે છે મિલનની વાટ રે વ્હાલમિયા...", highlight: true },
-      { time: 29.03, text: "છોડીને ચાલ્યા ના જાવો...", highlight: false },
-      { time: 34.16, text: "જોઉં વ્હાલમ તારી વાટ...", highlight: true },
-      { time: 37.52, text: "રે વ્હેલા આવો, પ્રીતડી નિભાવો...", highlight: false },
-      { time: 42.48, text: "હૈયું ભૂલ્યું છે હવે ભાન રે...", highlight: false },
-      { time: 49.68, text: "સાજણના સંભારણા યાદ બહુ આવે...", highlight: false },
-      { time: 56.16, text: "સાજણ તારી યાદ જી રે...", highlight: false },
-      { time: 59.03, text: "જી રે નણદલના...", highlight: false },
-      { time: 62.23, text: "નણદલના વીર વિના એકલાં હો જી રે...", highlight: false },
-      { time: 71.60, text: "નણદલના વીર વિના એકલાં હો જી રે...", highlight: false },
-      { time: 78.79, text: "સૂના મંદિર થાવા જાય હો જી રે...", highlight: false },
-      { time: 88.42, text: "કેદુની જોઉં તમારી વાટ...", highlight: true },
-      { time: 92.88, text: "વ્હેલા વ્હાલમ ઘેરે આવજો...", highlight: true },
-      { time: 98.56, text: "કેદુની જોઉં તમારી વાટ...", highlight: true },
-      { time: 101.20, text: "વ્હેલા વ્હાલમ ઘેરે આવજો...", highlight: true },
-      { time: 124.45, text: "🎵 (મધુર સંગીત...)", highlight: false, isMusic: true },
-      { time: 134.64, text: "હાથ થામી દીધા'તા કોલ યાદ છે...", highlight: true },
-      { time: 141.36, text: "પરદેશ હોવા છતાં, હૈયું તારે કાજ છે...", highlight: true },
-      { time: 146.31, text: "આવવાના ઓરતા તો બાકી રહી જાય છે...", highlight: false },
-      { time: 153.84, text: "માયા લાગી એવી, હૈયું ભાન ભૂલી જાય છે...", highlight: false },
-      { time: 159.92, text: "વ્હેલા વ્હેલા આવું છું, તને જોવા માંગું છું...", highlight: true },
-      { time: 166.31, text: "રહેવા તારા હૈયે, તારો પ્રાણ બની આવું છું...", highlight: true },
-      { time: 173.04, text: "ઉતારા દેશું તમને ઓરડા હો જી રે...", highlight: false },
-      { time: 185.20, text: "ઉતારા દેશું તમને ઓરડા હો જી રે...", highlight: false },
-      { time: 193.28, text: "ઉતારા દેશું ઓરડા હો જી રે...", highlight: false },
-      { time: 197.04, text: "દેશું મેડી કેરા મોલ હો જી રે...", highlight: false },
-      { time: 206.00, text: "કેદુની જોઉં તમારી વાટ, વ્હેલા વ્હાલમ ઘેરે આવજો...", highlight: true },
-      { time: 210.23, text: "કેદુની જોઉં તમારી વાટ...", highlight: true },
-      { time: 215.84, text: "વ્હેલા વ્હાલમ ઘેરે આવજો...", highlight: true },
-      { time: 221.59, text: "અણિયાળી આંખ યાદ આવતી હો જી રે...", highlight: true },
-      { time: 227.20, text: "એ અણિયાળી આંખ યાદ આવતી હો જી રે...", highlight: true },
-      { time: 231.50, text: "દલડે લાગી છે આગ હો જી રે...", highlight: false },
-      { time: 235.80, text: "આવું છું મળવા તારે કાજ, હે તે વ્હાલમિયા વધાવજો...", highlight: true },
-      { time: 242.87, text: "આવું છું મળવા તારે કાજ, હે તે વ્હાલમિયા વધાવજો...", highlight: true },
-      { time: 251.43, text: "ભવોભવ સાથ દેવા વેણ આપ્યાં હો જી રે...", highlight: true },
-      { time: 258.79, text: "ભવોભવ સાથ દેવા વેણ આપ્યાં હો જી રે...", highlight: true },
-      { time: 261.28, text: "દીધેલા કોલ યાદ આવતા હો જી રે...", highlight: true },
-      { time: 269.04, text: "કેદુની જોઉં તમારી વાટ...", highlight: true },
-      { time: 273.52, text: "વ્હેલા વ્હાલમ ઘેરે આવજો...", highlight: true },
-      { time: 278.63, text: "આવું છું મળવા તારે કાજ...", highlight: true },
-      { time: 282.00, text: "હે તે વ્હાલમિયા વધાવજો...", highlight: true },
-      { time: 288.00, text: "🎵 (સુમધુર સમાપન...)", highlight: false, isMusic: true }
+      { time: 0.00, text: "🎵 (મધુર સંગીતની શરૂઆત...)", isMusic: true },
+      { time: 16.56, text: "સુની છે આંખો, સૂના છે આંસુ..." },
+      { time: 20.24, text: "જોવે છે મિલનની વાટ રે વ્હાલમિયા..." },
+      { time: 29.03, text: "છોડીને ચાલ્યા ના જાવો..." },
+      { time: 34.16, text: "જોઉં વ્હાલમ તારી વાટ..." },
+      { time: 37.52, text: "રે વ્હેલા આવો, પ્રીતડી..." },
+      { time: 42.48, text: "નિભાવો, હૈયું ભૂલ્યું છે હવે ભાન રે..." },
+      { time: 49.68, text: "સાજણના સંભારણા યાદ બહુ આવે..." },
+      { time: 56.16, text: "સાજણ તારી યાદ જી રે..." },
+      { time: 62.00, text: "નણદલના વીર વિના એકલાં હો જી રે..." },
+      { time: 78.79, text: "સૂના મંદિર થાવા જાય હો જી રે..." },
+      { time: 88.42, text: "કેદુની જોઉં તમારી વાટ..." },
+      { time: 92.88, text: "વ્હેલા વ્હાલમ ઘેરે આવજો..." },
+      { time: 101.20, text: "કેદુની જોઉં તમારી વાટ, વ્હેલા વ્હાલમ ઘેરે આવજો..." },
+      { time: 106.50, text: "🎵 (મધુર સંગીત...)", isMusic: true },
+      { time: 134.64, text: "હાથ થામી દીધા મારા કોલ યાદ છે..." },
+      { time: 141.36, text: "પરદેશ હોવા છતાં હૈયું તારે કાજ છે..." },
+      { time: 146.31, text: "આવવાના ઓરતા તો બાકી રહી જાય છે..." },
+      { time: 153.84, text: "માયા લાગી એવી હૈયું ભાન ભૂલી જાય છે..." },
+      { time: 159.92, text: "વ્હેલા વ્હેલા આવું છું, તને જોવા માંગું છું..." },
+      { time: 166.31, text: "રહેવા તારા હૈયે, તારો પ્રાણ બની આવું છું..." },
+      { time: 173.04, text: "ઉતારા દેશું તમને ઓરડા હો જી રે..." },
+      { time: 197.04, text: "દેશું મેડી કેરા મોલ હો જી રે..." },
+      { time: 206.00, text: "કેદુની જોઉં તમારી વાટ, વ્હેલા વ્હાલમ ઘેરે આવજો..." },
+      { time: 221.59, text: "અણિયાળી આંખ યાદ આવતી હો જી રે..." },
+      { time: 227.20, text: "દલડે લાગી છે આગ હો જી રે..." },
+      { time: 235.80, text: "આવું છું મળવા તારે કાજ, હે તે વ્હાલમિયા વધાવજો..." },
+      { time: 251.43, text: "ભવોભવ સાથ દેવા વેણ આપ્યાં હો જી રે..." },
+      { time: 261.28, text: "દીધેલા કોલ યાદ આવતા હો જી રે..." },
+      { time: 269.04, text: "કેદુની જોઉં તમારી વાટ, વ્હેલા વ્હાલમ ઘેરે આવજો..." },
+      { time: 278.63, text: "આવું છું મળવા તારે કાજ, હે તે વ્હાલમિયા વધાવજો..." },
+      { time: 285.50, text: "🎵 (સુમધુર સમાપન...)", isMusic: true }
     ];
 
     /**
      * ====================================================================
-     * 2. DOM Elements & State Management
+     * 2. DOM Elements & State
      * ====================================================================
      */
-    const landingScreen   = document.getElementById('landingScreen');
-    const revealScreen    = document.getElementById('revealScreen');
-    const playerScreen    = document.getElementById('playerScreen');
-    const endingScreen    = document.getElementById('endingScreen');
+    const landingScreen = document.getElementById('landingScreen');
+    const revealScreen = document.getElementById('revealScreen');
+    const playerScreen = document.getElementById('playerScreen');
+    const endingScreen = document.getElementById('endingScreen');
 
-    const mainPlayBtn     = document.getElementById('mainPlayBtn');
-    const audioPlayer     = document.getElementById('audioPlayer');
-    const lyricsContainer = document.getElementById('lyricsContainer');
-    const timeGreeting    = document.getElementById('timeGreeting');
+    const mainPlayBtn = document.getElementById('mainPlayBtn');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const singleLyricEl = document.getElementById('singleLyric');
+    const timeGreeting = document.getElementById('timeGreeting');
 
-    const revealSparkle   = document.getElementById('revealSparkle');
-    const revealLine1     = document.getElementById('revealLine1');
-    const revealLine2     = document.getElementById('revealLine2');
+    const revealSparkle = document.getElementById('revealSparkle');
+    const revealLine1 = document.getElementById('revealLine1');
+    const revealLine2 = document.getElementById('revealLine2');
 
-    const togglePlayBtn   = document.getElementById('togglePlayBtn');
-    const playIconSvg     = document.getElementById('playIconSvg');
-    const rewindBtn       = document.getElementById('rewindBtn');
-    const forwardBtn      = document.getElementById('forwardBtn');
-    const replayBtn       = document.getElementById('replayBtn');
+    const togglePlayBtn = document.getElementById('togglePlayBtn');
+    const playIconSvg = document.getElementById('playIconSvg');
+    const rewindBtn = document.getElementById('rewindBtn');
+    const forwardBtn = document.getElementById('forwardBtn');
+    const replayBtn = document.getElementById('replayBtn');
 
-    const progressWrap    = document.getElementById('progressWrap');
-    const progressFill    = document.getElementById('progressFill');
-    const currentTimeEl   = document.getElementById('currentTime');
-    const durationTimeEl  = document.getElementById('durationTime');
-    const waveVisualizer  = document.getElementById('waveVisualizer');
+    const scrubberTrack = document.getElementById('scrubberTrack');
+    const scrubberFill = document.getElementById('scrubberFill');
+    const scrubberThumb = document.getElementById('scrubberThumb');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationTimeEl = document.getElementById('durationTime');
 
-    let currentActiveIndex = -1;
+    let currentLyricIndex = 0; // Starts at index 0 without redundant re-trigger
     let isUserSeeking = false;
 
     /**
@@ -1008,9 +979,9 @@
      * 3. Time-Aware Gujarati Greeting
      * ====================================================================
      */
-    function updateTimeGreeting() {
+    function updateGreeting() {
       const hour = new Date().getHours();
-      let greeting = "શુભ દિવસ ✨";
+      let greeting = "શુભ સાંજ ✨";
 
       if (hour >= 4 && hour < 12) {
         greeting = "શુભ સવાર 🌅";
@@ -1026,11 +997,29 @@
         timeGreeting.textContent = greeting;
       }
     }
-    updateTimeGreeting();
+    updateGreeting();
 
     /**
      * ====================================================================
-     * 4. Switch Between Screens
+     * 4. Fullscreen on Mobile / User Tap
+     * ====================================================================
+     */
+    function triggerFullscreen() {
+      const docEl = document.documentElement;
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(() => { });
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen().catch(() => { });
+      } else if (docEl.mozRequestFullScreen) {
+        docEl.mozRequestFullScreen().catch(() => { });
+      } else if (docEl.msRequestFullscreen) {
+        docEl.msRequestFullscreen().catch(() => { });
+      }
+    }
+
+    /**
+     * ====================================================================
+     * 5. Switch Between Screens
      * ====================================================================
      */
     function showScreen(screenToShow) {
@@ -1046,143 +1035,99 @@
 
     /**
      * ====================================================================
-     * 5. Populate Synced Lyrics DOM
+     * 6. Smooth Single-Line Lyric Cross-Fade
      * ====================================================================
      */
-    function renderLyrics() {
-      lyricsContainer.innerHTML = '';
-      LYRICS_DATA.forEach((line, index) => {
-        const div = document.createElement('div');
-        div.className = `lyric-item ${line.highlight ? 'is-special' : ''} ${line.isMusic ? 'is-music' : ''}`;
-        div.textContent = line.text;
-        div.dataset.index = index;
-        div.dataset.time = line.time;
+    function updateSingleLyric(index) {
+      if (index === currentLyricIndex || index < 0 || index >= LYRICS_DATA.length) return;
+      currentLyricIndex = index;
 
-        // Click on any lyric line to jump directly there
-        div.addEventListener('click', () => {
-          seekToLyric(index);
-        });
+      const item = LYRICS_DATA[index];
 
-        lyricsContainer.appendChild(div);
-      });
-    }
-    renderLyrics();
+      singleLyricEl.classList.remove('visible', 'fading-in');
+      singleLyricEl.classList.add('fading-out');
 
-    function seekToLyric(index) {
-      if (index >= 0 && index < LYRICS_DATA.length) {
-        audioPlayer.currentTime = LYRICS_DATA[index].time;
-        if (audioPlayer.paused) {
-          audioPlayer.play().catch(() => {});
+      setTimeout(() => {
+        if (item.isMusic) {
+          singleLyricEl.innerHTML = `<span class="music-badge">✨ 🎵 ${item.text.replace('🎵', '').trim()} ✨</span>`;
+        } else {
+          singleLyricEl.textContent = item.text;
         }
-        highlightActiveLyric(index, true);
-      }
+
+        singleLyricEl.classList.remove('fading-out');
+        singleLyricEl.classList.add('fading-in');
+
+        void singleLyricEl.offsetWidth;
+
+        singleLyricEl.classList.remove('fading-in');
+        singleLyricEl.classList.add('visible');
+      }, 340);
     }
 
     /**
      * ====================================================================
-     * 6. Smooth Lyric Highlighting & Centering
-     * ====================================================================
-     */
-    function highlightActiveLyric(index, forceScroll = false) {
-      if (index === currentActiveIndex && !forceScroll) return;
-
-      const items = lyricsContainer.querySelectorAll('.lyric-item');
-      if (currentActiveIndex >= 0 && items[currentActiveIndex]) {
-        items[currentActiveIndex].classList.remove('active');
-      }
-
-      currentActiveIndex = index;
-
-      if (index >= 0 && items[index]) {
-        const activeItem = items[index];
-        activeItem.classList.add('active');
-
-        // Scroll to vertical center of lyrics viewport
-        const containerHeight = lyricsContainer.clientHeight;
-        const itemTop = activeItem.offsetTop;
-        const itemHeight = activeItem.clientHeight;
-
-        const targetScrollTop = itemTop - (containerHeight / 2) + (itemHeight / 2);
-
-        lyricsContainer.scrollTo({
-          top: Math.max(0, targetScrollTop),
-          behavior: 'smooth'
-        });
-      }
-    }
-
-    /**
-     * ====================================================================
-     * 7. Interactive Flow: Play Button Click -> Emotional Reveal -> Audio
+     * 7. Interactive Flow: Play Tap -> Fullscreen -> Emotional Reveal -> Song
      * ====================================================================
      */
     mainPlayBtn.addEventListener('click', () => {
-      // 1. Prime / unlock HTML5 Audio on user tap (prevents iOS/Android autoplay policy block)
+      triggerFullscreen();
+
       audioPlayer.play().then(() => {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
-      }).catch(() => {
-        // Fallback for browsers with strict permissions
-      });
+      }).catch(() => { });
 
-      // 2. Transition to Pre-Music Emotional Reveal Screen
       showScreen(revealScreen);
 
-      // Timed reveal animations:
-      // 0.0s - 2.5s: First line appears
       setTimeout(() => {
         revealSparkle.classList.add('show');
         revealLine1.classList.add('show');
-      }, 100);
+      }, 120);
 
-      // 2.5s - 5.0s: Second line appears
       setTimeout(() => {
         revealLine2.classList.add('show');
       }, 2500);
 
-      // At 5.2s: Transition to Player & Synced Lyrics and start the song
       setTimeout(() => {
         showScreen(playerScreen);
         audioPlayer.currentTime = 0;
         audioPlayer.play().then(() => {
-          updatePlayPauseIcon(true);
+          updatePlayPauseState(true);
         }).catch(err => {
           console.warn("Audio playback note:", err);
-          updatePlayPauseIcon(false);
+          updatePlayPauseState(false);
         });
       }, 5200);
     });
 
     /**
      * ====================================================================
-     * 8. Audio Synchronization & Time Updating
+     * 8. 60fps Smooth Scrubber & Progress Loop
      * ====================================================================
      */
-    audioPlayer.addEventListener('timeupdate', () => {
-      if (isUserSeeking) return;
+    function updateProgress60fps() {
+      if (!isUserSeeking && !audioPlayer.paused && audioPlayer.duration) {
+        const curr = audioPlayer.currentTime;
+        const dur = audioPlayer.duration || 293;
+        const pct = Math.min(100, Math.max(0, (curr / dur) * 100));
 
-      const curr = audioPlayer.currentTime;
-      const dur  = audioPlayer.duration || 293; // 4:53 fallback
+        scrubberFill.style.width = `${pct}%`;
+        scrubberThumb.style.left = `${pct}%`;
+        currentTimeEl.textContent = formatTime(curr);
 
-      // Update Scrubber Progress & Timers
-      const percentage = (curr / dur) * 100;
-      progressFill.style.width = `${Math.min(100, percentage)}%`;
-      currentTimeEl.textContent = formatTime(curr);
-
-      // Find current active lyric line
-      let activeIndex = -1;
-      for (let i = 0; i < LYRICS_DATA.length; i++) {
-        if (curr >= LYRICS_DATA[i].time) {
-          activeIndex = i;
-        } else {
-          break;
+        let activeIdx = 0;
+        for (let i = 0; i < LYRICS_DATA.length; i++) {
+          if (curr >= LYRICS_DATA[i].time) {
+            activeIdx = i;
+          } else {
+            break;
+          }
         }
+        updateSingleLyric(activeIdx);
       }
-
-      if (activeIndex !== -1 && activeIndex !== currentActiveIndex) {
-        highlightActiveLyric(activeIndex);
-      }
-    });
+      requestAnimationFrame(updateProgress60fps);
+    }
+    requestAnimationFrame(updateProgress60fps);
 
     audioPlayer.addEventListener('loadedmetadata', () => {
       if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
@@ -1190,82 +1135,113 @@
       }
     });
 
-    // When the song finishes -> smooth transition to Post-Song Surprise Card
     audioPlayer.addEventListener('ended', () => {
-      updatePlayPauseIcon(false);
+      updatePlayPauseState(false);
       setTimeout(() => {
         showScreen(endingScreen);
-      }, 800);
+      }, 700);
     });
 
     /**
      * ====================================================================
-     * 9. Playback Controls & Scrubber Handlers
+     * 9. Playback Controls & Interactive Seeking
      * ====================================================================
      */
-    function updatePlayPauseIcon(isPlaying) {
+    function updatePlayPauseState(isPlaying) {
       if (isPlaying) {
-        playIconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; // Pause bars
-        playerScreen.classList.add('playing');
+        playIconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
       } else {
-        playIconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>'; // Play triangle
-        playerScreen.classList.remove('playing');
+        playIconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
       }
     }
 
     togglePlayBtn.addEventListener('click', () => {
       if (audioPlayer.paused) {
         audioPlayer.play().then(() => {
-          updatePlayPauseIcon(true);
-        }).catch(() => {});
+          updatePlayPauseState(true);
+        }).catch(() => { });
       } else {
         audioPlayer.pause();
-        updatePlayPauseIcon(false);
+        updatePlayPauseState(false);
       }
     });
 
     rewindBtn.addEventListener('click', () => {
       audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
+      syncScrubberVisualInstant();
     });
 
     forwardBtn.addEventListener('click', () => {
       audioPlayer.currentTime = Math.min(audioPlayer.duration || 293, audioPlayer.currentTime + 10);
+      syncScrubberVisualInstant();
     });
 
-    // Replay button on surprise card
     replayBtn.addEventListener('click', () => {
       showScreen(playerScreen);
       audioPlayer.currentTime = 0;
+      currentLyricIndex = 0;
+      const item = LYRICS_DATA[0];
+      singleLyricEl.innerHTML = `<span class="music-badge">✨ 🎵 ${item.text.replace('🎵', '').trim()} ✨</span>`;
+      singleLyricEl.className = 'single-lyric-text visible';
       audioPlayer.play().then(() => {
-        updatePlayPauseIcon(true);
-        highlightActiveLyric(0, true);
-      }).catch(() => {});
+        updatePlayPauseState(true);
+      }).catch(() => { });
     });
 
-    // Interactive Scrubber seeking
-    function seekFromEvent(e) {
-      const rect = progressWrap.getBoundingClientRect();
+    function syncScrubberVisualInstant() {
+      const curr = audioPlayer.currentTime;
+      const dur = audioPlayer.duration || 293;
+      const pct = (curr / dur) * 100;
+      scrubberFill.style.width = `${pct}%`;
+      scrubberThumb.style.left = `${pct}%`;
+      currentTimeEl.textContent = formatTime(curr);
+
+      let activeIdx = 0;
+      for (let i = 0; i < LYRICS_DATA.length; i++) {
+        if (curr >= LYRICS_DATA[i].time) activeIdx = i;
+        else break;
+      }
+      updateSingleLyric(activeIdx);
+    }
+
+    function handleScrubberInput(e) {
+      const rect = scrubberTrack.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const pos = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
       const dur = audioPlayer.duration || 293;
-      audioPlayer.currentTime = pos * dur;
-      progressFill.style.width = `${pos * 100}%`;
-      currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+
+      scrubberFill.style.width = `${pos * 100}%`;
+      scrubberThumb.style.left = `${pos * 100}%`;
+      currentTimeEl.textContent = formatTime(pos * dur);
+
+      if (!isUserSeeking) {
+        audioPlayer.currentTime = pos * dur;
+      }
+      return pos * dur;
     }
 
-    progressWrap.addEventListener('click', seekFromEvent);
+    scrubberTrack.addEventListener('click', (e) => {
+      const targetTime = handleScrubberInput(e);
+      audioPlayer.currentTime = targetTime;
+      syncScrubberVisualInstant();
+    });
 
-    progressWrap.addEventListener('touchstart', (e) => {
+    scrubberTrack.addEventListener('touchstart', (e) => {
       isUserSeeking = true;
-      seekFromEvent(e);
+      handleScrubberInput(e);
     }, { passive: true });
 
     window.addEventListener('touchmove', (e) => {
-      if (isUserSeeking) seekFromEvent(e);
+      if (isUserSeeking) {
+        handleScrubberInput(e);
+      }
     }, { passive: true });
 
     window.addEventListener('touchend', () => {
-      if (isUserSeeking) isUserSeeking = false;
+      if (isUserSeeking) {
+        isUserSeeking = false;
+        syncScrubberVisualInstant();
+      }
     });
 
     function formatTime(seconds) {
@@ -1277,89 +1253,174 @@
 
     /**
      * ====================================================================
-     * 10. Ambient Golden Stardust Particles Canvas
+     * 10. Delicate Floating Wave Visualizer (Top Header)
      * ====================================================================
      */
-    const canvas = document.getElementById('ambientCanvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animationFrameId;
+    const waveCanvas = document.getElementById('waveVisualizerCanvas');
+    const waveCtx = waveCanvas.getContext('2d');
+    let wavePhase = 0;
+    let waveAnimId;
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    function resizeWaveCanvas() {
+      const rect = waveCanvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      waveCanvas.width = rect.width * dpr;
+      waveCanvas.height = rect.height * dpr;
+      waveCtx.scale(dpr, dpr);
     }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    window.addEventListener('resize', resizeWaveCanvas);
+    setTimeout(resizeWaveCanvas, 200);
 
-    class Particle {
+    function drawOrganicWave() {
+      const rect = waveCanvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      waveCtx.clearRect(0, 0, w, h);
+
+      const isPlaying = !audioPlayer.paused;
+      const baseAmp = isPlaying ? 7 : 1.2;
+      wavePhase += isPlaying ? 0.045 : 0.012;
+
+      const waves = [
+        { amp: baseAmp * 1.0, freq: 0.035, phaseOffset: 0, alpha: 0.75, width: 1.8 },
+        { amp: baseAmp * 0.6, freq: 0.048, phaseOffset: 1.8, alpha: 0.4, width: 1.2 },
+        { amp: baseAmp * 0.35, freq: 0.022, phaseOffset: 3.2, alpha: 0.25, width: 1.0 }
+      ];
+
+      waves.forEach(wave => {
+        waveCtx.beginPath();
+        for (let x = 0; x <= w; x += 3) {
+          const edgeTaper = Math.sin((x / w) * Math.PI);
+          const y = (h / 2) + Math.sin(x * wave.freq + wavePhase + wave.phaseOffset) * wave.amp * edgeTaper;
+          if (x === 0) waveCtx.moveTo(x, y);
+          else waveCtx.lineTo(x, y);
+        }
+        waveCtx.strokeStyle = `rgba(229, 193, 88, ${wave.alpha})`;
+        waveCtx.lineWidth = wave.width;
+        waveCtx.lineCap = 'round';
+        waveCtx.shadowBlur = isPlaying ? 8 : 2;
+        waveCtx.shadowColor = 'rgba(229, 193, 88, 0.5)';
+        waveCtx.stroke();
+      });
+
+      waveAnimId = requestAnimationFrame(drawOrganicWave);
+    }
+    drawOrganicWave();
+
+    /**
+     * ====================================================================
+     * 11. Romantic Sparkling Particle Canvas (Diamond Sparkles & Golden Stardust)
+     * ====================================================================
+     */
+    const sparkleCanvas = document.getElementById('sparkleCanvas');
+    const sparkleCtx = sparkleCanvas.getContext('2d');
+    let sparkles = [];
+    let sparkleAnimId;
+
+    function resizeSparkleCanvas() {
+      sparkleCanvas.width = window.innerWidth;
+      sparkleCanvas.height = window.innerHeight;
+      initSparkles();
+    }
+    window.addEventListener('resize', resizeSparkleCanvas);
+
+    class SparkleParticle {
       constructor() {
-        this.reset();
+        this.reset(true);
       }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 1.8 + 0.5;
-        this.speedY = Math.random() * -0.35 - 0.1;
-        this.speedX = (Math.random() - 0.5) * 0.2;
-        this.alpha = Math.random() * 0.5 + 0.2;
-        this.fadeSpeed = Math.random() * 0.005 + 0.002;
-        this.increasing = Math.random() > 0.5;
+      reset(initial = false) {
+        this.x = Math.random() * sparkleCanvas.width;
+        this.y = initial ? Math.random() * sparkleCanvas.height : sparkleCanvas.height + 15;
+        this.isDiamond = Math.random() < 0.35; // 35% diamond sparkles, 65% soft stardust orbs
+        this.baseSize = this.isDiamond ? Math.random() * 4 + 3 : Math.random() * 1.8 + 0.6;
+        this.speedY = Math.random() * -0.32 - 0.08;
+        this.speedX = (Math.random() - 0.5) * 0.16;
+        this.twinklePhase = Math.random() * Math.PI * 2;
+        this.twinkleSpeed = Math.random() * 0.035 + 0.015;
+        this.maxAlpha = Math.random() * 0.55 + 0.35;
       }
       update() {
         this.y += this.speedY;
         this.x += this.speedX;
+        this.twinklePhase += this.twinkleSpeed;
 
-        if (this.increasing) {
-          this.alpha += this.fadeSpeed;
-          if (this.alpha >= 0.7) this.increasing = false;
-        } else {
-          this.alpha -= this.fadeSpeed;
-          if (this.alpha <= 0.1) this.increasing = true;
-        }
-
-        if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
-          this.reset();
-          this.y = canvas.height + 5;
+        if (this.y < -20 || this.x < -20 || this.x > sparkleCanvas.width + 20) {
+          this.reset(false);
         }
       }
       draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(229, 193, 88, ${this.alpha})`;
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = 'rgba(229, 193, 88, 0.4)';
-        ctx.fill();
+        // Natural harmonic twinkle
+        const alpha = Math.max(0.05, Math.min(this.maxAlpha, (Math.sin(this.twinklePhase) + 1) * 0.5 * this.maxAlpha));
+
+        if (this.isDiamond) {
+          // Draw a 4-point diamond sparkle star
+          const size = this.baseSize * (0.8 + 0.4 * Math.sin(this.twinklePhase));
+          sparkleCtx.save();
+          sparkleCtx.translate(this.x, this.y);
+          sparkleCtx.fillStyle = `rgba(247, 231, 169, ${alpha})`;
+          sparkleCtx.shadowBlur = 10;
+          sparkleCtx.shadowColor = `rgba(229, 193, 88, ${alpha * 0.8})`;
+
+          sparkleCtx.beginPath();
+          sparkleCtx.moveTo(0, -size);
+          sparkleCtx.quadraticCurveTo(0, 0, size * 0.22, 0);
+          sparkleCtx.quadraticCurveTo(0, 0, 0, size);
+          sparkleCtx.quadraticCurveTo(0, 0, -size * 0.22, 0);
+          sparkleCtx.quadraticCurveTo(0, 0, 0, -size);
+          sparkleCtx.fill();
+
+          // Horizontal flare
+          sparkleCtx.beginPath();
+          sparkleCtx.moveTo(-size, 0);
+          sparkleCtx.quadraticCurveTo(0, 0, 0, size * 0.22);
+          sparkleCtx.quadraticCurveTo(0, 0, size, 0);
+          sparkleCtx.quadraticCurveTo(0, 0, 0, -size * 0.22);
+          sparkleCtx.quadraticCurveTo(0, 0, -size, 0);
+          sparkleCtx.fill();
+
+          sparkleCtx.restore();
+        } else {
+          // Soft golden circular stardust orb
+          sparkleCtx.beginPath();
+          sparkleCtx.arc(this.x, this.y, this.baseSize, 0, Math.PI * 2);
+          sparkleCtx.fillStyle = `rgba(229, 193, 88, ${alpha})`;
+          sparkleCtx.shadowBlur = 6;
+          sparkleCtx.shadowColor = `rgba(229, 193, 88, ${alpha * 0.6})`;
+          sparkleCtx.fill();
+        }
       }
     }
 
-    function initParticles() {
-      particles = [];
-      const count = Math.min(45, Math.floor((canvas.width * canvas.height) / 18000));
+    function initSparkles() {
+      sparkles = [];
+      // Responsive sparkle density based on screen dimensions
+      const count = Math.min(50, Math.floor((sparkleCanvas.width * sparkleCanvas.height) / 16000));
       for (let i = 0; i < count; i++) {
-        particles.push(new Particle());
+        sparkles.push(new SparkleParticle());
       }
     }
-    initParticles();
+    resizeSparkleCanvas();
 
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
+    function animateSparkles() {
+      sparkleCtx.clearRect(0, 0, sparkleCanvas.width, sparkleCanvas.height);
+      sparkles.forEach(p => {
         p.update();
         p.draw();
       });
-      animationFrameId = requestAnimationFrame(animateParticles);
+      sparkleAnimId = requestAnimationFrame(animateSparkles);
     }
-    animateParticles();
+    animateSparkles();
 
-    // Pause canvas animation when tab is inactive to preserve battery
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        cancelAnimationFrame(animationFrameId);
+        cancelAnimationFrame(waveAnimId);
+        cancelAnimationFrame(sparkleAnimId);
       } else {
-        animateParticles();
+        drawOrganicWave();
+        animateSparkles();
       }
     });
   </script>
 </body>
+
 </html>
