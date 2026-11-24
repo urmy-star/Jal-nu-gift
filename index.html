@@ -900,6 +900,40 @@
   <script>
     /**
      * ====================================================================
+     * HAPTIC HEARTBEAT (Tactile Goosebumps on Her Phone)
+     * ====================================================================
+     */
+    function triggerHeartbeat(pattern = [45, 110, 65]) {
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        try {
+          navigator.vibrate(pattern);
+        } catch (e) { }
+      }
+    }
+
+    /**
+     * ====================================================================
+     * CINEMATIC AUDIO FADE-IN (Soft Acoustic Blossom in Earbuds)
+     * ====================================================================
+     */
+    function fadeInAudio(audio, durationMs = 2200) {
+      audio.volume = 0;
+      const startTime = performance.now();
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / durationMs);
+        audio.volume = progress * progress; // Natural quadratic volume curve
+        if (progress < 1 && !audio.paused) {
+          requestAnimationFrame(step);
+        } else {
+          audio.volume = 1;
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    /**
+     * ====================================================================
      * 1. LYRICS_DATA (Super Synced & Grammatically Polished Gujarati Lyrics)
      * ====================================================================
      * High-precision timestamps perfectly synchronized with Jigardan Gadhavi's
@@ -973,6 +1007,7 @@
 
     let currentLyricIndex = 0; // Starts at index 0 without redundant re-trigger
     let isUserSeeking = false;
+    let hasTriggeredClimaxHaptic = false;
 
     /**
      * ====================================================================
@@ -1071,6 +1106,7 @@
      */
     mainPlayBtn.addEventListener('click', () => {
       triggerFullscreen();
+      triggerHeartbeat([50, 120, 70]); // Initial gentle heartbeat pulse on tap
 
       audioPlayer.play().then(() => {
         audioPlayer.pause();
@@ -1082,6 +1118,7 @@
       setTimeout(() => {
         revealSparkle.classList.add('show');
         revealLine1.classList.add('show');
+        triggerHeartbeat([35, 90, 45]);
       }, 120);
 
       setTimeout(() => {
@@ -1091,11 +1128,16 @@
       setTimeout(() => {
         showScreen(playerScreen);
         audioPlayer.currentTime = 0;
+        audioPlayer.volume = 0;
+        triggerHeartbeat([40, 100, 60]);
+
         audioPlayer.play().then(() => {
           updatePlayPauseState(true);
+          fadeInAudio(audioPlayer, 2200); // 2.2s cinematic audio swell
         }).catch(err => {
           console.warn("Audio playback note:", err);
           updatePlayPauseState(false);
+          audioPlayer.volume = 1;
         });
       }, 5200);
     });
@@ -1124,6 +1166,12 @@
           }
         }
         updateSingleLyric(activeIdx);
+
+        // Tactile Heartbeat at the emotional climax: "હાથ થામી દીધા મારા કોલ યાદ છે..." (134.64s)
+        if (curr >= 134.64 && curr < 140.0 && !hasTriggeredClimaxHaptic) {
+          hasTriggeredClimaxHaptic = true;
+          triggerHeartbeat([50, 120, 75]);
+        }
       }
       requestAnimationFrame(updateProgress60fps);
     }
@@ -1137,6 +1185,7 @@
 
     audioPlayer.addEventListener('ended', () => {
       updatePlayPauseState(false);
+      triggerHeartbeat([45, 100, 50, 100, 65]);
       setTimeout(() => {
         showScreen(endingScreen);
       }, 700);
@@ -1179,12 +1228,17 @@
     replayBtn.addEventListener('click', () => {
       showScreen(playerScreen);
       audioPlayer.currentTime = 0;
+      audioPlayer.volume = 0;
       currentLyricIndex = 0;
+      hasTriggeredClimaxHaptic = false;
       const item = LYRICS_DATA[0];
       singleLyricEl.innerHTML = `<span class="music-badge">✨ 🎵 ${item.text.replace('🎵', '').trim()} ✨</span>`;
       singleLyricEl.className = 'single-lyric-text visible';
+      triggerHeartbeat([40, 100, 60]);
+
       audioPlayer.play().then(() => {
         updatePlayPauseState(true);
+        fadeInAudio(audioPlayer, 2000);
       }).catch(() => { });
     });
 
@@ -1401,12 +1455,112 @@
     }
     resizeSparkleCanvas();
 
+    /**
+     * ====================================================================
+     * 12. Interactive Touch Stardust (Option 3: Blooms on Tap & Drag)
+     * ====================================================================
+     */
+    class TouchSparkle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 2.4 + 0.8;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed - 1.4; // Soft upward drift
+        this.gravity = -0.015; // Slow gentle ascent
+        this.life = 1.0;
+        this.decay = Math.random() * 0.022 + 0.015; // ~1.5 - 2s lifetime
+        this.baseSize = Math.random() * 4.0 + 2.2;
+        this.isDiamond = Math.random() < 0.45;
+        this.twinklePhase = Math.random() * Math.PI * 2;
+        this.goldColor = Math.random() < 0.35 ? '247, 231, 169' : '229, 193, 88';
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += this.gravity;
+        this.vx *= 0.97;
+        this.life -= this.decay;
+        this.twinklePhase += 0.12;
+      }
+      draw() {
+        if (this.life <= 0) return;
+        const alpha = Math.max(0, this.life);
+
+        if (this.isDiamond) {
+          const size = this.baseSize * this.life * (0.8 + 0.3 * Math.sin(this.twinklePhase));
+          sparkleCtx.save();
+          sparkleCtx.translate(this.x, this.y);
+          sparkleCtx.fillStyle = `rgba(${this.goldColor}, ${alpha})`;
+          sparkleCtx.shadowBlur = 12;
+          sparkleCtx.shadowColor = `rgba(229, 193, 88, ${alpha * 0.85})`;
+
+          sparkleCtx.beginPath();
+          sparkleCtx.moveTo(0, -size);
+          sparkleCtx.quadraticCurveTo(0, 0, size * 0.22, 0);
+          sparkleCtx.quadraticCurveTo(0, 0, 0, size);
+          sparkleCtx.quadraticCurveTo(0, 0, -size * 0.22, 0);
+          sparkleCtx.quadraticCurveTo(0, 0, 0, -size);
+          sparkleCtx.fill();
+
+          sparkleCtx.beginPath();
+          sparkleCtx.moveTo(-size, 0);
+          sparkleCtx.quadraticCurveTo(0, 0, 0, size * 0.22);
+          sparkleCtx.quadraticCurveTo(0, 0, size, 0);
+          sparkleCtx.quadraticCurveTo(0, 0, 0, -size * 0.22);
+          sparkleCtx.quadraticCurveTo(0, 0, -size, 0);
+          sparkleCtx.fill();
+
+          sparkleCtx.restore();
+        } else {
+          sparkleCtx.beginPath();
+          sparkleCtx.arc(this.x, this.y, this.baseSize * this.life * 0.7, 0, Math.PI * 2);
+          sparkleCtx.fillStyle = `rgba(${this.goldColor}, ${alpha})`;
+          sparkleCtx.shadowBlur = 8;
+          sparkleCtx.shadowColor = `rgba(229, 193, 88, ${alpha * 0.7})`;
+          sparkleCtx.fill();
+        }
+      }
+    }
+
+    let touchSparkles = [];
+    function spawnTouchSparkles(x, y, count = 6) {
+      for (let i = 0; i < count; i++) {
+        touchSparkles.push(new TouchSparkle(x, y));
+      }
+      if (touchSparkles.length > 70) {
+        touchSparkles.splice(0, touchSparkles.length - 70);
+      }
+    }
+
+    window.addEventListener('pointerdown', (e) => {
+      spawnTouchSparkles(e.clientX, e.clientY, 8);
+    }, { passive: true });
+
+    let lastTouchMove = 0;
+    window.addEventListener('pointermove', (e) => {
+      const now = performance.now();
+      if (now - lastTouchMove > 35) {
+        lastTouchMove = now;
+        spawnTouchSparkles(e.clientX, e.clientY, 2);
+      }
+    }, { passive: true });
+
     function animateSparkles() {
       sparkleCtx.clearRect(0, 0, sparkleCanvas.width, sparkleCanvas.height);
       sparkles.forEach(p => {
         p.update();
         p.draw();
       });
+      for (let i = touchSparkles.length - 1; i >= 0; i--) {
+        const p = touchSparkles[i];
+        p.update();
+        p.draw();
+        if (p.life <= 0) {
+          touchSparkles.splice(i, 1);
+        }
+      }
       sparkleAnimId = requestAnimationFrame(animateSparkles);
     }
     animateSparkles();
