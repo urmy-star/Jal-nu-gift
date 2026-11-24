@@ -402,65 +402,60 @@
       box-shadow: none;
     }
 
-    /* Single Lyric Text View with Smooth Cross-Fade */
+    /* Single Lyric Text View with Curved Smooth Motion */
     .single-lyric-text {
       width: 100%;
-      font-size: clamp(1.45rem, 5.4vw, 2.35rem);
+      min-height: 2.8em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.45rem, 5.2vw, 2.35rem);
       font-weight: 600;
-      line-height: 1.75;
+      line-height: 1.6;
       text-align: center;
       /* Consistent radiant warm champagne gold across all lyrics */
       color: #F7E7A9;
       background: var(--text-gold-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 24px rgba(229, 193, 88, 0.4));
-      transition: opacity 0.38s cubic-bezier(0.25, 1, 0.5, 1),
-        transform 0.38s cubic-bezier(0.25, 1, 0.5, 1),
-        filter 0.38s ease;
+      filter: drop-shadow(0 0 24px rgba(229, 193, 88, 0.45));
       will-change: opacity, transform, filter;
     }
 
-    .single-lyric-text.fading-out {
-      opacity: 0;
-      transform: translateY(-16px) scale(0.97);
-      filter: blur(6px);
+    .single-lyric-text.curved-fade-in {
+      animation: lyricCurvedIn 0.52s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .single-lyric-text.fading-in {
-      opacity: 0;
-      transform: translateY(16px) scale(0.97);
-      filter: blur(6px);
+    .single-lyric-text.curved-fade-out {
+      animation: lyricCurvedOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
-    .single-lyric-text.visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0);
-    }
-
-    /* Musical Interlude Badge */
-    .music-badge {
-      font-size: clamp(1.05rem, 3.5vw, 1.35rem);
-      font-weight: 400;
-      color: var(--accent-gold-primary);
-      -webkit-text-fill-color: initial;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      letter-spacing: 0.5px;
-      animation: musicPulse 2.4s ease-in-out infinite alternate;
-    }
-
-    @keyframes musicPulse {
+    @keyframes lyricCurvedIn {
       0% {
-        opacity: 0.65;
-        transform: scale(0.98);
+        opacity: 0;
+        transform: translate3d(0, 22px, 0) scale(0.95);
+        filter: blur(8px) drop-shadow(0 0 8px rgba(229, 193, 88, 0.2));
       }
-
+      60% {
+        filter: blur(0px);
+      }
       100% {
         opacity: 1;
-        transform: scale(1.02);
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px) drop-shadow(0 0 24px rgba(229, 193, 88, 0.45));
+      }
+    }
+
+    @keyframes lyricCurvedOut {
+      0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(0, -16px, 0) scale(1.02);
+        filter: blur(6px);
       }
     }
 
@@ -479,7 +474,7 @@
       box-shadow: none;
     }
 
-    /* Thin, Minimalist 60fps Scrubber */
+    /* High-Precision Touch & Drag Scrubber */
     .scrubber-wrap {
       width: 100%;
       display: flex;
@@ -489,26 +484,32 @@
 
     .scrubber-track-area {
       width: 100%;
-      height: 24px;
-      /* Generous touch target */
+      height: 32px;
+      /* Generous touch target for effortless slide and hold */
       display: flex;
       align-items: center;
       cursor: pointer;
       position: relative;
+      touch-action: none; /* Prevents mobile browser from intercepting dragging */
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .scrubber-rail {
       width: 100%;
       height: 3px;
-      background: rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.16);
       border-radius: 3px;
       position: relative;
       overflow: visible;
-      transition: height 0.15s ease;
+      transition: height 0.15s ease, background 0.15s ease;
+      pointer-events: none;
     }
 
-    .scrubber-track-area:active .scrubber-rail {
+    .scrubber-track-area:active .scrubber-rail,
+    .scrubber-track-area.is-dragging .scrubber-rail {
       height: 5px;
+      background: rgba(255, 255, 255, 0.25);
     }
 
     .scrubber-fill {
@@ -537,13 +538,14 @@
       border: 1.5px solid var(--accent-gold-primary);
       box-shadow: 0 0 12px rgba(229, 193, 88, 0.7);
       pointer-events: none;
-      transition: transform 0.1s ease;
-      will-change: left;
+      transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
+      will-change: left, transform;
     }
 
-    .scrubber-track-area:active .scrubber-thumb {
-      transform: scale(1.3);
-      box-shadow: 0 0 18px rgba(229, 193, 88, 1);
+    .scrubber-track-area:active .scrubber-thumb,
+    .scrubber-track-area.is-dragging .scrubber-thumb {
+      transform: scale(1.4);
+      box-shadow: 0 0 20px rgba(229, 193, 88, 1), 0 0 8px #FFF;
     }
 
     .time-labels {
@@ -802,9 +804,7 @@
 
       <!-- Center Floating Lyrics Spotlight (BORDERLESS) -->
       <main class="lyrics-spotlight">
-        <div id="singleLyric" class="single-lyric-text visible">
-          🎵 (મધુર સંગીતની શરૂઆત...)
-        </div>
+        <div id="singleLyric" class="single-lyric-text"></div>
       </main>
 
       <!-- Bottom Floating Controls Deck (BORDERLESS) -->
@@ -940,7 +940,7 @@
      * vocals in ./vhaalam-aavo-ne.mp3 (4:53 duration).
      */
     const LYRICS_DATA = [
-      { time: 0.00, text: "🎵 (મધુર સંગીતની શરૂઆત...)", isMusic: true },
+      { time: 0.00, text: "" },
       { time: 16.56, text: "સુની છે આંખો, સૂના છે આંસુ..." },
       { time: 20.24, text: "જોવે છે મિલનની વાટ રે વ્હાલમિયા..." },
       { time: 29.03, text: "છોડીને ચાલ્યા ના જાવો..." },
@@ -949,12 +949,15 @@
       { time: 42.48, text: "નિભાવો, હૈયું ભૂલ્યું છે હવે ભાન રે..." },
       { time: 49.68, text: "સાજણના સંભારણા યાદ બહુ આવે..." },
       { time: 56.16, text: "સાજણ તારી યાદ જી રે..." },
+      { time: 59.03, text: "જી રે નણદલના..." },
       { time: 62.00, text: "નણદલના વીર વિના એકલાં હો જી રે..." },
+      { time: 71.60, text: "નણદલના વીર વિના એકલાં હો જી રે..." },
       { time: 78.79, text: "સૂના મંદિર થાવા જાય હો જી રે..." },
       { time: 88.42, text: "કેદુની જોઉં તમારી વાટ..." },
       { time: 92.88, text: "વ્હેલા વ્હાલમ ઘેરે આવજો..." },
-      { time: 101.20, text: "કેદુની જોઉં તમારી વાટ, વ્હેલા વ્હાલમ ઘેરે આવજો..." },
-      { time: 106.50, text: "🎵 (મધુર સંગીત...)", isMusic: true },
+      { time: 98.56, text: "કેદુની જોઉં તમારી વાટ..." },
+      { time: 101.20, text: "વ્હેલા વ્હાલમ ઘેરે આવજો..." },
+      { time: 106.50, text: "" },
       { time: 134.64, text: "હાથ થામી દીધા મારા કોલ યાદ છે..." },
       { time: 141.36, text: "પરદેશ હોવા છતાં હૈયું તારે કાજ છે..." },
       { time: 146.31, text: "આવવાના ઓરતા તો બાકી રહી જાય છે..." },
@@ -963,15 +966,19 @@
       { time: 166.31, text: "રહેવા તારા હૈયે, તારો પ્રાણ બની આવું છું..." },
       { time: 173.04, text: "ઉતારા દેશું તમને ઓરડા હો જી રે..." },
       { time: 197.04, text: "દેશું મેડી કેરા મોલ હો જી રે..." },
-      { time: 206.00, text: "કેદુની જોઉં તમારી વાટ, વ્હેલા વ્હાલમ ઘેરે આવજો..." },
+      { time: 206.00, text: "કેદુની જોઉં તમારી વાટ..." },
+      { time: 210.50, text: "વ્હેલા વ્હાલમ ઘેરે આવજો..." },
       { time: 221.59, text: "અણિયાળી આંખ યાદ આવતી હો જી રે..." },
       { time: 227.20, text: "દલડે લાગી છે આગ હો જી રે..." },
-      { time: 235.80, text: "આવું છું મળવા તારે કાજ, હે તે વ્હાલમિયા વધાવજો..." },
+      { time: 235.80, text: "આવું છું મળવા તારે કાજ..." },
+      { time: 240.20, text: "હે તે વ્હાલમિયા વધાવજો..." },
       { time: 251.43, text: "ભવોભવ સાથ દેવા વેણ આપ્યાં હો જી રે..." },
       { time: 261.28, text: "દીધેલા કોલ યાદ આવતા હો જી રે..." },
-      { time: 269.04, text: "કેદુની જોઉં તમારી વાટ, વ્હેલા વ્હાલમ ઘેરે આવજો..." },
-      { time: 278.63, text: "આવું છું મળવા તારે કાજ, હે તે વ્હાલમિયા વધાવજો..." },
-      { time: 285.50, text: "🎵 (સુમધુર સમાપન...)", isMusic: true }
+      { time: 269.04, text: "કેદુની જોઉં તમારી વાટ..." },
+      { time: 273.50, text: "વ્હેલા વ્હાલમ ઘેરે આવજો..." },
+      { time: 278.63, text: "આવું છું મળવા તારે કાજ..." },
+      { time: 282.00, text: "હે તે વ્હાલમિયા વધાવજો..." },
+      { time: 286.50, text: "" }
     ];
 
     /**
@@ -1070,33 +1077,61 @@
 
     /**
      * ====================================================================
-     * 6. Smooth Single-Line Lyric Cross-Fade
+     * 6. Curved Smooth Single-Line Lyric Animation
      * ====================================================================
      */
-    function updateSingleLyric(index) {
-      if (index === currentLyricIndex || index < 0 || index >= LYRICS_DATA.length) return;
+    let lyricTransitionTimeout = null;
+
+    function updateSingleLyric(index, instant = false) {
+      if (index === currentLyricIndex && !instant) return;
       currentLyricIndex = index;
 
-      const item = LYRICS_DATA[index];
+      if (lyricTransitionTimeout) {
+        clearTimeout(lyricTransitionTimeout);
+        lyricTransitionTimeout = null;
+      }
 
-      singleLyricEl.classList.remove('visible', 'fading-in');
-      singleLyricEl.classList.add('fading-out');
+      const item = (index >= 0 && index < LYRICS_DATA.length) ? LYRICS_DATA[index] : null;
+      const targetText = item ? (item.text || '') : '';
 
-      setTimeout(() => {
-        if (item.isMusic) {
-          singleLyricEl.innerHTML = `<span class="music-badge">✨ 🎵 ${item.text.replace('🎵', '').trim()} ✨</span>`;
-        } else {
-          singleLyricEl.textContent = item.text;
+      if (instant) {
+        if (!targetText) {
+          singleLyricEl.textContent = '';
+          singleLyricEl.className = 'single-lyric-text';
+          return;
         }
-
-        singleLyricEl.classList.remove('fading-out');
-        singleLyricEl.classList.add('fading-in');
-
+        singleLyricEl.textContent = targetText;
+        singleLyricEl.className = 'single-lyric-text';
         void singleLyricEl.offsetWidth;
+        singleLyricEl.className = 'single-lyric-text curved-fade-in';
+        return;
+      }
 
-        singleLyricEl.classList.remove('fading-in');
-        singleLyricEl.classList.add('visible');
-      }, 340);
+      if (!targetText) {
+        if (singleLyricEl.textContent.trim()) {
+          singleLyricEl.className = 'single-lyric-text curved-fade-out';
+          lyricTransitionTimeout = setTimeout(() => {
+            singleLyricEl.textContent = '';
+            singleLyricEl.className = 'single-lyric-text';
+          }, 300);
+        }
+        return;
+      }
+
+      if (singleLyricEl.textContent.trim()) {
+        singleLyricEl.className = 'single-lyric-text curved-fade-out';
+        lyricTransitionTimeout = setTimeout(() => {
+          singleLyricEl.textContent = targetText;
+          singleLyricEl.className = 'single-lyric-text';
+          void singleLyricEl.offsetWidth;
+          singleLyricEl.className = 'single-lyric-text curved-fade-in';
+        }, 300);
+      } else {
+        singleLyricEl.textContent = targetText;
+        singleLyricEl.className = 'single-lyric-text';
+        void singleLyricEl.offsetWidth;
+        singleLyricEl.className = 'single-lyric-text curved-fade-in';
+      }
     }
 
     /**
@@ -1147,25 +1182,36 @@
      * 8. 60fps Smooth Scrubber & Progress Loop
      * ====================================================================
      */
+    function renderScrubberAt(pos, timeInSeconds) {
+      const pct = Math.min(100, Math.max(0, pos * 100));
+      scrubberFill.style.width = `${pct}%`;
+      scrubberThumb.style.left = `${pct}%`;
+      currentTimeEl.textContent = formatTime(timeInSeconds);
+    }
+
+    function findLyricIndexForTime(seconds) {
+      let activeIdx = -1;
+      for (let i = 0; i < LYRICS_DATA.length; i++) {
+        if (seconds >= LYRICS_DATA[i].time) {
+          activeIdx = i;
+        } else {
+          break;
+        }
+      }
+      return activeIdx;
+    }
+
     function updateProgress60fps() {
       if (!isUserSeeking && !audioPlayer.paused && audioPlayer.duration) {
         const curr = audioPlayer.currentTime;
-        const dur = audioPlayer.duration || 293;
-        const pct = Math.min(100, Math.max(0, (curr / dur) * 100));
+        const dur = (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.duration > 0)
+          ? audioPlayer.duration
+          : 293;
+        const pos = Math.min(1, Math.max(0, curr / dur));
+        renderScrubberAt(pos, curr);
 
-        scrubberFill.style.width = `${pct}%`;
-        scrubberThumb.style.left = `${pct}%`;
-        currentTimeEl.textContent = formatTime(curr);
-
-        let activeIdx = 0;
-        for (let i = 0; i < LYRICS_DATA.length; i++) {
-          if (curr >= LYRICS_DATA[i].time) {
-            activeIdx = i;
-          } else {
-            break;
-          }
-        }
-        updateSingleLyric(activeIdx);
+        const activeIdx = findLyricIndexForTime(curr);
+        updateSingleLyric(activeIdx, false);
 
         // Tactile Heartbeat at the emotional climax: "હાથ થામી દીધા મારા કોલ યાદ છે..." (134.64s)
         if (curr >= 134.64 && curr < 140.0 && !hasTriggeredClimaxHaptic) {
@@ -1193,7 +1239,7 @@
 
     /**
      * ====================================================================
-     * 9. Playback Controls & Interactive Seeking
+     * 9. Playback Controls & High-Precision Interactive Seeking
      * ====================================================================
      */
     function updatePlayPauseState(isPlaying) {
@@ -1216,24 +1262,33 @@
     });
 
     rewindBtn.addEventListener('click', () => {
+      const dur = (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.duration > 0)
+        ? audioPlayer.duration
+        : 293;
       audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
-      syncScrubberVisualInstant();
+      const curr = audioPlayer.currentTime;
+      renderScrubberAt(curr / dur, curr);
+      updateSingleLyric(findLyricIndexForTime(curr), true);
     });
 
     forwardBtn.addEventListener('click', () => {
-      audioPlayer.currentTime = Math.min(audioPlayer.duration || 293, audioPlayer.currentTime + 10);
-      syncScrubberVisualInstant();
+      const dur = (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.duration > 0)
+        ? audioPlayer.duration
+        : 293;
+      audioPlayer.currentTime = Math.min(dur, audioPlayer.currentTime + 10);
+      const curr = audioPlayer.currentTime;
+      renderScrubberAt(curr / dur, curr);
+      updateSingleLyric(findLyricIndexForTime(curr), true);
     });
 
     replayBtn.addEventListener('click', () => {
       showScreen(playerScreen);
       audioPlayer.currentTime = 0;
       audioPlayer.volume = 0;
-      currentLyricIndex = 0;
+      currentLyricIndex = -1;
       hasTriggeredClimaxHaptic = false;
-      const item = LYRICS_DATA[0];
-      singleLyricEl.innerHTML = `<span class="music-badge">✨ 🎵 ${item.text.replace('🎵', '').trim()} ✨</span>`;
-      singleLyricEl.className = 'single-lyric-text visible';
+      renderScrubberAt(0, 0);
+      updateSingleLyric(-1, true);
       triggerHeartbeat([40, 100, 60]);
 
       audioPlayer.play().then(() => {
@@ -1242,61 +1297,59 @@
       }).catch(() => { });
     });
 
-    function syncScrubberVisualInstant() {
-      const curr = audioPlayer.currentTime;
-      const dur = audioPlayer.duration || 293;
-      const pct = (curr / dur) * 100;
-      scrubberFill.style.width = `${pct}%`;
-      scrubberThumb.style.left = `${pct}%`;
-      currentTimeEl.textContent = formatTime(curr);
+    let isUserSeeking = false;
+    let seekTargetTime = 0;
 
-      let activeIdx = 0;
-      for (let i = 0; i < LYRICS_DATA.length; i++) {
-        if (curr >= LYRICS_DATA[i].time) activeIdx = i;
-        else break;
-      }
-      updateSingleLyric(activeIdx);
-    }
-
-    function handleScrubberInput(e) {
+    function getScrubberSeekData(clientX) {
       const rect = scrubberTrack.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const pos = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-      const dur = audioPlayer.duration || 293;
-
-      scrubberFill.style.width = `${pos * 100}%`;
-      scrubberThumb.style.left = `${pos * 100}%`;
-      currentTimeEl.textContent = formatTime(pos * dur);
-
-      if (!isUserSeeking) {
-        audioPlayer.currentTime = pos * dur;
-      }
-      return pos * dur;
+      const dur = (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.duration > 0)
+        ? audioPlayer.duration
+        : 293;
+      const targetTime = pos * dur;
+      return { pos, targetTime };
     }
 
-    scrubberTrack.addEventListener('click', (e) => {
-      const targetTime = handleScrubberInput(e);
-      audioPlayer.currentTime = targetTime;
-      syncScrubberVisualInstant();
-    });
-
-    scrubberTrack.addEventListener('touchstart', (e) => {
+    function onScrubberPointerDown(e) {
       isUserSeeking = true;
-      handleScrubberInput(e);
-    }, { passive: true });
-
-    window.addEventListener('touchmove', (e) => {
-      if (isUserSeeking) {
-        handleScrubberInput(e);
+      scrubberTrack.classList.add('is-dragging');
+      if (typeof scrubberTrack.setPointerCapture === 'function') {
+        try { scrubberTrack.setPointerCapture(e.pointerId); } catch (_) {}
       }
-    }, { passive: true });
+      const { pos, targetTime } = getScrubberSeekData(e.clientX);
+      seekTargetTime = targetTime;
+      renderScrubberAt(pos, targetTime);
+      updateSingleLyric(findLyricIndexForTime(targetTime), true);
+    }
 
-    window.addEventListener('touchend', () => {
-      if (isUserSeeking) {
-        isUserSeeking = false;
-        syncScrubberVisualInstant();
+    function onScrubberPointerMove(e) {
+      if (!isUserSeeking) return;
+      const { pos, targetTime } = getScrubberSeekData(e.clientX);
+      seekTargetTime = targetTime;
+      renderScrubberAt(pos, targetTime);
+      updateSingleLyric(findLyricIndexForTime(targetTime), true);
+    }
+
+    function onScrubberPointerUp(e) {
+      if (!isUserSeeking) return;
+      isUserSeeking = false;
+      scrubberTrack.classList.remove('is-dragging');
+      if (typeof scrubberTrack.releasePointerCapture === 'function') {
+        try { scrubberTrack.releasePointerCapture(e.pointerId); } catch (_) {}
       }
-    });
+
+      audioPlayer.currentTime = seekTargetTime;
+      const dur = (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.duration > 0)
+        ? audioPlayer.duration
+        : 293;
+      renderScrubberAt(seekTargetTime / dur, seekTargetTime);
+      updateSingleLyric(findLyricIndexForTime(seekTargetTime), true);
+    }
+
+    scrubberTrack.addEventListener('pointerdown', onScrubberPointerDown);
+    scrubberTrack.addEventListener('pointermove', onScrubberPointerMove);
+    scrubberTrack.addEventListener('pointerup', onScrubberPointerUp);
+    scrubberTrack.addEventListener('pointercancel', onScrubberPointerUp);
 
     function formatTime(seconds) {
       if (isNaN(seconds) || seconds < 0) return "0:00";
