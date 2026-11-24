@@ -1054,6 +1054,7 @@
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     /**
      * ====================================================================
@@ -1555,10 +1556,14 @@
     });
 
     /**
-     * Lighting Setup
+     * Lighting Setup - Multi-Angle Luminous Atmosphere System
      */
     const hemiLight = new THREE.HemisphereLight('#70b4f8', '#48753a', 0.85);
     scene.add(hemiLight);
+
+    // Dynamic Scene Ambient Wrap (prevents any surface from dropping to pitch black)
+    const ambientFillLight = new THREE.AmbientLight('#dbeaf8', 1.15);
+    scene.add(ambientFillLight);
 
     const dirLight = new THREE.DirectionalLight('#fff5df', 1.25);
     dirLight.position.set(14, 18, 12);
@@ -1574,23 +1579,38 @@
     dirLight.shadow.bias = -0.001;
     scene.add(dirLight);
 
-    // 4-Step Toon Gradient Map for Cel-Shaded Anime Aesthetics
-    function createToonGradientMap() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 4;
-      canvas.height = 1;
-      const ctx = canvas.getContext('2d');
-      const steps = ['#5a5c68', '#8e92a0', '#cfd3de', '#ffffff'];
+    // Dynamic Atmosphere Back-Fill Directional Light
+    // Placed directly behind the characters pointing forward to illuminate their backs, hair, and shoulders
+    // with the exact dynamic sky horizon colors across morning, afternoon, sunset, and night
+    const backAtmosphereLight = new THREE.DirectionalLight('#ffe4cb', 1.85);
+    backAtmosphereLight.position.set(0, 2.8, -4.8);
+    backAtmosphereLight.target.position.set(0, 1.0, 0.45);
+    scene.add(backAtmosphereLight);
+    scene.add(backAtmosphereLight.target);
+
+    // Seasonal Upward Bounce Light from Picnic Blanket / Grass
+    const seasonalBounceLight = new THREE.PointLight('#ffe8f0', 1.25, 6.0, 1.2);
+    seasonalBounceLight.position.set(0, 0.25, 0.35);
+    scene.add(seasonalBounceLight);
+
+    // Dynamic 4-Step Toon Gradient Map for Cel-Shaded Anime Aesthetics
+    // Automatically re-painted with atmospheric bounce tones so shadows are dreamy and luminous instead of dark gray/black
+    const toonCanvas = document.createElement('canvas');
+    toonCanvas.width = 4;
+    toonCanvas.height = 1;
+    const toonCtx = toonCanvas.getContext('2d');
+    const toonGradient = new THREE.CanvasTexture(toonCanvas);
+    toonGradient.minFilter = THREE.NearestFilter;
+    toonGradient.magFilter = THREE.NearestFilter;
+
+    function updateToonGradient(steps) {
       steps.forEach((c, idx) => {
-        ctx.fillStyle = c;
-        ctx.fillRect(idx, 0, 1, 1);
+        toonCtx.fillStyle = c;
+        toonCtx.fillRect(idx, 0, 1, 1);
       });
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.minFilter = THREE.NearestFilter;
-      tex.magFilter = THREE.NearestFilter;
-      return tex;
+      toonGradient.needsUpdate = true;
     }
-    const toonGradient = createToonGradientMap();
+    updateToonGradient(['#c8b8dc', '#ded6eb', '#f2eff9', '#ffffff']);
 
     // Soft Rim Lighting from behind-above to sculpt anime silhouettes and hair highlights
     const rimLight = new THREE.DirectionalLight('#fff2db', 1.15);
@@ -2843,21 +2863,28 @@
     pearl.position.z = 0.015;
     sakuraClipGroup.add(pearl);
 
-    // Two delicate golden ribbon streamers fluttering down
-    sakuraClipGroup.add(createCurvedHairStrand([
+    // Two delicate golden ribbon streamers fluttering down from sakura clip
+    const girlHairRibbon1 = createCurvedHairStrand([
       new THREE.Vector3(0, -0.02, 0),
       new THREE.Vector3(0.02, -0.08, 0.01),
       new THREE.Vector3(0.015, -0.15, 0.02)
-    ], 0.01, 0.004, 8, 6, clipGoldMat));
+    ], 0.01, 0.004, 8, 6, clipGoldMat);
+    sakuraClipGroup.add(girlHairRibbon1);
 
-    sakuraClipGroup.add(createCurvedHairStrand([
+    const girlHairRibbon2 = createCurvedHairStrand([
       new THREE.Vector3(-0.01, -0.02, 0),
       new THREE.Vector3(-0.025, -0.07, 0.01),
       new THREE.Vector3(-0.02, -0.14, 0.02)
-    ], 0.009, 0.004, 8, 6, clipGoldMat));
+    ], 0.009, 0.004, 8, 6, clipGoldMat);
+    sakuraClipGroup.add(girlHairRibbon2);
 
     // Girl Head Affectionate Tilt toward boy
     girlHeadPivot.rotation.set(0.06, -0.24, -0.2);
+
+    // Dynamic Character Animation & Shy Glance State
+    let shyGlanceTimer = 0;
+    let targetHeadYaw = -0.28;
+    let targetHeadPitch = 0.16;
 
     // --- Vintage Lantern on Blanket ---
     const lanternGroup = new THREE.Group();
@@ -3084,6 +3111,7 @@
     /**
      * ====================================================================
      * 8. DYNAMIC TIME-OF-DAY & SEASONS ENGINE
+     * Multi-Angle Atmospheric Illumination & Reactive Seasonal Wardrobes
      * ====================================================================
      */
     const TIME_PRESETS = {
@@ -3097,6 +3125,11 @@
         dirColor: '#fff5df',
         dirIntensity: 1.25,
         dirPos: [14, 18, 12],
+        backAtmoColor: '#ffe4cb',
+        backAtmoIntensity: 1.85,
+        ambientFillColor: '#dbeaf8',
+        ambientFillIntensity: 1.15,
+        toonSteps: ['#c8b8dc', '#ded6eb', '#f2eff9', '#ffffff'],
         fogColor: '#6dafe8',
         fogDensity: 0.007,
         lanternIntensity: 0.15,
@@ -3115,6 +3148,11 @@
         dirColor: '#ffffff',
         dirIntensity: 1.35,
         dirPos: [4, 24, 6],
+        backAtmoColor: '#cce6ff',
+        backAtmoIntensity: 1.7,
+        ambientFillColor: '#e4f0fc',
+        ambientFillIntensity: 1.2,
+        toonSteps: ['#b8d4ee', '#d6e8f8', '#f2f8fd', '#ffffff'],
         fogColor: '#549ce0',
         fogDensity: 0.006,
         lanternIntensity: 0.0,
@@ -3133,6 +3171,11 @@
         dirColor: '#ff6b3d',
         dirIntensity: 1.7,
         dirPos: [-18, 6, -8],
+        backAtmoColor: '#ff7d45',
+        backAtmoIntensity: 2.6,
+        ambientFillColor: '#ffd4c2',
+        ambientFillIntensity: 1.35,
+        toonSteps: ['#d87268', '#f0988a', '#fad0c4', '#ffffff'],
         fogColor: '#4e2236',
         fogDensity: 0.009,
         lanternIntensity: 2.5,
@@ -3151,6 +3194,11 @@
         dirColor: '#708eb8',
         dirIntensity: 0.45,
         dirPos: [-12, 18, -10],
+        backAtmoColor: '#7092dc',
+        backAtmoIntensity: 1.75,
+        ambientFillColor: '#54668e',
+        ambientFillIntensity: 0.95,
+        toonSteps: ['#425884', '#6884bc', '#a4c0f2', '#ffffff'],
         fogColor: '#050814',
         fogDensity: 0.012,
         lanternIntensity: 3.4,
@@ -3168,7 +3216,11 @@
         particleShape: 'sakura',
         hillColor: '#386634',
         grassColor: '#4e8b45',
-        girlDressColor: '#fca5b8'
+        girlDressColor: '#ff9eb5',
+        girlRibbonColor: '#f25c84',
+        boyCardiganColor: '#2b3f5c',
+        blanketColor: '#fdfbf7',
+        bounceColor: '#ffe8f0'
       },
       summer: {
         foliageColors: ['#3e9b32', '#5ec848', '#2d7a22', '#76db5a', '#24621c'],
@@ -3176,7 +3228,11 @@
         particleShape: 'dandelion',
         hillColor: '#2f6327',
         grassColor: '#3f8238',
-        girlDressColor: '#fca5b8'
+        girlDressColor: '#ff7e95',
+        girlRibbonColor: '#e04868',
+        boyCardiganColor: '#245275',
+        blanketColor: '#fff9e6',
+        bounceColor: '#f0ffe0'
       },
       autumn: {
         foliageColors: ['#d35400', '#e67e22', '#f39c12', '#c0392b', '#f1c40f'],
@@ -3184,7 +3240,11 @@
         particleShape: 'leaf',
         hillColor: '#483a22',
         grassColor: '#5c4d28',
-        girlDressColor: '#d8664b'
+        girlDressColor: '#d65d40',
+        girlRibbonColor: '#e68a20',
+        boyCardiganColor: '#4c3325',
+        blanketColor: '#f0dec5',
+        bounceColor: '#ffe6cc'
       },
       winter: {
         foliageColors: ['#e4f0f6', '#cce2ed', '#ffffff', '#759496', '#9ebfc4'],
@@ -3192,7 +3252,11 @@
         particleShape: 'snow',
         hillColor: '#eef5fa',
         grassColor: '#d2e4f0',
-        girlDressColor: '#ea6c87'
+        girlDressColor: '#b82a48',
+        girlRibbonColor: '#8a1832',
+        boyCardiganColor: '#222834',
+        blanketColor: '#edf2f7',
+        bounceColor: '#eaf6ff'
       }
     };
 
@@ -3215,6 +3279,17 @@
       dirLight.color.set(t.dirColor);
       dirLight.intensity = t.dirIntensity;
       dirLight.position.set(t.dirPos[0], t.dirPos[1], t.dirPos[2]);
+
+      // Update Toon Cel-Shading Ramp to reflect atmospheric shadow hue (never black!)
+      updateToonGradient(t.toonSteps);
+
+      // Back Atmosphere Light illuminating backs of characters with sky horizon tone
+      backAtmosphereLight.color.set(t.backAtmoColor);
+      backAtmosphereLight.intensity = t.backAtmoIntensity;
+
+      // Ambient Fill Light wrapping entire scene
+      ambientFillLight.color.set(t.ambientFillColor);
+      ambientFillLight.intensity = t.ambientFillIntensity;
 
       celestialMat.color.set(t.celestialColor);
       celestialMesh.position.set(t.celestialPos[0], t.celestialPos[1], t.celestialPos[2]);
@@ -3275,20 +3350,25 @@
         cluster.material.color.set(col);
       });
 
-      // Winter Snow Caps & Cozy Winter Blanket
+      // Winter Snow Caps & Cozy Seasonal Blanket
       if (season === 'winter') {
         snowCapsGroup.visible = true;
-        blanketMesh.material.color.set('#edf2f7');
+        blanketMesh.material.color.set(s.blanketColor);
       } else {
         snowCapsGroup.visible = false;
-        blanketMesh.material.color.set('#faebd7');
+        blanketMesh.material.color.set(s.blanketColor);
       }
 
       // Update grass & vast meadow knoll color
       hillMesh.material.color.set(s.hillColor);
       hillDistantMat.color.set(s.hillColor);
       bladeMat.color.set(s.grassColor);
+
+      // Reactive Couple Seasonal Outfits & Ambient Bounce
       girlDressMat.color.set(s.girlDressColor);
+      girlRibbonMat.color.set(s.girlRibbonColor);
+      boyCardiganMat.color.set(s.boyCardiganColor);
+      seasonalBounceLight.color.set(s.bounceColor);
       particleMat.color.set(s.particleColor);
 
       // Adjust particle opacity and fall speed for weather
@@ -3399,8 +3479,6 @@
      * ====================================================================
      */
     const clock = new THREE.Clock();
-    let shyGlanceTimer = 0;
-    let targetHeadYaw = -0.26;
 
     function animate() {
       requestAnimationFrame(animate);
@@ -3419,16 +3497,21 @@
         cluster.position.y = cluster.userData.initialY + Math.sin(elapsedTime * 1.8 + cluster.userData.phase) * 0.02;
       });
 
-      // Boy subtle idle breathing & periodic shy glance toward girl
+      // ========================================================
+      // Stylized Anime Couple Romantic Animation Engine
+      // ========================================================
+      // The Boy (Handsome & Shy)
+      // Gentle rhythmic idle breathing motion
       boyTorso.scale.y = 1.0 + Math.sin(elapsedTime * 2.2) * 0.025;
+
+      // Bashful sideways glance loop: glances affectionately toward girl every few seconds, then looks down/away
       shyGlanceTimer += delta;
       let targetHeadPitch = 0.16;
-      if (shyGlanceTimer > 6.0) {
-        // Glance toward girl for 2.2s, then look shyly down again
-        targetHeadYaw = 0.28;
+      if (shyGlanceTimer > 5.5) {
+        targetHeadYaw = 0.28; // looks sideways at girl
         targetHeadPitch = 0.04;
-        if (shyGlanceTimer > 8.4) {
-          targetHeadYaw = -0.28;
+        if (shyGlanceTimer > 8.0) {
+          targetHeadYaw = -0.28; // looks bashfully down and away
           targetHeadPitch = 0.16;
           shyGlanceTimer = 0;
         }
@@ -3436,11 +3519,20 @@
       boyHeadPivot.rotation.y = THREE.MathUtils.lerp(boyHeadPivot.rotation.y, targetHeadYaw, 0.05);
       boyHeadPivot.rotation.x = THREE.MathUtils.lerp(boyHeadPivot.rotation.x, targetHeadPitch, 0.05);
 
-      // Girl gentle rhythmic swaying to music with sweet affectionate head tilt
-      const girlSway = Math.sin(elapsedTime * 2.4) * 0.045;
-      girlGroup.rotation.z = girlSway;
-      girlHeadPivot.rotation.z = -0.2 + girlSway * 0.5;
-      girlTorso.scale.y = 1.0 + Math.sin(elapsedTime * 2.2 + 0.5) * 0.02;
+      // The Girl (Cute & Beautiful)
+      // Sweet rhythmic upper-body sway synced to the music tempo
+      const musicSway = Math.sin(elapsedTime * 2.4) * 0.045;
+      girlGroup.rotation.z = musicSway;
+      girlHeadPivot.rotation.z = -0.2 + musicSway * 0.5; // affectionate head tilt leaning toward boy
+      girlTorso.scale.y = 1.0 + Math.sin(elapsedTime * 2.2 + 0.5) * 0.02; // gentle breathing
+
+      // Delicate golden ribbon streamers fluttering gracefully in the breeze
+      if (typeof girlHairRibbon1 !== 'undefined' && girlHairRibbon1) {
+        girlHairRibbon1.rotation.z = Math.sin(elapsedTime * 3.2) * 0.12;
+      }
+      if (typeof girlHairRibbon2 !== 'undefined' && girlHairRibbon2) {
+        girlHairRibbon2.rotation.z = Math.sin(elapsedTime * 3.2 + 0.6) * 0.14;
+      }
 
       // Romantic Lantern Flicker (Sunset / Night)
       if (lanternLight.intensity > 0.5) {
