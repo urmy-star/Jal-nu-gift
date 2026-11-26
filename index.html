@@ -945,9 +945,9 @@
       </div>
       <div class="scene-group">
         <span class="group-title">કેમેરા (Camera Auto-Rotate)</span>
-        <button id="autoRotateToggleBtn" class="pill-opt active"
+        <button id="autoRotateToggleBtn" class="pill-opt"
           style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <span id="rotateStatusIcon">🔄</span> <span id="rotateStatusText">ઓટો-રોટેટ: ચાલુ (Auto-Rotate: ON)</span>
+          <span id="rotateStatusIcon">⏸️</span> <span id="rotateStatusText">ઓટો-રોટેટ: બંધ (Auto-Rotate: OFF)</span>
         </button>
       </div>
       <div class="scene-group scene-auto-row">
@@ -1628,9 +1628,9 @@
     controls.maxPolarAngle = Math.PI / 2 - 0.04; // Cannot dip below ground
     controls.minPolarAngle = 0.3;
     controls.target.set(0, 1.25, 1.4);
-    let isAutoRotateEnabled = true;
+    let isAutoRotateEnabled = false;
     let userDraggedCamera = false;
-    controls.autoRotate = true;
+    controls.autoRotate = false;
     controls.autoRotateSpeed = 0.38;
 
     // Temporary pause of auto-rotate when user drags
