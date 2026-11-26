@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="gu">
 
 <head>
@@ -90,7 +90,8 @@
       display: flex;
       flex-direction: column;
       z-index: 2;
-      pointer-events: none; /* Allows 3D OrbitControls touches to pass through empty regions */
+      pointer-events: none;
+      /* Allows 3D OrbitControls touches to pass through empty regions */
       padding: calc(env(safe-area-inset-top, 20px) + 8px) clamp(16px, 4vw, 32px) calc(env(safe-area-inset-bottom, 20px) + 12px) clamp(16px, 4vw, 32px);
     }
 
@@ -181,6 +182,7 @@
         opacity: 0;
         transform: translateY(-8px) scale(0.96);
       }
+
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -296,7 +298,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: auto 0;
+      margin: auto 0 0 0;
       width: 100%;
       pointer-events: auto;
     }
@@ -326,15 +328,40 @@
       animation: etherealHalo 3.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
     }
 
-    .halo-ring:nth-child(1) { animation-delay: 0s; }
-    .halo-ring:nth-child(2) { animation-delay: 1.2s; }
-    .halo-ring:nth-child(3) { animation-delay: 2.4s; }
+    .halo-ring:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .halo-ring:nth-child(2) {
+      animation-delay: 1.2s;
+    }
+
+    .halo-ring:nth-child(3) {
+      animation-delay: 2.4s;
+    }
 
     @keyframes etherealHalo {
-      0% { transform: scale(0.95); opacity: 0; }
-      20% { opacity: 0.6; border-color: rgba(247, 231, 169, 0.55); box-shadow: 0 0 22px rgba(229, 193, 88, 0.35); }
-      70% { opacity: 0.22; border-color: rgba(229, 193, 88, 0.25); }
-      100% { transform: scale(1.85); opacity: 0; box-shadow: 0 0 24px rgba(229, 193, 88, 0); }
+      0% {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+
+      20% {
+        opacity: 0.6;
+        border-color: rgba(247, 231, 169, 0.55);
+        box-shadow: 0 0 22px rgba(229, 193, 88, 0.35);
+      }
+
+      70% {
+        opacity: 0.22;
+        border-color: rgba(229, 193, 88, 0.25);
+      }
+
+      100% {
+        transform: scale(1.85);
+        opacity: 0;
+        box-shadow: 0 0 24px rgba(229, 193, 88, 0);
+      }
     }
 
     .play-btn-circle {
@@ -357,8 +384,15 @@
     }
 
     @keyframes gentleBreathing {
-      0% { transform: scale(1); box-shadow: 0 0 26px rgba(229, 193, 88, 0.25); }
-      100% { transform: scale(1.05); box-shadow: 0 0 42px rgba(229, 193, 88, 0.45); }
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 26px rgba(229, 193, 88, 0.25);
+      }
+
+      100% {
+        transform: scale(1.05);
+        box-shadow: 0 0 42px rgba(229, 193, 88, 0.45);
+      }
     }
 
     .play-btn-wrapper:active .play-btn-circle {
@@ -387,7 +421,9 @@
       pointer-events: auto;
     }
 
-    .landing-bottom-spacer { height: 24px; }
+    .landing-bottom-spacer {
+      height: 24px;
+    }
 
     /* ==========================================================================
        SCREEN 2: PRE-MUSIC EMOTIONAL REVEAL (0.0s - 5.2s)
@@ -564,7 +600,11 @@
         transform: translate3d(0, 18px, 0) scale(0.96);
         filter: blur(6px);
       }
-      60% { filter: blur(0px); }
+
+      60% {
+        filter: blur(0px);
+      }
+
       100% {
         opacity: 1;
         transform: translate3d(0, 0, 0) scale(1);
@@ -578,6 +618,7 @@
         transform: translate3d(0, 0, 0) scale(1);
         filter: blur(0px);
       }
+
       100% {
         opacity: 0;
         transform: translate3d(0, -14px, 0) scale(1.02);
@@ -766,8 +807,15 @@
     }
 
     @keyframes cardEntrance {
-      from { opacity: 0; transform: translateY(28px) scale(0.94); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+      from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.94);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     .card-sparkle-icon {
@@ -830,7 +878,9 @@
       box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
     }
 
-    .btn-whatsapp:active { transform: scale(0.97); }
+    .btn-whatsapp:active {
+      transform: scale(0.97);
+    }
 
     .btn-replay {
       background: rgba(255, 255, 255, 0.08);
@@ -877,7 +927,8 @@
       </div>
       <div class="scene-group">
         <span class="group-title">કેમેરા (Camera Auto-Rotate)</span>
-        <button id="autoRotateToggleBtn" class="pill-opt active" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <button id="autoRotateToggleBtn" class="pill-opt active"
+          style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
           <span id="rotateStatusIcon">🔄</span> <span id="rotateStatusText">ઓટો-રોટેટ: ચાલુ (Auto-Rotate: ON)</span>
         </button>
       </div>
@@ -1055,7 +1106,6 @@
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     /**
      * ====================================================================
@@ -1405,7 +1455,7 @@
       isUserSeeking = true;
       scrubberTrack.classList.add('is-dragging');
       if (typeof scrubberTrack.setPointerCapture === 'function') {
-        try { scrubberTrack.setPointerCapture(e.pointerId); } catch (_) {}
+        try { scrubberTrack.setPointerCapture(e.pointerId); } catch (_) { }
       }
       const { pos, targetTime } = getScrubberSeekData(e.clientX);
       seekTargetTime = targetTime;
@@ -1426,7 +1476,7 @@
       isUserSeeking = false;
       scrubberTrack.classList.remove('is-dragging');
       if (typeof scrubberTrack.releasePointerCapture === 'function') {
-        try { scrubberTrack.releasePointerCapture(e.pointerId); } catch (_) {}
+        try { scrubberTrack.releasePointerCapture(e.pointerId); } catch (_) { }
       }
       audioPlayer.currentTime = seekTargetTime;
       const dur = (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.duration > 0) ? audioPlayer.duration : 293;
@@ -1816,11 +1866,14 @@
     const dummyScale = new THREE.Vector3();
 
     for (let i = 0; i < grassCount; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      // 700 close to couple/tree, 400 across meadow
-      const radius = i < 700 ? 0.9 + Math.random() * 5.8 : 6.0 + Math.random() * 18.0;
-      const x = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
+      let x = 0, z = 0, radius = 0;
+      do {
+        const angle = Math.random() * Math.PI * 2;
+        // 700 close to couple/tree, 400 across meadow
+        radius = i < 700 ? 0.9 + Math.random() * 5.8 : 6.0 + Math.random() * 18.0;
+        x = Math.cos(angle) * radius;
+        z = Math.sin(angle) * radius;
+      } while (Math.abs(x) < 1.8 && z > -0.3 && z < 2.7);
       let y = 0.85;
       if (radius < 6.8) {
         y = 0.86 * Math.sin(Math.max(0, 1 - radius / 6.8) * Math.PI * 0.5) + (Math.random() * 0.08);
@@ -1852,10 +1905,13 @@
 
     for (let i = 0; i < 75; i++) {
       const flowerGroup = new THREE.Group();
-      const angle = Math.random() * Math.PI * 2;
-      const radius = i < 55 ? 1.2 + Math.random() * 5.2 : 5.5 + Math.random() * 10.0;
-      const x = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
+      let x = 0, z = 0, radius = 0;
+      do {
+        const angle = Math.random() * Math.PI * 2;
+        radius = i < 55 ? 1.2 + Math.random() * 5.2 : 5.5 + Math.random() * 10.0;
+        x = Math.cos(angle) * radius;
+        z = Math.sin(angle) * radius;
+      } while (Math.abs(x) < 1.8 && z > -0.3 && z < 2.7);
       let y = 0.85;
       if (radius < 6.8) {
         y = 0.86 * Math.sin(Math.max(0, 1 - radius / 6.8) * Math.PI * 0.5);
@@ -1882,12 +1938,12 @@
     }
 
     // Picnic Blanket under the tree
-    const blanketGeo = new THREE.PlaneGeometry(2.5, 2.2, 6, 6);
+    const blanketGeo = new THREE.PlaneGeometry(2.8, 2.35, 6, 6);
     // Slight curvature to match mound
     for (let i = 0; i < blanketGeo.attributes.position.count; i++) {
       const bx = blanketGeo.attributes.position.getX(i);
       const by = blanketGeo.attributes.position.getY(i);
-      blanketGeo.attributes.position.setZ(i, -0.04 * (bx * bx + by * by));
+      blanketGeo.attributes.position.setZ(i, -0.025 * (bx * bx + by * by));
     }
     blanketGeo.computeVertexNormals();
     const blanketMat = new THREE.MeshStandardMaterial({
@@ -1896,8 +1952,8 @@
       metalness: 0.0
     });
     const blanketMesh = new THREE.Mesh(blanketGeo, blanketMat);
-    blanketMesh.rotation.x = -Math.PI / 2;
-    blanketMesh.position.set(0, 0.82, 0.45);
+    blanketMesh.rotation.x = -Math.PI / 2 + 0.012;
+    blanketMesh.position.set(0, 0.865, 1.05);
     blanketMesh.receiveShadow = true;
     islandGroup.add(blanketMesh);
 
@@ -2033,891 +2089,494 @@
     });
 
     /**
-     * The Couple Beneath the Tree (High-Fidelity Cute Anime Characters)
-     * Positioned comfortably forward from the tree trunk onto the lush picnic blanket
+     * The Couple Beneath the Tree (Simple, Cute & Lovely Sitting Chibi Couple)
+     * Seated side-by-side on the picnic blanket in front of the hero tree trunk
      */
     const coupleGroup = new THREE.Group();
-    coupleGroup.position.set(0, 0.84, 1.4);
+    coupleGroup.position.set(0, 0.868, 1.46);
+    coupleGroup.scale.setScalar(1.24);
     scene.add(coupleGroup);
 
     // ====================================================================
-    // 7. HIGH-FIDELITY SCULPTED ANIME CHARACTERS (CEL-SHADED TOON SYSTEM)
+    // 7. CUTE & LOVELY SITTING CHIBI COUPLE (PURE THREE.JS SCULPTED)
     // ====================================================================
 
+    // Shared Chibi Materials (luminous soft finishes so faces & outfits never turn black)
+    const boySkinMat = new THREE.MeshStandardMaterial({
+      color: '#ffe0cc',
+      emissive: '#ffd0b8',
+      emissiveIntensity: 0.12,
+      roughness: 0.65,
+      metalness: 0.02
+    });
+
+    const girlSkinMat = new THREE.MeshStandardMaterial({
+      color: '#ffe6d8',
+      emissive: '#ffd6c4',
+      emissiveIntensity: 0.14,
+      roughness: 0.62,
+      metalness: 0.02
+    });
+
+    const girlDressMat = new THREE.MeshStandardMaterial({
+      color: '#ff9eb5',
+      emissive: '#ff8da8',
+      emissiveIntensity: 0.08,
+      roughness: 0.72,
+      metalness: 0.02
+    });
+
+    const girlRibbonMat = new THREE.MeshStandardMaterial({
+      color: '#f25c84',
+      emissive: '#e04870',
+      emissiveIntensity: 0.1,
+      roughness: 0.55,
+      metalness: 0.04
+    });
+
+    const boyCardiganMat = new THREE.MeshStandardMaterial({
+      color: '#5b84b8',
+      emissive: '#42689c',
+      emissiveIntensity: 0.08,
+      roughness: 0.78,
+      metalness: 0.02
+    });
+
+    const creamWhiteMat = new THREE.MeshStandardMaterial({
+      color: '#fffaf5',
+      emissive: '#fff4ea',
+      emissiveIntensity: 0.08,
+      roughness: 0.7,
+      metalness: 0.02
+    });
+
+    const boyPantsMat = new THREE.MeshStandardMaterial({
+      color: '#ccb9a3',
+      emissive: '#998774',
+      emissiveIntensity: 0.06,
+      roughness: 0.85
+    });
+
+    const boyShoeMat = new THREE.MeshStandardMaterial({
+      color: '#5c463c',
+      roughness: 0.7
+    });
+
+    const boyHairMat = new THREE.MeshStandardMaterial({
+      color: '#3d2d28',
+      emissive: '#221815',
+      emissiveIntensity: 0.08,
+      roughness: 0.58
+    });
+
+    const girlHairMat = new THREE.MeshStandardMaterial({
+      color: '#634033',
+      emissive: '#3a221a',
+      emissiveIntensity: 0.08,
+      roughness: 0.56
+    });
+
+    const eyeIrisMat = new THREE.MeshStandardMaterial({
+      color: '#1e1924',
+      roughness: 0.15,
+      metalness: 0.1
+    });
+
+    const eyeHighlightMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
+
+    const blushMat = new THREE.MeshStandardMaterial({
+      color: '#ff8ea3',
+      emissive: '#ff6e8a',
+      emissiveIntensity: 0.25,
+      roughness: 0.8
+    });
+
+    const smileMat = new THREE.MeshStandardMaterial({
+      color: '#d95b6e',
+      emissive: '#c44558',
+      emissiveIntensity: 0.15,
+      roughness: 0.5
+    });
+
+    const heartMat = new THREE.MeshStandardMaterial({
+      color: '#ff527e',
+      emissive: '#ff2e63',
+      emissiveIntensity: 0.38,
+      roughness: 0.35,
+      metalness: 0.05
+    });
+
     /**
-     * Helper: Creates Organic Curved Hair Strands with CatmullRomCurve3 & TubeGeometry
-     * Tapers smoothly from root to tip for anime locks and bangs
+     * Helper: Builds an adorable rounded chibi head with sparkling 3D eyes, blush, and sweet smile
      */
-    function createCurvedHairStrand(points, radiusStart = 0.024, radiusEnd = 0.006, segments = 12, radialSegments = 8, mat) {
+    function createChibiFace(headGroup, skinMat, irisTintColor, isGirl) {
+      // Soft chubby chibi head sphere (slightly wider than tall)
+      const headGeo = new THREE.SphereGeometry(0.24, 32, 24);
+      const headMesh = new THREE.Mesh(headGeo, skinMat);
+      headMesh.scale.set(1.06, 0.96, 1.0);
+      headMesh.castShadow = true;
+      headGroup.add(headMesh);
+
+      const irisTintMat = new THREE.MeshBasicMaterial({ color: irisTintColor });
+
+      // Sparkling Chibi Eyes (left & right - big expressive lower-face placement)
+      [-1, 1].forEach((side) => {
+        const eyePivot = new THREE.Group();
+        eyePivot.position.set(side * 0.082, -0.025, 0.228);
+        eyePivot.rotation.set(0.05, side * 0.26, 0);
+        headGroup.add(eyePivot);
+
+        // Main dark glossy eye oval
+        const eyeGeo = new THREE.SphereGeometry(0.043, 18, 16);
+        const eyeMesh = new THREE.Mesh(eyeGeo, eyeIrisMat);
+        eyeMesh.scale.set(0.84, 1.12, 0.38);
+        eyePivot.add(eyeMesh);
+
+        // Subtle colorful lower-iris glow
+        const tintGeo = new THREE.SphereGeometry(0.03, 14, 12);
+        const tintMesh = new THREE.Mesh(tintGeo, irisTintMat);
+        tintMesh.scale.set(0.86, 0.72, 0.35);
+        tintMesh.position.set(0, -0.015, 0.009);
+        eyePivot.add(tintMesh);
+
+        // Crisp large top-left white catchlight & tiny secondary sparkle
+        const shine1 = new THREE.Mesh(new THREE.SphereGeometry(0.014, 10, 10), eyeHighlightMat);
+        shine1.scale.set(1, 1, 0.5);
+        shine1.position.set(-0.012, 0.019, 0.015);
+        eyePivot.add(shine1);
+
+        const shine2 = new THREE.Mesh(new THREE.SphereGeometry(0.0065, 8, 8), eyeHighlightMat);
+        shine2.scale.set(1, 1, 0.5);
+        shine2.position.set(0.012, -0.014, 0.015);
+        eyePivot.add(shine2);
+
+        // Cute soft curved upper lash arch for girl
+        if (isGirl) {
+          const lashGeo = new THREE.TorusGeometry(0.039, 0.0046, 6, 12, Math.PI * 0.72);
+          const lashMesh = new THREE.Mesh(lashGeo, eyeIrisMat);
+          lashMesh.rotation.z = Math.PI * 0.14;
+          lashMesh.position.set(0, 0.015, 0.011);
+          eyePivot.add(lashMesh);
+        }
+
+        // Cute soft cheek blush oval
+        const blushGeo = new THREE.SphereGeometry(0.036, 12, 10);
+        const blushMesh = new THREE.Mesh(blushGeo, blushMat);
+        blushMesh.scale.set(1.25, 0.65, 0.25);
+        blushMesh.position.set(side * 0.132, -0.075, 0.206);
+        blushMesh.rotation.y = side * 0.45;
+        headGroup.add(blushMesh);
+      });
+
+      // Tiny soft nose dot
+      const nose = new THREE.Mesh(new THREE.SphereGeometry(0.01, 8, 8), skinMat);
+      nose.position.set(0, -0.055, 0.244);
+      headGroup.add(nose);
+
+      // Sweet tiny smiling U-curve mouth
+      const mouthGeo = new THREE.TorusGeometry(0.02, 0.0044, 8, 14, Math.PI * 0.78);
+      const mouthMesh = new THREE.Mesh(mouthGeo, smileMat);
+      mouthMesh.position.set(0, -0.092, 0.232);
+      mouthMesh.rotation.z = Math.PI * 1.11;
+      mouthMesh.rotation.x = 0.25;
+      headGroup.add(mouthMesh);
+    }
+
+    /**
+     * Helper: Builds curved hair lock strands via CatmullRomCurve3 + TubeGeometry
+     */
+    function createChibiHairLock(points, rStart, rEnd, mat) {
       const curve = new THREE.CatmullRomCurve3(points);
-      const tubeGeo = new THREE.TubeGeometry(curve, segments, radiusStart, radialSegments, false);
-      const pos = tubeGeo.attributes.position;
-      const rings = segments + 1;
-      const vertsPerRing = radialSegments + 1;
+      const geo = new THREE.TubeGeometry(curve, 10, rStart, 8, false);
+      const pos = geo.attributes.position;
       const v = new THREE.Vector3();
       const center = new THREE.Vector3();
-
-      for (let s = 0; s < rings; s++) {
-        const t = s / segments;
-        const currentRadius = THREE.MathUtils.lerp(radiusStart, radiusEnd, Math.pow(t, 1.25));
-        const scale = currentRadius / radiusStart;
+      for (let s = 0; s <= 10; s++) {
+        const t = s / 10;
+        const scale = THREE.MathUtils.lerp(rStart, rEnd, t) / rStart;
         curve.getPoint(t, center);
-
-        for (let r = 0; r < vertsPerRing; r++) {
-          const idx = s * vertsPerRing + r;
-          if (idx < pos.count) {
-            v.fromBufferAttribute(pos, idx);
-            v.sub(center).multiplyScalar(scale).add(center);
-            pos.setXYZ(idx, v.x, v.y, v.z);
-          }
+        for (let r = 0; r <= 8; r++) {
+          const idx = s * 9 + r;
+          v.fromBufferAttribute(pos, idx);
+          v.sub(center).multiplyScalar(scale).add(center);
+          pos.setXYZ(idx, v.x, v.y, v.z);
         }
       }
-      tubeGeo.computeVertexNormals();
-      const mesh = new THREE.Mesh(tubeGeo, mat);
+      geo.computeVertexNormals();
+      const mesh = new THREE.Mesh(geo, mat);
       mesh.castShadow = true;
       return mesh;
     }
 
-    /**
-     * Helper: Creates Sculpted Anime Head Geometry from Deformed Sphere
-     * Smoothly tapers the chin, contours jawline, and softens cheek curvature
-     */
-    function createSculptedHeadGeometry(radius, isGirl = true) {
-      const geo = new THREE.SphereGeometry(radius, 32, 28);
-      const pos = geo.attributes.position;
-      const v = new THREE.Vector3();
-      for (let i = 0; i < pos.count; i++) {
-        v.fromBufferAttribute(pos, i);
-        const ny = v.y / radius; // -1 to +1
-        // Smooth jawline/chin tapering
-        if (ny < 0.12) {
-          const taper = isGirl
-            ? (1.0 - (0.12 - ny) * 0.28) // delicate anime V-line for girl
-            : (1.0 - (0.12 - ny) * 0.21); // clean defined jawline for boy
-          v.x *= taper;
-          v.z *= (isGirl ? (1.0 - (0.12 - ny) * 0.15) : (1.0 - (0.12 - ny) * 0.11));
-        }
-        // Soft rounded cheek fullness
-        if (ny > -0.28 && ny < 0.32) {
-          const cheek = Math.cos(((ny - 0.02) / 0.3) * Math.PI * 0.5);
-          v.x *= (1.0 + Math.max(0, cheek) * (isGirl ? 0.055 : 0.035));
-        }
-        pos.setXYZ(i, v.x, v.y, v.z);
-      }
-      geo.computeVertexNormals();
-      return geo;
-    }
-
-    /**
-     * CanvasTexture Generator: The Girl's Anime Face
-     * Features large expressive sparkling eyes with twin star specular highlights,
-     * delicate winged eyeliner, sweet smile, and soft radial rosy blush cheeks.
-     */
-    function createGirlFaceTexture() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-
-      // Warm porcelain skin base
-      ctx.fillStyle = '#ffece2';
-      ctx.fillRect(0, 0, 512, 512);
-
-      // Soft Radial Rosy Blush on both cheeks
-      function drawBlush(cx, cy) {
-        const grad = ctx.createRadialGradient(cx, cy, 4, cx, cy, 38);
-        grad.addColorStop(0, 'rgba(255, 105, 135, 0.68)');
-        grad.addColorStop(0.5, 'rgba(255, 140, 160, 0.35)');
-        grad.addColorStop(1, 'rgba(255, 236, 226, 0.0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, 44, 28, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Cute anime blush diagonal hatch lines
-        ctx.strokeStyle = 'rgba(240, 85, 115, 0.55)';
-        ctx.lineWidth = 2.4;
-        ctx.lineCap = 'round';
-        for (let i = -1; i <= 1; i++) {
-          ctx.beginPath();
-          ctx.moveTo(cx + i * 14 - 7, cy + 5);
-          ctx.lineTo(cx + i * 14 + 6, cy - 7);
-          ctx.stroke();
-        }
-      }
-      drawBlush(185, 292); // Left cheek
-      drawBlush(327, 292); // Right cheek
-
-      // Dainty anime nose hint
-      ctx.fillStyle = '#e8a590';
-      ctx.beginPath();
-      ctx.ellipse(256, 276, 3, 2, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Sweet smiling lips with soft pink tint
-      ctx.strokeStyle = '#d65d70';
-      ctx.lineWidth = 3.2;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.arc(256, 308, 18, 0.16 * Math.PI, 0.84 * Math.PI);
-      ctx.stroke();
-
-      ctx.fillStyle = 'rgba(245, 115, 142, 0.42)';
-      ctx.beginPath();
-      ctx.arc(256, 311, 14, 0.16 * Math.PI, 0.84 * Math.PI);
-      ctx.fill();
-
-      // Eyebrows (Dainty, soft chestnut arch)
-      ctx.strokeStyle = '#5a3520';
-      ctx.lineWidth = 3.0;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(172, 186);
-      ctx.quadraticCurveTo(205, 172, 234, 186);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(278, 186);
-      ctx.quadraticCurveTo(307, 172, 340, 186);
-      ctx.stroke();
-
-      // Large Expressive Anime Eyes
-      function drawAnimeEye(cx, cy, isLeft) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, 33, 41, isLeft ? -0.05 : 0.05, 0, Math.PI * 2);
-        ctx.clip();
-
-        // Eye White
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(cx - 38, cy - 48, 76, 96);
-
-        // Iris Gradient (Rich chestnut into warm amber)
-        const irisGrad = ctx.createLinearGradient(cx, cy - 36, cx, cy + 36);
-        irisGrad.addColorStop(0, '#1f130d');
-        irisGrad.addColorStop(0.4, '#442517');
-        irisGrad.addColorStop(0.75, '#87492c');
-        irisGrad.addColorStop(1, '#b56d47');
-        ctx.fillStyle = irisGrad;
-        ctx.beginPath();
-        ctx.ellipse(cx, cy + 2, 27, 36, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Deep Pupil
-        ctx.fillStyle = '#110a07';
-        ctx.beginPath();
-        ctx.ellipse(cx, cy - 2, 14, 18, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Soft warm iris reflex arc
-        ctx.strokeStyle = 'rgba(255, 180, 130, 0.65)';
-        ctx.lineWidth = 2.4;
-        ctx.beginPath();
-        ctx.arc(cx, cy + 12, 16, 0.2 * Math.PI, 0.8 * Math.PI);
-        ctx.stroke();
-
-        // Twin Sparkling White Specular Highlights
-        ctx.fillStyle = '#ffffff';
-        // Major star highlight
-        ctx.beginPath();
-        ctx.ellipse(cx - 8, cy - 12, 8, 11, -0.2, 0, Math.PI * 2);
-        ctx.fill();
-        // Minor sparkle highlight
-        ctx.beginPath();
-        ctx.arc(cx + 9, cy + 10, 4.5, 0, Math.PI * 2);
-        ctx.fill();
-        // Micro sparkle
-        ctx.beginPath();
-        ctx.arc(cx - 7, cy + 16, 2.5, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.restore();
-
-        // Upper bold curved anime eyelash
-        ctx.strokeStyle = '#221510';
-        ctx.lineWidth = 5.0;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.arc(cx, cy + 6, 34, 1.15 * Math.PI, 1.85 * Math.PI);
-        ctx.stroke();
-
-        // Winged flick
-        ctx.beginPath();
-        if (isLeft) {
-          ctx.moveTo(cx - 26, cy - 8);
-          ctx.quadraticCurveTo(cx - 36, cy - 14, cx - 40, cy - 10);
-        } else {
-          ctx.moveTo(cx + 26, cy - 8);
-          ctx.quadraticCurveTo(cx + 36, cy - 14, cx + 40, cy - 10);
-        }
-        ctx.stroke();
-
-        // Lower subtle eyelid line
-        ctx.strokeStyle = 'rgba(80, 50, 40, 0.5)';
-        ctx.lineWidth = 2.0;
-        ctx.beginPath();
-        ctx.arc(cx, cy - 4, 30, 0.25 * Math.PI, 0.75 * Math.PI);
-        ctx.stroke();
-      }
-
-      drawAnimeEye(200, 235, true);  // Left Eye
-      drawAnimeEye(312, 235, false); // Right Eye
-
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      return tex;
-    }
-
-    /**
-     * CanvasTexture Generator: The Boy's Anime Face
-     * Features calm expressive eyes glancing bashfully sideways towards the girl (+X),
-     * refined eyebrows, clean anime nose, and subtle blushing cheekbones.
-     */
-    function createBoyFaceTexture() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-
-      // Warm natural skin base
-      ctx.fillStyle = '#feddc8';
-      ctx.fillRect(0, 0, 512, 512);
-
-      // Subtle bashful blush on cheekbones
-      function drawBoyBlush(cx, cy) {
-        const grad = ctx.createRadialGradient(cx, cy, 3, cx, cy, 34);
-        grad.addColorStop(0, 'rgba(235, 120, 120, 0.52)');
-        grad.addColorStop(0.55, 'rgba(240, 150, 150, 0.26)');
-        grad.addColorStop(1, 'rgba(254, 221, 200, 0.0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, 40, 24, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Subtle shy blush hatch marks
-        ctx.strokeStyle = 'rgba(215, 95, 95, 0.42)';
-        ctx.lineWidth = 2.0;
-        ctx.lineCap = 'round';
-        for (let i = -1; i <= 1; i++) {
-          ctx.beginPath();
-          ctx.moveTo(cx + i * 12 - 5, cy + 4);
-          ctx.lineTo(cx + i * 12 + 5, cy - 5);
-          ctx.stroke();
-        }
-      }
-      drawBoyBlush(188, 292); // Left cheek
-      drawBoyBlush(324, 292); // Right cheek
-
-      // Refined clean anime nose
-      ctx.strokeStyle = '#d59478';
-      ctx.lineWidth = 2.4;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(254, 260);
-      ctx.lineTo(256, 276);
-      ctx.lineTo(262, 278);
-      ctx.stroke();
-
-      // Shy, calm, subtle lips
-      ctx.strokeStyle = '#b86658';
-      ctx.lineWidth = 2.8;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(242, 318);
-      ctx.quadraticCurveTo(256, 321, 270, 318);
-      ctx.stroke();
-
-      // Eyebrows (Calm, handsome, slightly shy arch)
-      ctx.strokeStyle = '#2b2320';
-      ctx.lineWidth = 3.6;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(170, 192);
-      ctx.quadraticCurveTo(204, 178, 236, 190);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(276, 190);
-      ctx.quadraticCurveTo(308, 178, 342, 192);
-      ctx.stroke();
-
-      // Calm Expressive Anime Eyes (Pupils glancing subtly towards girl!)
-      function drawBoyEye(cx, cy, isLeft) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, 30, 35, isLeft ? -0.04 : 0.04, 0, Math.PI * 2);
-        ctx.clip();
-
-        // Eye White
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(cx - 36, cy - 42, 72, 84);
-
-        // Pupil/Iris shifted subtly towards girl (-5px on UV space -> towards girl in world space)
-        const glanceShift = -5;
-        const irisGrad = ctx.createLinearGradient(cx + glanceShift, cy - 30, cx + glanceShift, cy + 30);
-        irisGrad.addColorStop(0, '#1a1d24');
-        irisGrad.addColorStop(0.5, '#2e3848');
-        irisGrad.addColorStop(1, '#485870');
-        ctx.fillStyle = irisGrad;
-        ctx.beginPath();
-        ctx.ellipse(cx + glanceShift, cy + 1, 23, 29, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Deep Pupil
-        ctx.fillStyle = '#0f1116';
-        ctx.beginPath();
-        ctx.ellipse(cx + glanceShift, cy, 12, 15, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Specular Highlight
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.ellipse(cx + glanceShift + 4, cy - 8, 6, 8, -0.2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(cx + glanceShift - 6, cy + 9, 3.0, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.restore();
-
-        // Upper eyelid contour
-        ctx.strokeStyle = '#1e1c1b';
-        ctx.lineWidth = 4.6;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.arc(cx, cy + 5, 31, 1.15 * Math.PI, 1.85 * Math.PI);
-        ctx.stroke();
-
-        // Lower subtle contour
-        ctx.strokeStyle = 'rgba(60, 50, 48, 0.45)';
-        ctx.lineWidth = 1.8;
-        ctx.beginPath();
-        ctx.arc(cx, cy - 2, 28, 0.28 * Math.PI, 0.72 * Math.PI);
-        ctx.stroke();
-      }
-
-      drawBoyEye(202, 236, true);  // Left Eye
-      drawBoyEye(310, 236, false); // Right Eye
-
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      return tex;
-    }
-
-    // High-Craft Anime Materials with Soft PBR Shading (Warm, Radiant & Cel-Inspired)
-    const girlFaceTex = createGirlFaceTexture();
-    const girlSkinMat = new THREE.MeshStandardMaterial({
-      map: girlFaceTex,
-      color: '#ffffff',
-      roughness: 0.55,
-      metalness: 0.02
-    });
-    const girlPlainSkinMat = new THREE.MeshStandardMaterial({
-      color: '#ffece2',
-      roughness: 0.55,
-      metalness: 0.02
-    });
-
-    const boyFaceTex = createBoyFaceTexture();
-    const boySkinMat = new THREE.MeshStandardMaterial({
-      map: boyFaceTex,
-      color: '#ffffff',
-      roughness: 0.55,
-      metalness: 0.02
-    });
-    const boyPlainSkinMat = new THREE.MeshStandardMaterial({
-      color: '#fedec9',
-      roughness: 0.55,
-      metalness: 0.02
-    });
-
-    // Hair Materials (Rich natural tones with warm highlights - never flat black)
-    const girlHairMat = new THREE.MeshStandardMaterial({
-      color: '#462b1e', // Warm milk chocolate hair with chestnut undertones
-      roughness: 0.72,
-      metalness: 0.04
-    });
-    const boyHairMat = new THREE.MeshStandardMaterial({
-      color: '#38261c', // Warm dark espresso brown hair
-      roughness: 0.72,
-      metalness: 0.04
-    });
-
-    // Clothing Materials (Pastel sweet dress & handsome stylish knitwear)
-    const girlDressMat = new THREE.MeshStandardMaterial({
-      color: '#ff9eb5', // Sweet sakura blossom pink
-      roughness: 0.75,
-      metalness: 0.02
-    });
-    const girlRibbonMat = new THREE.MeshStandardMaterial({
-      color: '#f25c84', // Vibrant cherry blossom ribbon
-      roughness: 0.6,
-      metalness: 0.02
-    });
-    const girlLaceMat = new THREE.MeshStandardMaterial({
-      color: '#ffffff', // Scalloped white lace trim
-      roughness: 0.65,
-      metalness: 0.0
-    });
-    const girlShoeMat = new THREE.MeshStandardMaterial({
-      color: '#fff1f4', // Dainty pastel flats
-      roughness: 0.5,
-      metalness: 0.05
-    });
-
-    const boyShirtMat = new THREE.MeshStandardMaterial({
-      color: '#ffffff', // Crisp clean white shirt
-      roughness: 0.65,
-      metalness: 0.0
-    });
-    const boyCardiganMat = new THREE.MeshStandardMaterial({
-      color: '#c99b6d', // Elegant cozy honey-camel knit cardigan (handsome & bright, NOT black!)
-      roughness: 0.8,
-      metalness: 0.02
-    });
-    const boyPantsMat = new THREE.MeshStandardMaterial({
-      color: '#6b7280', // Tailored slate-khaki trousers (NOT black!)
-      roughness: 0.8,
-      metalness: 0.02
-    });
-    const boyShoeMat = new THREE.MeshStandardMaterial({
-      color: '#8b5a3c', // Warm saddle cognac leather shoes
-      roughness: 0.45,
-      metalness: 0.05
-    });
-
     // ==========================================
-    // --- THE BOY (Handsome & Shy) ---
+    // --- THE BOY (Shy & Cute Seated Chibi) ---
     // ==========================================
     const boyGroup = new THREE.Group();
-    boyGroup.position.set(-0.38, 0, 0);
+    boyGroup.position.set(-0.29, 0, 0.02);
+    boyGroup.rotation.y = 0.14;
     coupleGroup.add(boyGroup);
 
-    // Boy Torso: layered cardigan with inner white shirt lapels
+    // Seated Torso & Cardigan
     const boyTorso = new THREE.Group();
-    boyTorso.position.y = 0.38;
-    boyTorso.rotation.x = -0.06;
+    boyTorso.position.set(0, 0.08, 0);
     boyGroup.add(boyTorso);
 
-    const boyBodyGeo = new THREE.CapsuleGeometry(0.185, 0.32, 8, 16);
-    const boyBodyMesh = new THREE.Mesh(boyBodyGeo, boyCardiganMat);
+    const boyBodyMesh = new THREE.Mesh(new THREE.CapsuleGeometry(0.125, 0.14, 10, 18), boyCardiganMat);
+    boyBodyMesh.scale.set(1.06, 1.0, 0.88);
+    boyBodyMesh.position.y = 0.14;
     boyBodyMesh.castShadow = true;
     boyTorso.add(boyBodyMesh);
 
-    // Inner White Shirt Bib & Collar Lapels
-    const innerShirtGeo = new THREE.CapsuleGeometry(0.08, 0.24, 6, 12);
-    const innerShirt = new THREE.Mesh(innerShirtGeo, boyShirtMat);
-    innerShirt.position.set(0, 0.05, 0.12);
-    innerShirt.scale.set(1.1, 1.0, 0.45);
-    boyTorso.add(innerShirt);
+    // Crisp White Shirt Collar
+    const boyCollar = new THREE.Mesh(new THREE.TorusGeometry(0.082, 0.02, 8, 16), creamWhiteMat);
+    boyCollar.rotation.x = Math.PI * 0.52;
+    boyCollar.position.set(0, 0.255, 0.015);
+    boyTorso.add(boyCollar);
 
-    // White shirt collar lapels
-    const collarLapelL = new THREE.Mesh(new THREE.CapsuleGeometry(0.032, 0.1, 4, 8), boyShirtMat);
-    collarLapelL.position.set(-0.058, 0.18, 0.14);
-    collarLapelL.rotation.set(-0.3, 0, 0.32);
-    boyTorso.add(collarLapelL);
+    // Seated Chubby Legs & Shoes resting cleanly forward on blanket
+    [-1, 1].forEach((side) => {
+      const leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.056, 0.16, 8, 14), boyPantsMat);
+      leg.rotation.x = Math.PI / 2 - 0.08;
+      leg.rotation.z = -side * 0.12;
+      leg.position.set(side * 0.072, 0.062, 0.14);
+      leg.castShadow = true;
+      boyGroup.add(leg);
 
-    const collarLapelR = new THREE.Mesh(new THREE.CapsuleGeometry(0.032, 0.1, 4, 8), boyShirtMat);
-    collarLapelR.position.set(0.058, 0.18, 0.14);
-    collarLapelR.rotation.set(-0.3, 0, -0.32);
-    boyTorso.add(collarLapelR);
+      const shoe = new THREE.Mesh(new THREE.CapsuleGeometry(0.052, 0.055, 8, 12), boyShoeMat);
+      shoe.rotation.x = Math.PI / 2;
+      shoe.scale.set(0.95, 1.0, 0.78);
+      shoe.position.set(side * 0.09, 0.05, 0.265);
+      shoe.castShadow = true;
+      boyGroup.add(shoe);
+    });
 
-    // Boy Legs (Smooth seated posture with knees drawn up bashfully)
-    const boyThighGeo = new THREE.CapsuleGeometry(0.082, 0.34, 8, 16);
-    const boyLegL = new THREE.Mesh(boyThighGeo, boyPantsMat);
-    boyLegL.position.set(-0.13, 0.16, 0.22);
-    boyLegL.rotation.set(1.15, 0.1, -0.15);
-    boyLegL.castShadow = true;
-    boyGroup.add(boyLegL);
-
-    const boyLegR = new THREE.Mesh(boyThighGeo, boyPantsMat);
-    boyLegR.position.set(0.12, 0.16, 0.22);
-    boyLegR.rotation.set(1.15, -0.1, 0.15);
-    boyLegR.castShadow = true;
-    boyGroup.add(boyLegR);
-
-    // Contoured Oxford Shoes
-    const boyShoeGeo = new THREE.CapsuleGeometry(0.065, 0.16, 6, 12);
-    const boyShoeL = new THREE.Mesh(boyShoeGeo, boyShoeMat);
-    boyShoeL.position.set(-0.13, 0.05, 0.44);
-    boyShoeL.rotation.set(0.1, 0.1, 0);
-    boyShoeL.castShadow = true;
-    boyGroup.add(boyShoeL);
-
-    const boyShoeR = new THREE.Mesh(boyShoeGeo, boyShoeMat);
-    boyShoeR.position.set(0.12, 0.05, 0.44);
-    boyShoeR.rotation.set(0.1, -0.1, 0);
-    boyShoeR.castShadow = true;
-    boyGroup.add(boyShoeR);
-
-    // Boy Arms (Resting shyly on knees with white cuffs)
-    const boyArmGeo = new THREE.CapsuleGeometry(0.062, 0.28, 8, 16);
-    const boyArmL = new THREE.Mesh(boyArmGeo, boyCardiganMat);
-    boyArmL.position.set(-0.24, 0.32, 0.12);
-    boyArmL.rotation.set(0.65, 0, 0.28);
+    // Outer Left Arm resting bashfully on his knee
+    const boyArmL = new THREE.Mesh(new THREE.CapsuleGeometry(0.044, 0.13, 8, 12), boyCardiganMat);
+    boyArmL.position.set(-0.145, 0.17, 0.06);
+    boyArmL.rotation.set(-0.42, 0, 0.22);
     boyArmL.castShadow = true;
     boyGroup.add(boyArmL);
 
-    const boyArmR = new THREE.Mesh(boyArmGeo, boyCardiganMat);
-    boyArmR.position.set(0.24, 0.32, 0.12);
-    boyArmR.rotation.set(0.65, 0, -0.28);
+    const boyHandL = new THREE.Mesh(new THREE.SphereGeometry(0.042, 12, 10), boySkinMat);
+    boyHandL.position.set(-0.135, 0.125, 0.145);
+    boyGroup.add(boyHandL);
+
+    // Inner Right Arm reaching gently onto the blanket toward the girl
+    const boyArmR = new THREE.Mesh(new THREE.CapsuleGeometry(0.044, 0.13, 8, 12), boyCardiganMat);
+    boyArmR.position.set(0.155, 0.16, 0.04);
+    boyArmR.rotation.set(-0.32, 0, -0.45);
     boyArmR.castShadow = true;
     boyGroup.add(boyArmR);
 
-    // Crisp white cuffs
-    const cuffGeo = new THREE.CylinderGeometry(0.066, 0.066, 0.04, 12);
-    const cuffL = new THREE.Mesh(cuffGeo, boyShirtMat);
-    cuffL.position.set(-0.19, 0.2, 0.26);
-    cuffL.rotation.set(0.65, 0, 0.28);
-    boyGroup.add(cuffL);
-
-    const cuffR = new THREE.Mesh(cuffGeo, boyShirtMat);
-    cuffR.position.set(0.19, 0.2, 0.26);
-    cuffR.rotation.set(0.65, 0, -0.28);
-    boyGroup.add(cuffR);
-
-    // Sculpted hands resting on knees
-    const boyHandGeo = new THREE.CapsuleGeometry(0.046, 0.08, 6, 10);
-    const boyHandL = new THREE.Mesh(boyHandGeo, boyPlainSkinMat);
-    boyHandL.position.set(-0.17, 0.15, 0.33);
-    boyHandL.rotation.set(0.6, 0, 0.1);
-    boyGroup.add(boyHandL);
-
-    const boyHandR = new THREE.Mesh(boyHandGeo, boyPlainSkinMat);
-    boyHandR.position.set(0.17, 0.15, 0.33);
-    boyHandR.rotation.set(0.6, 0, -0.1);
+    const boyHandR = new THREE.Mesh(new THREE.SphereGeometry(0.04, 12, 10), boySkinMat);
+    boyHandR.position.set(0.225, 0.07, 0.095);
     boyGroup.add(boyHandR);
 
-    // Boy Head Pivot (Shy, handsome anime boy with clean jawline)
+    // Boy Head Pivot
     const boyHeadPivot = new THREE.Group();
-    boyHeadPivot.position.set(0, 0.64, 0);
+    boyHeadPivot.position.set(0, 0.48, 0);
     boyGroup.add(boyHeadPivot);
+    createChibiFace(boyHeadPivot, boySkinMat, '#4a6b9e', false);
 
-    // Sculpted Head with CanvasTexture face map
-    const boyHeadGeo = createSculptedHeadGeometry(0.17, false);
-    const boyHeadMesh = new THREE.Mesh(boyHeadGeo, boySkinMat);
-    boyHeadMesh.rotation.y = -Math.PI / 2; // Aligns front UVs with +Z
-    boyHeadMesh.castShadow = true;
-    boyHeadPivot.add(boyHeadMesh);
-
-    // Boy Crown & Back Hair Shell (covers crown and back skull only, leaving front face completely open and bright)
-    const boyHairCapGeo = new THREE.SphereGeometry(0.178, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.48);
+    // Boy Smooth Crown & Clean Front Bangs (kept clearly above eyes so forehead/eyes shine cleanly)
+    const boyHairCapGeo = new THREE.SphereGeometry(0.256, 28, 20, 0, Math.PI * 2, 0, Math.PI * 0.54);
     const boyHairCap = new THREE.Mesh(boyHairCapGeo, boyHairMat);
-    boyHairCap.position.set(0, 0.03, -0.04);
+    boyHairCap.scale.set(1.06, 0.98, 1.03);
+    boyHairCap.rotation.x = -0.52;
+    boyHairCap.position.set(0, 0.025, -0.015);
+    boyHairCap.castShadow = true;
     boyHeadPivot.add(boyHairCap);
 
-    // Boy Back Hair Mass (covering back of the head seamlessly)
-    const boyBackHairGeo = new THREE.SphereGeometry(0.178, 20, 16, Math.PI * 0.48, Math.PI * 1.04, 0, Math.PI * 0.72);
-    const boyBackHair = new THREE.Mesh(boyBackHairGeo, boyHairMat);
-    boyBackHair.position.set(0, 0.01, -0.035);
-    boyBackHair.rotation.y = Math.PI / 2;
+    // Back hair volume behind boy's neck
+    const boyBackHair = new THREE.Mesh(new THREE.SphereGeometry(0.235, 20, 16), boyHairMat);
+    boyBackHair.scale.set(1.04, 0.84, 0.72);
+    boyBackHair.position.set(0, -0.04, -0.095);
     boyHeadPivot.add(boyBackHair);
 
-    // Swept bangs and temple locks using TubeGeometry
-    boyHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(-0.08, 0.15, 0.12),
-      new THREE.Vector3(-0.13, 0.08, 0.155),
-      new THREE.Vector3(-0.15, 0.01, 0.125)
-    ], 0.028, 0.008, 12, 8, boyHairMat));
+    // Neat fluffy bangs framing top of forehead (well clear of eyes)
+    [
+      [new THREE.Vector3(-0.08, 0.2, 0.1), new THREE.Vector3(-0.125, 0.14, 0.195), new THREE.Vector3(-0.14, 0.085, 0.215)],
+      [new THREE.Vector3(-0.02, 0.22, 0.11), new THREE.Vector3(-0.045, 0.15, 0.215), new THREE.Vector3(-0.055, 0.095, 0.232)],
+      [new THREE.Vector3(0.04, 0.22, 0.11), new THREE.Vector3(0.04, 0.15, 0.215), new THREE.Vector3(0.045, 0.098, 0.232)],
+      [new THREE.Vector3(0.11, 0.19, 0.095), new THREE.Vector3(0.145, 0.13, 0.185), new THREE.Vector3(0.16, 0.075, 0.205)]
+    ].forEach((pts) => boyHeadPivot.add(createChibiHairLock(pts, 0.035, 0.009, boyHairMat)));
 
-    boyHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(-0.03, 0.16, 0.13),
-      new THREE.Vector3(0.01, 0.11, 0.17),
-      new THREE.Vector3(0.035, 0.05, 0.155)
-    ], 0.03, 0.008, 12, 8, boyHairMat));
+    // Cute shy little top hair tuft (ahoge)
+    boyHeadPivot.add(createChibiHairLock([
+      new THREE.Vector3(0.0, 0.22, -0.02),
+      new THREE.Vector3(0.03, 0.285, 0.02),
+      new THREE.Vector3(0.08, 0.275, 0.05)
+    ], 0.018, 0.005, boyHairMat));
 
-    boyHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(0.02, 0.16, 0.13),
-      new THREE.Vector3(0.08, 0.1, 0.165),
-      new THREE.Vector3(0.125, 0.03, 0.135)
-    ], 0.028, 0.008, 12, 8, boyHairMat));
-
-    boyHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(0.12, 0.12, 0.09),
-      new THREE.Vector3(0.16, 0.05, 0.11),
-      new THREE.Vector3(0.165, -0.02, 0.07)
-    ], 0.024, 0.006, 12, 8, boyHairMat));
-
-    boyHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(-0.14, 0.1, 0.07),
-      new THREE.Vector3(-0.17, 0.02, 0.08),
-      new THREE.Vector3(-0.16, -0.05, 0.06)
-    ], 0.024, 0.006, 12, 8, boyHairMat));
-
-    // Tousled anime crown layers
-    boyHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(-0.05, 0.18, 0.02),
-      new THREE.Vector3(-0.08, 0.23, -0.03),
-      new THREE.Vector3(-0.1, 0.22, -0.07)
-    ], 0.025, 0.007, 10, 6, boyHairMat));
-
-    boyHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(0.04, 0.19, 0.04),
-      new THREE.Vector3(0.07, 0.24, -0.01),
-      new THREE.Vector3(0.09, 0.23, -0.05)
-    ], 0.025, 0.007, 10, 6, boyHairMat));
-
-    boyHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(0.0, 0.2, -0.04),
-      new THREE.Vector3(0.02, 0.24, -0.1),
-      new THREE.Vector3(0.03, 0.22, -0.14)
-    ], 0.026, 0.008, 10, 6, boyHairMat));
-
-    // Initial shy head posture: tilted slightly down and turned away
-    boyHeadPivot.rotation.set(0.16, -0.28, -0.06);
+    boyHeadPivot.rotation.set(0.06, -0.08, 0.03);
 
     // ==========================================
-    // --- THE GIRL (Cutie & Beautiful) ---
+    // --- THE GIRL (Cute & Lovely Seated Chibi) ---
     // ==========================================
     const girlGroup = new THREE.Group();
-    girlGroup.position.set(0.38, 0, 0);
+    girlGroup.position.set(0.28, 0, 0.03);
+    girlGroup.rotation.y = -0.18;
     coupleGroup.add(girlGroup);
 
-    // Girl Bodice (Sweetheart neckline with puffed sleeves)
+    // Girl Torso leaning affectionately toward the boy
     const girlTorso = new THREE.Group();
-    girlTorso.position.y = 0.36;
-    girlTorso.rotation.z = -0.12;
+    girlTorso.position.set(0, 0.07, 0);
+    girlTorso.rotation.z = 0.08;
     girlGroup.add(girlTorso);
 
-    const girlBodyGeo = new THREE.CapsuleGeometry(0.16, 0.26, 8, 16);
-    const girlBodyMesh = new THREE.Mesh(girlBodyGeo, girlDressMat);
-    girlBodyMesh.castShadow = true;
-    girlTorso.add(girlBodyMesh);
+    // Sweet Chibi Dress Skirt & Bodice
+    const girlSkirt = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.21, 0.19, 24), girlDressMat);
+    girlSkirt.position.y = 0.095;
+    girlSkirt.castShadow = true;
+    girlTorso.add(girlSkirt);
 
-    // Dainty white scalloped lace collar trimming neckline
-    const laceCollarGeo = new THREE.TorusGeometry(0.11, 0.022, 8, 24, Math.PI);
-    const laceCollar = new THREE.Mesh(laceCollarGeo, girlLaceMat);
-    laceCollar.position.set(0, 0.12, 0.08);
-    laceCollar.rotation.x = 0.4;
-    girlTorso.add(laceCollar);
+    const girlLaceRim = new THREE.Mesh(new THREE.TorusGeometry(0.205, 0.014, 8, 24), creamWhiteMat);
+    girlLaceRim.rotation.x = Math.PI / 2;
+    girlLaceRim.position.y = 0.005;
+    girlTorso.add(girlLaceRim);
 
-    // Waist ribbon sash
-    const sashGeo = new THREE.CylinderGeometry(0.165, 0.17, 0.045, 16);
-    const sash = new THREE.Mesh(sashGeo, girlRibbonMat);
-    sash.position.y = -0.04;
-    girlTorso.add(sash);
+    const girlBodice = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.11, 8, 16), girlDressMat);
+    girlBodice.scale.set(1.02, 1.0, 0.9);
+    girlBodice.position.y = 0.21;
+    girlBodice.castShadow = true;
+    girlTorso.add(girlBodice);
 
-    // Cute Ribbon Bow in back with fluttering ribbon streamers
-    const bowCenterGeo = new THREE.SphereGeometry(0.042, 10, 10);
-    const bowCenter = new THREE.Mesh(bowCenterGeo, girlRibbonMat);
-    bowCenter.position.set(0, -0.04, -0.17);
-    girlTorso.add(bowCenter);
+    // White Peter Pan Collar & Cute Front Ribbon Bow
+    const girlCollar = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.019, 8, 16), creamWhiteMat);
+    girlCollar.rotation.x = Math.PI * 0.52;
+    girlCollar.position.set(0, 0.295, 0.012);
+    girlTorso.add(girlCollar);
 
-    girlTorso.add(createCurvedHairStrand([
-      new THREE.Vector3(-0.03, -0.04, -0.17),
-      new THREE.Vector3(-0.06, -0.12, -0.18),
-      new THREE.Vector3(-0.05, -0.2, -0.17)
-    ], 0.016, 0.006, 8, 6, girlRibbonMat));
+    const bowKnot = new THREE.Mesh(new THREE.SphereGeometry(0.022, 10, 10), girlRibbonMat);
+    bowKnot.position.set(0, 0.255, 0.11);
+    girlTorso.add(bowKnot);
+    [-1, 1].forEach((side) => {
+      const wing = new THREE.Mesh(new THREE.ConeGeometry(0.024, 0.055, 8), girlRibbonMat);
+      wing.rotation.z = side * Math.PI * 0.45;
+      wing.position.set(side * 0.032, 0.255, 0.105);
+      girlTorso.add(wing);
+    });
 
-    girlTorso.add(createCurvedHairStrand([
-      new THREE.Vector3(0.03, -0.04, -0.17),
-      new THREE.Vector3(0.06, -0.12, -0.18),
-      new THREE.Vector3(0.05, -0.2, -0.17)
-    ], 0.016, 0.006, 8, 6, girlRibbonMat));
+    // Seated Cute Legs with White Socks & Pink Shoes
+    [-1, 1].forEach((side) => {
+      const leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.048, 0.15, 8, 12), creamWhiteMat);
+      leg.rotation.x = Math.PI / 2 - 0.06;
+      leg.rotation.z = -side * 0.08;
+      leg.position.set(side * 0.062, 0.055, 0.13);
+      leg.castShadow = true;
+      girlGroup.add(leg);
 
-    // Puffed Shoulder Cap Sleeves
-    const puffGeo = new THREE.SphereGeometry(0.076, 14, 14);
-    const puffL = new THREE.Mesh(puffGeo, girlDressMat);
-    puffL.position.set(-0.19, 0.11, 0.02);
-    girlTorso.add(puffL);
+      const shoe = new THREE.Mesh(new THREE.CapsuleGeometry(0.048, 0.048, 8, 12), girlRibbonMat);
+      shoe.rotation.x = Math.PI / 2;
+      shoe.scale.set(0.95, 1.0, 0.78);
+      shoe.position.set(side * 0.072, 0.046, 0.245);
+      shoe.castShadow = true;
+      girlGroup.add(shoe);
+    });
 
-    const puffR = new THREE.Mesh(puffGeo, girlDressMat);
-    puffR.position.set(0.19, 0.11, 0.02);
-    girlTorso.add(puffR);
-
-    // Girl Delicate Arms (CapsuleGeometry with porcelain skin)
-    const girlArmGeo = new THREE.CapsuleGeometry(0.05, 0.26, 8, 16);
-    const girlArmL = new THREE.Mesh(girlArmGeo, girlPlainSkinMat);
-    girlArmL.position.set(-0.21, 0.26, 0.15);
-    girlArmL.rotation.set(0.65, 0, 0.45);
-    girlArmL.castShadow = true;
-    girlGroup.add(girlArmL);
-
-    // Delicate hand reaching sweetly toward boy on the blanket
-    const girlHandGeo = new THREE.CapsuleGeometry(0.04, 0.07, 6, 10);
-    const girlHandL = new THREE.Mesh(girlHandGeo, girlPlainSkinMat);
-    girlHandL.position.set(-0.14, 0.14, 0.32);
-    girlHandL.rotation.set(0.5, 0, 0.2);
-    girlGroup.add(girlHandL);
-
-    const girlArmR = new THREE.Mesh(girlArmGeo, girlPlainSkinMat);
-    girlArmR.position.set(0.22, 0.28, 0.12);
-    girlArmR.rotation.set(0.6, 0, -0.3);
+    // Outer Right Arm resting sweetly beside her lap
+    const girlArmR = new THREE.Mesh(new THREE.CapsuleGeometry(0.038, 0.12, 8, 12), girlDressMat);
+    girlArmR.position.set(0.135, 0.17, 0.04);
+    girlArmR.rotation.set(-0.35, 0, -0.24);
     girlArmR.castShadow = true;
     girlGroup.add(girlArmR);
 
-    const girlHandR = new THREE.Mesh(girlHandGeo, girlPlainSkinMat);
-    girlHandR.position.set(0.15, 0.18, 0.28);
-    girlHandR.rotation.set(0.5, 0, -0.2);
+    const girlHandR = new THREE.Mesh(new THREE.SphereGeometry(0.036, 10, 10), girlSkinMat);
+    girlHandR.position.set(0.155, 0.1, 0.105);
     girlGroup.add(girlHandR);
 
-    // Flared Pleated Skirt with Scalloped Lace Petticoat
-    const skirtGeo = new THREE.ConeGeometry(0.38, 0.35, 20);
-    const skirt = new THREE.Mesh(skirtGeo, girlDressMat);
-    skirt.position.set(-0.02, 0.16, 0.06);
-    skirt.rotation.x = 0.16;
-    skirt.castShadow = true;
-    girlGroup.add(skirt);
+    // Inner Left Arm reaching tenderly to hold the boy's hand
+    const girlArmL = new THREE.Mesh(new THREE.CapsuleGeometry(0.038, 0.13, 8, 12), girlDressMat);
+    girlArmL.position.set(-0.15, 0.16, 0.04);
+    girlArmL.rotation.set(-0.35, 0, 0.48);
+    girlArmL.castShadow = true;
+    girlGroup.add(girlArmL);
 
-    // White scalloped petticoat frill peeking under skirt hem
-    const petticoatGeo = new THREE.CylinderGeometry(0.34, 0.39, 0.06, 24);
-    const petticoat = new THREE.Mesh(petticoatGeo, girlLaceMat);
-    petticoat.position.set(-0.02, 0.03, 0.08);
-    girlGroup.add(petticoat);
+    const girlHandL = new THREE.Mesh(new THREE.SphereGeometry(0.038, 10, 10), girlSkinMat);
+    girlHandL.position.set(-0.215, 0.07, 0.095);
+    girlGroup.add(girlHandL);
 
-    // Dainty Pastel Shoes
-    const girlShoeGeo = new THREE.CapsuleGeometry(0.058, 0.14, 6, 10);
-    const girlShoeL = new THREE.Mesh(girlShoeGeo, girlShoeMat);
-    girlShoeL.position.set(-0.08, 0.04, 0.32);
-    girlShoeL.rotation.set(0.1, 0.15, 0);
-    girlShoeL.castShadow = true;
-    girlGroup.add(girlShoeL);
-
-    const girlShoeR = new THREE.Mesh(girlShoeGeo, girlShoeMat);
-    girlShoeR.position.set(0.08, 0.04, 0.32);
-    girlShoeR.rotation.set(0.1, -0.15, 0);
-    girlShoeR.castShadow = true;
-    girlGroup.add(girlShoeR);
-
-    // Girl Head Pivot (Warm, joyful, affectionate head tilt)
+    // Girl Head Pivot (tilted lovingly toward boy's shoulder)
     const girlHeadPivot = new THREE.Group();
-    girlHeadPivot.position.set(-0.04, 0.62, 0);
+    girlHeadPivot.position.set(-0.025, 0.455, 0);
     girlGroup.add(girlHeadPivot);
+    createChibiFace(girlHeadPivot, girlSkinMat, '#3e8c8c', true);
 
-    // Sculpted Head with CanvasTexture face map
-    const girlHeadGeo = createSculptedHeadGeometry(0.165, true);
-    const girlHeadMesh = new THREE.Mesh(girlHeadGeo, girlSkinMat);
-    girlHeadMesh.rotation.y = -Math.PI / 2; // Aligns front UVs with +Z
-    girlHeadMesh.castShadow = true;
-    girlHeadPivot.add(girlHeadMesh);
-
-    // Girl Crown & Back Hair Shell (covers crown and back skull only, leaving front face completely open and bright)
-    const girlHairCapGeo = new THREE.SphereGeometry(0.174, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.48);
+    // Girl Hair Crown & Cute Rounded Bob Back (leaves full face & forehead luminous)
+    const girlHairCapGeo = new THREE.SphereGeometry(0.256, 28, 22, 0, Math.PI * 2, 0, Math.PI * 0.55);
     const girlHairCap = new THREE.Mesh(girlHairCapGeo, girlHairMat);
-    girlHairCap.position.set(0, 0.03, -0.04);
+    girlHairCap.scale.set(1.07, 0.99, 1.04);
+    girlHairCap.rotation.x = -0.52;
+    girlHairCap.position.set(0, 0.022, -0.018);
+    girlHairCap.castShadow = true;
     girlHeadPivot.add(girlHairCap);
 
-    // Girl Back Hair Mass (covering back of the head seamlessly)
-    const girlBackHairGeo = new THREE.SphereGeometry(0.174, 20, 16, Math.PI * 0.48, Math.PI * 1.04, 0, Math.PI * 0.75);
-    const girlBackHair = new THREE.Mesh(girlBackHairGeo, girlHairMat);
-    girlBackHair.position.set(0, 0.01, -0.035);
-    girlBackHair.rotation.y = Math.PI / 2;
+    // Soft rounded lower back hair hugging behind neck
+    const girlBackHair = new THREE.Mesh(new THREE.SphereGeometry(0.24, 20, 16), girlHairMat);
+    girlBackHair.scale.set(1.08, 0.85, 0.72);
+    girlBackHair.position.set(0, -0.06, -0.1);
+    girlBackHair.castShadow = true;
     girlHeadPivot.add(girlBackHair);
 
-    // Soft Curved Front Bangs with gentle anime parting
-    girlHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(-0.02, 0.14, 0.12),
-      new THREE.Vector3(-0.045, 0.07, 0.168),
-      new THREE.Vector3(-0.07, -0.01, 0.155)
-    ], 0.026, 0.007, 12, 8, girlHairMat));
+    // Sweet soft curved bangs & cheek-framing side locks (kept completely clear of eyes)
+    [
+      [new THREE.Vector3(-0.075, 0.21, 0.1), new THREE.Vector3(-0.095, 0.145, 0.198), new THREE.Vector3(-0.105, 0.095, 0.22)],
+      [new THREE.Vector3(0.0, 0.22, 0.11), new THREE.Vector3(0.0, 0.15, 0.212), new THREE.Vector3(0.0, 0.1, 0.232)],
+      [new THREE.Vector3(0.075, 0.21, 0.1), new THREE.Vector3(0.095, 0.145, 0.198), new THREE.Vector3(0.105, 0.095, 0.22)],
+      [new THREE.Vector3(-0.18, 0.12, 0.03), new THREE.Vector3(-0.245, -0.02, 0.08), new THREE.Vector3(-0.22, -0.16, 0.11)],
+      [new THREE.Vector3(0.18, 0.12, 0.03), new THREE.Vector3(0.245, -0.02, 0.08), new THREE.Vector3(0.22, -0.16, 0.11)]
+    ].forEach((pts) => girlHeadPivot.add(createChibiHairLock(pts, 0.033, 0.01, girlHairMat)));
 
-    girlHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(0.01, 0.14, 0.12),
-      new THREE.Vector3(0.035, 0.07, 0.17),
-      new THREE.Vector3(0.06, -0.01, 0.158)
-    ], 0.026, 0.007, 12, 8, girlHairMat));
+    // Cute Twin Chignon Side Buns + Sakura Pink Ribbon Accents!
+    const girlBunGroupL = new THREE.Group();
+    girlBunGroupL.position.set(-0.225, 0.175, -0.03);
+    girlHeadPivot.add(girlBunGroupL);
+    const bunL = new THREE.Mesh(new THREE.SphereGeometry(0.082, 16, 14), girlHairMat);
+    bunL.castShadow = true;
+    girlBunGroupL.add(bunL);
+    const bunRingL = new THREE.Mesh(new THREE.TorusGeometry(0.068, 0.014, 8, 16), girlRibbonMat);
+    bunRingL.rotation.set(0.3, Math.PI * 0.35, 0);
+    girlBunGroupL.add(bunRingL);
 
-    girlHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(-0.06, 0.13, 0.1),
-      new THREE.Vector3(-0.11, 0.06, 0.148),
-      new THREE.Vector3(-0.13, -0.02, 0.128)
-    ], 0.024, 0.006, 12, 8, girlHairMat));
+    const girlBunGroupR = new THREE.Group();
+    girlBunGroupR.position.set(0.225, 0.175, -0.03);
+    girlHeadPivot.add(girlBunGroupR);
+    const bunR = new THREE.Mesh(new THREE.SphereGeometry(0.082, 16, 14), girlHairMat);
+    bunR.castShadow = true;
+    girlBunGroupR.add(bunR);
+    const bunRingR = new THREE.Mesh(new THREE.TorusGeometry(0.068, 0.014, 8, 16), girlRibbonMat);
+    bunRingR.rotation.set(0.3, -Math.PI * 0.35, 0);
+    girlBunGroupR.add(bunRingR);
 
-    girlHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(0.06, 0.13, 0.1),
-      new THREE.Vector3(0.1, 0.06, 0.15),
-      new THREE.Vector3(0.125, -0.02, 0.13)
-    ], 0.024, 0.006, 12, 8, girlHairMat));
+    girlHeadPivot.rotation.set(0.04, -0.12, 0.14);
 
-    // Flowing Side-Locks cascading gracefully past cheeks and over shoulders
-    girlHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(-0.13, 0.1, 0.06),
-      new THREE.Vector3(-0.165, -0.03, 0.12),
-      new THREE.Vector3(-0.16, -0.15, 0.13),
-      new THREE.Vector3(-0.13, -0.25, 0.09)
-    ], 0.028, 0.008, 14, 8, girlHairMat));
+    // ==========================================
+    // --- FLOATING TINY GLOWING HEART BETWEEN THEM ---
+    // ==========================================
+    const heartShape = new THREE.Shape();
+    heartShape.moveTo(0, 0.028);
+    heartShape.bezierCurveTo(0, 0.048, -0.038, 0.048, -0.038, 0.02);
+    heartShape.bezierCurveTo(-0.038, -0.005, 0, -0.025, 0, -0.042);
+    heartShape.bezierCurveTo(0, -0.025, 0.038, -0.005, 0.038, 0.02);
+    heartShape.bezierCurveTo(0.038, 0.048, 0, 0.048, 0, 0.028);
 
-    girlHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(0.13, 0.1, 0.06),
-      new THREE.Vector3(0.165, -0.03, 0.12),
-      new THREE.Vector3(0.16, -0.15, 0.13),
-      new THREE.Vector3(0.13, -0.25, 0.09)
-    ], 0.028, 0.008, 14, 8, girlHairMat));
-
-    // Cascading Back and Shoulder Wavy Hair Locks
-    girlHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(-0.05, 0.08, -0.12),
-      new THREE.Vector3(-0.08, -0.06, -0.15),
-      new THREE.Vector3(-0.06, -0.22, -0.11)
-    ], 0.032, 0.01, 12, 8, girlHairMat));
-
-    girlHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(0.05, 0.08, -0.12),
-      new THREE.Vector3(0.08, -0.06, -0.15),
-      new THREE.Vector3(0.06, -0.22, -0.11)
-    ], 0.032, 0.01, 12, 8, girlHairMat));
-
-    girlHeadPivot.add(createCurvedHairStrand([
-      new THREE.Vector3(0.14, 0.05, -0.04),
-      new THREE.Vector3(0.17, -0.08, 0.04),
-      new THREE.Vector3(0.15, -0.2, 0.08)
-    ], 0.026, 0.008, 12, 8, girlHairMat));
-
-    // Cute Side Chignon Bun
-    const bunGeo = new THREE.SphereGeometry(0.092, 14, 14);
-    const bun = new THREE.Mesh(bunGeo, girlHairMat);
-    bun.position.set(0.14, 0.06, -0.06);
-    girlHeadPivot.add(bun);
-
-    // Exquisite Golden Sakura Flower Hairpin with Pink Pearl Center
-    const sakuraClipGroup = new THREE.Group();
-    sakuraClipGroup.position.set(0.13, 0.12, 0.08);
-    girlHeadPivot.add(sakuraClipGroup);
-
-    const clipGoldMat = new THREE.MeshToonMaterial({
-      color: '#ffcb47',
-      gradientMap: toonGradient
+    const heartGeo = new THREE.ExtrudeGeometry(heartShape, {
+      depth: 0.018,
+      bevelEnabled: true,
+      bevelSegments: 3,
+      steps: 1,
+      bevelSize: 0.008,
+      bevelThickness: 0.008
     });
-    const pearlCenterMat = new THREE.MeshBasicMaterial({ color: '#ff9eb5' });
+    heartGeo.center();
+    const floatingHeart = new THREE.Mesh(heartGeo, heartMat);
+    floatingHeart.position.set(0, 0.32, 0.15);
+    coupleGroup.add(floatingHeart);
 
-    // 5 Sakura Blossom Petals
-    const sakuraPetalGeo = new THREE.CapsuleGeometry(0.015, 0.03, 4, 8);
-    for (let p = 0; p < 5; p++) {
-      const petalAngle = (p / 5) * Math.PI * 2;
-      const petalMesh = new THREE.Mesh(sakuraPetalGeo, clipGoldMat);
-      petalMesh.position.set(Math.cos(petalAngle) * 0.024, Math.sin(petalAngle) * 0.024, 0);
-      petalMesh.rotation.z = petalAngle;
-      petalMesh.rotation.x = 0.2;
-      sakuraClipGroup.add(petalMesh);
-    }
-
-    // Glowing pink pearl center
-    const pearl = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 8), pearlCenterMat);
-    pearl.position.z = 0.015;
-    sakuraClipGroup.add(pearl);
-
-    // Two delicate golden ribbon streamers fluttering down from sakura clip
-    const girlHairRibbon1 = createCurvedHairStrand([
-      new THREE.Vector3(0, -0.02, 0),
-      new THREE.Vector3(0.02, -0.08, 0.01),
-      new THREE.Vector3(0.015, -0.15, 0.02)
-    ], 0.01, 0.004, 8, 6, clipGoldMat);
-    sakuraClipGroup.add(girlHairRibbon1);
-
-    const girlHairRibbon2 = createCurvedHairStrand([
-      new THREE.Vector3(-0.01, -0.02, 0),
-      new THREE.Vector3(-0.025, -0.07, 0.01),
-      new THREE.Vector3(-0.02, -0.14, 0.02)
-    ], 0.009, 0.004, 8, 6, clipGoldMat);
-    sakuraClipGroup.add(girlHairRibbon2);
-
-    // Girl Head Affectionate Tilt toward boy
-    girlHeadPivot.rotation.set(0.06, -0.24, -0.2);
-
-    // Dynamic Character Animation & Shy Glance State
+    // Shy glance state for boy animation
     let shyGlanceTimer = 0;
-    let targetHeadYaw = -0.28;
-    let targetHeadPitch = 0.16;
+    let targetBoyHeadYaw = -0.08;
+    let targetBoyHeadPitch = 0.06;
 
     // --- Vintage Lantern on Blanket ---
     const lanternGroup = new THREE.Group();
@@ -3401,10 +3060,13 @@
       hillDistantMat.color.set(s.hillColor);
       bladeMat.color.set(s.grassColor);
 
-      // Reactive Couple Seasonal Outfits & Ambient Bounce
+      // Reactive Seasonal Lighting, Outfits & Ambient Bounce
       girlDressMat.color.set(s.girlDressColor);
+      girlDressMat.emissive.set(s.girlDressColor);
       girlRibbonMat.color.set(s.girlRibbonColor);
+      girlRibbonMat.emissive.set(s.girlRibbonColor);
       boyCardiganMat.color.set(s.boyCardiganColor);
+      boyCardiganMat.emissive.set(s.boyCardiganColor);
       seasonalBounceLight.color.set(s.bounceColor);
       particleMat.color.set(s.particleColor);
 
@@ -3520,8 +3182,8 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      const elapsedTime = clock.getElapsedTime();
-      const delta = clock.getDelta();
+      const delta = Math.min(clock.getDelta(), 0.1);
+      const elapsedTime = clock.elapsedTime;
 
       // Controls update (handles auto-rotation & smooth damping)
       controls.update();
@@ -3535,41 +3197,36 @@
       });
 
       // ========================================================
-      // Stylized Anime Couple Romantic Animation Engine
+      // Cute & Lovely Sitting Chibi Couple Romantic Animations
       // ========================================================
-      // The Boy (Handsome & Shy)
-      // Gentle rhythmic idle breathing motion
-      boyTorso.scale.y = 1.0 + Math.sin(elapsedTime * 2.2) * 0.025;
+      // Gentle rhythmic breathing
+      boyTorso.scale.y = 1.0 + Math.sin(elapsedTime * 2.1) * 0.025;
+      girlTorso.scale.y = 1.0 + Math.sin(elapsedTime * 2.1 + 0.6) * 0.025;
 
-      // Bashful sideways glance loop: glances affectionately toward girl every few seconds, then looks down/away
+      // Boy periodic shy glance toward girl, then bashfully looking slightly away
       shyGlanceTimer += delta;
-      let targetHeadPitch = 0.16;
-      if (shyGlanceTimer > 5.5) {
-        targetHeadYaw = 0.28; // looks sideways at girl
-        targetHeadPitch = 0.04;
-        if (shyGlanceTimer > 8.0) {
-          targetHeadYaw = -0.28; // looks bashfully down and away
-          targetHeadPitch = 0.16;
+      if (shyGlanceTimer > 4.5) {
+        targetBoyHeadYaw = 0.16;
+        targetBoyHeadPitch = 0.03;
+        if (shyGlanceTimer > 7.2) {
+          targetBoyHeadYaw = -0.08;
+          targetBoyHeadPitch = 0.07;
           shyGlanceTimer = 0;
         }
       }
-      boyHeadPivot.rotation.y = THREE.MathUtils.lerp(boyHeadPivot.rotation.y, targetHeadYaw, 0.05);
-      boyHeadPivot.rotation.x = THREE.MathUtils.lerp(boyHeadPivot.rotation.x, targetHeadPitch, 0.05);
+      boyHeadPivot.rotation.y = THREE.MathUtils.lerp(boyHeadPivot.rotation.y, targetBoyHeadYaw, 0.05);
+      boyHeadPivot.rotation.x = THREE.MathUtils.lerp(boyHeadPivot.rotation.x, targetBoyHeadPitch, 0.05);
 
-      // The Girl (Cute & Beautiful)
-      // Sweet rhythmic upper-body sway synced to the music tempo
-      const musicSway = Math.sin(elapsedTime * 2.4) * 0.045;
-      girlGroup.rotation.z = musicSway;
-      girlHeadPivot.rotation.z = -0.2 + musicSway * 0.5; // affectionate head tilt leaning toward boy
-      girlTorso.scale.y = 1.0 + Math.sin(elapsedTime * 2.2 + 0.5) * 0.02; // gentle breathing
+      // Girl happy affectionate leaning sway to music tempo
+      const musicSway = Math.sin(elapsedTime * 2.2) * 0.032;
+      girlTorso.rotation.z = 0.08 + musicSway;
+      girlHeadPivot.rotation.z = 0.14 + musicSway * 0.75;
 
-      // Delicate golden ribbon streamers fluttering gracefully in the breeze
-      if (typeof girlHairRibbon1 !== 'undefined' && girlHairRibbon1) {
-        girlHairRibbon1.rotation.z = Math.sin(elapsedTime * 3.2) * 0.12;
-      }
-      if (typeof girlHairRibbon2 !== 'undefined' && girlHairRibbon2) {
-        girlHairRibbon2.rotation.z = Math.sin(elapsedTime * 3.2 + 0.6) * 0.14;
-      }
+      // Gentle pulsing glowing heart between their joined hands
+      const heartPulse = 1.0 + Math.sin(elapsedTime * 3.4) * 0.09;
+      floatingHeart.scale.setScalar(heartPulse);
+      floatingHeart.position.y = 0.32 + Math.sin(elapsedTime * 2.0) * 0.015;
+      floatingHeart.rotation.y = Math.sin(elapsedTime * 1.1) * 0.2;
 
       // Romantic Lantern Flicker (Sunset / Night)
       if (lanternLight.intensity > 0.5) {
