@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="gu">
 
 <head>
@@ -79,6 +79,22 @@
       touch-action: none;
     }
 
+    /* Mysterious Twilight Mist Vignette (Lifts smoothly when Play / Lantern is tapped) */
+    .mist-veil {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 47%, rgba(16, 20, 38, 0.04) 0%, rgba(10, 14, 28, 0.54) 36%, rgba(4, 7, 16, 0.88) 78%);
+      opacity: 1;
+      transition: opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .mist-veil.lifted {
+      opacity: 0;
+    }
+
     /* Universal Responsive Layout Overlay */
     .app-viewport {
       position: relative;
@@ -106,7 +122,7 @@
       align-items: center;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s ease;
+      transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0s linear 0.6s;
       z-index: 1;
       pointer-events: none;
     }
@@ -114,6 +130,7 @@
     .screen.active {
       opacity: 1;
       visibility: visible;
+      transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0s linear 0s;
       z-index: 2;
       pointer-events: none;
     }
@@ -761,9 +778,7 @@
       width: clamp(54px, 14vw, 64px);
       height: clamp(54px, 14vw, 64px);
       border-radius: 50%;
-      background: rgba(18, 20, 30, 0.75);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(18, 20, 30, 0.85);
       border: 1.5px solid rgba(247, 231, 169, 0.5);
       box-shadow: 0 0 26px rgba(229, 193, 88, 0.28);
       display: flex;
@@ -899,6 +914,9 @@
 
   <!-- Fullscreen Three.js WebGL Canvas -->
   <canvas id="webglCanvas"></canvas>
+
+  <!-- Mysterious Atmospheric Vignette Veil -->
+  <div id="mistVeilOverlay" class="mist-veil"></div>
 
   <!-- Discreet 3D Scene Controls Menu (Time of Day & Seasons Preview) -->
   <div class="scene-preview-wrapper" id="sceneControlsWrapper">
@@ -1190,6 +1208,7 @@
     const revealScreen = document.getElementById('revealScreen');
     const playerScreen = document.getElementById('playerScreen');
     const endingScreen = document.getElementById('endingScreen');
+    const mistVeilOverlay = document.getElementById('mistVeilOverlay');
 
     const mainPlayBtn = document.getElementById('mainPlayBtn');
     const audioPlayer = document.getElementById('audioPlayer');
@@ -1315,9 +1334,26 @@
      */
     let hasStartedExperience = false;
 
+    function triggerMistReveal(animated = true) {
+      mistRevealTarget = 1.0;
+      if (mistVeilOverlay) mistVeilOverlay.classList.add('lifted');
+      if (animated) {
+        mistRevealStartTime = performance.now();
+        lanternSurgeTimer = 0;
+      } else {
+        mistRevealProgress = 1.0;
+        mistRevealStartTime = -1;
+        lanternSurgeTimer = -1;
+        syncMysteriousAtmosphere(clock.elapsedTime);
+      }
+    }
+
     function startExperience() {
       if (hasStartedExperience) return;
       hasStartedExperience = true;
+
+      // Ignite the lantern and gently clear the twilight mist
+      triggerMistReveal(true);
 
       triggerFullscreen();
       triggerHeartbeat([50, 120, 70]);
@@ -1582,7 +1618,7 @@
     scene.fog = new THREE.FogExp2('#6dafe8', 0.003);
 
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1200);
-    camera.position.set(0, 2.3, 9.8);
+    camera.position.set(0, 2.55, 11.4);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -1593,11 +1629,15 @@
     controls.minPolarAngle = 0.3;
     controls.target.set(0, 1.25, 1.4);
     let isAutoRotateEnabled = true;
+    let userDraggedCamera = false;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.38;
 
     // Temporary pause of auto-rotate when user drags
-    controls.addEventListener('start', () => { controls.autoRotate = false; });
+    controls.addEventListener('start', () => {
+      controls.autoRotate = false;
+      userDraggedCamera = true;
+    });
     let autoRotateTimeout = null;
     controls.addEventListener('end', () => {
       clearTimeout(autoRotateTimeout);
@@ -1675,9 +1715,9 @@
     faceFocusLight.position.set(0, 1.65, 2.5);
     scene.add(faceFocusLight);
 
-    // Warm Romantic Lantern Point Light beside the couple
-    const lanternLight = new THREE.PointLight('#ffa737', 2.2, 7.5, 1.8);
-    lanternLight.position.set(0.88, 1.1, 1.95);
+    // Warm Romantic Lantern Point Light centered inside the brass lantern
+    const lanternLight = new THREE.PointLight('#ffa737', 3.0, 9.0, 1.6);
+    lanternLight.position.set(1.09, 1.08, 2.14);
     lanternLight.castShadow = true;
     lanternLight.shadow.bias = -0.002;
     scene.add(lanternLight);
@@ -2600,6 +2640,30 @@
     lanternGlass.position.y = 0.14;
     lanternGroup.add(lanternGlass);
 
+    // Soft glowing candlelight halo sprite for atmospheric Lantern-in-the-Mist focal glow
+    const lanternGlowCanvas = document.createElement('canvas');
+    lanternGlowCanvas.width = 64;
+    lanternGlowCanvas.height = 64;
+    const lgCtx = lanternGlowCanvas.getContext('2d');
+    const lgGrad = lgCtx.createRadialGradient(32, 32, 2, 32, 32, 30);
+    lgGrad.addColorStop(0.0, 'rgba(255, 232, 160, 0.95)');
+    lgGrad.addColorStop(0.35, 'rgba(255, 178, 72, 0.45)');
+    lgGrad.addColorStop(1.0, 'rgba(255, 140, 40, 0.0)');
+    lgCtx.fillStyle = lgGrad;
+    lgCtx.fillRect(0, 0, 64, 64);
+    const lanternGlowTex = new THREE.CanvasTexture(lanternGlowCanvas);
+    const lanternAuraMat = new THREE.SpriteMaterial({
+      map: lanternGlowTex,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const lanternAura = new THREE.Sprite(lanternAuraMat);
+    lanternAura.position.set(0, 0.14, 0);
+    lanternAura.scale.setScalar(0.95);
+    lanternGroup.add(lanternAura);
+
     // Picnic Accessories on Blanket
     const basketGeo = new THREE.BoxGeometry(0.34, 0.22, 0.26);
     const basketMat = new THREE.MeshStandardMaterial({ color: '#966236', roughness: 0.95 });
@@ -2956,24 +3020,95 @@
     let activeSeasonMode = 'spring';
     let isAutoDetect = true;
 
+    // Mysterious Opening ("Lantern-in-the-Mist") Transition State
+    let mistRevealProgress = 0.0; // 0 = misty silhouette intro, 1 = full unveiled world
+    let mistRevealTarget = 0.0;
+    let mistRevealStartTime = -1;
+    let lanternSurgeTimer = -1;
+
+    const MIST_FOG_COLOR = new THREE.Color('#13192e');
+    const MIST_SKY_TINT = new THREE.Color('#28314f');
+    const WHITE_COLOR = new THREE.Color('#ffffff');
+    const tempMistBgColor = new THREE.Color();
+    const tempCamDir = new THREE.Vector3();
+
+    const targetLightingState = {
+      skyTopColor: new THREE.Color('#24133a'),
+      fogColor: new THREE.Color('#4e2236'),
+      fogDensity: 0.004,
+      dirIntensity: 1.8,
+      hemiIntensity: 0.85,
+      backAtmoIntensity: 2.6,
+      ambientFillIntensity: 1.35,
+      faceFocusIntensity: 2.0,
+      rimIntensity: 1.4,
+      lanternIntensity: 2.5,
+      starOpacity: 0.35,
+      fireflyOpacity: 0.0,
+      isNight: false
+    };
+
+    /**
+     * Smoothly blends scene mist, lighting, and lantern aura between mysterious intro and unveiled state
+     */
+    function syncMysteriousAtmosphere(elapsedTime = 0) {
+      const mistMix = 1.0 - THREE.MathUtils.smoothstep(mistRevealProgress, 0.0, 1.0);
+
+      // Thick dreamy twilight mist fades cleanly into preset atmosphere fog
+      scene.fog.color.copy(targetLightingState.fogColor).lerp(MIST_FOG_COLOR, mistMix);
+      scene.fog.density = THREE.MathUtils.lerp(targetLightingState.fogDensity, 0.095, mistMix * mistMix);
+
+      // Sky dome and clear color softly dim into atmospheric dusk veil when mistMix > 0
+      skyMat.color.copy(WHITE_COLOR).lerp(MIST_SKY_TINT, mistMix);
+      tempMistBgColor.copy(targetLightingState.skyTopColor).lerp(MIST_FOG_COLOR, mistMix);
+      scene.background.copy(tempMistBgColor);
+      renderer.setClearColor(tempMistBgColor, 1.0);
+      document.body.style.backgroundColor = `#${tempMistBgColor.getHexString()}`;
+
+      // World lights ease upward as mist parts, keeping the glowing lantern as the opening beacon
+      dirLight.intensity = targetLightingState.dirIntensity * THREE.MathUtils.lerp(1.0, 0.14, mistMix);
+      hemiLight.intensity = targetLightingState.hemiIntensity * THREE.MathUtils.lerp(1.0, 0.24, mistMix);
+      backAtmosphereLight.intensity = targetLightingState.backAtmoIntensity * THREE.MathUtils.lerp(1.0, 0.38, mistMix);
+      ambientFillLight.intensity = targetLightingState.ambientFillIntensity * THREE.MathUtils.lerp(1.0, 0.2, mistMix);
+      rimLight.intensity = targetLightingState.rimIntensity * THREE.MathUtils.lerp(1.0, 0.52, mistMix);
+      faceFocusLight.intensity = THREE.MathUtils.lerp(targetLightingState.faceFocusIntensity, 0.28, mistMix);
+
+      // Keep subtle stars & fireflies glimmering through the twilight mist
+      starMat.opacity = Math.max(targetLightingState.starOpacity, mistMix * 0.42);
+      fireflyMat.opacity = Math.max(targetLightingState.fireflyOpacity, mistMix * 0.72);
+
+      // Warm candlelight bloom surge when Play is tapped + steady flicker while misted or in Sunset/Night
+      const surge = lanternSurgeTimer >= 0
+        ? Math.sin(Math.min(1, lanternSurgeTimer / 2.2) * Math.PI) * 3.8
+        : 0;
+      const baseLantern = Math.max(targetLightingState.lanternIntensity, mistMix * 3.1);
+      const flicker = (Math.sin(elapsedTime * 7.5) + Math.cos(elapsedTime * 13)) * 0.16;
+      const activeLantern = baseLantern + surge;
+      lanternLight.intensity = activeLantern > 0.2 ? Math.max(0.2, activeLantern + flicker) : 0;
+
+      lanternGlassMat.color.set((targetLightingState.isNight || mistMix > 0.2 || surge > 0.2) ? '#ffcc55' : '#ffeeaa');
+      const auraStrength = THREE.MathUtils.clamp(activeLantern / 3.6, 0, 1.5);
+      lanternAura.material.opacity = auraStrength * 0.85;
+      const auraScale = (0.45 + auraStrength * 0.55) * (1.0 + Math.sin(elapsedTime * 5.2) * 0.06);
+      lanternAura.scale.setScalar(auraScale);
+    }
+
     function applyTimeOfDay(mode) {
       activeTimeMode = mode;
       const t = TIME_PRESETS[mode] || TIME_PRESETS.afternoon;
 
       renderSkyTexture(t.skyTop, t.skyMid, t.skyBot);
-      scene.background.set(t.skyTop);
-      renderer.setClearColor(t.skyTop, 1.0);
-      document.body.style.backgroundColor = t.skyTop;
+      targetLightingState.skyTopColor.set(t.skyTop);
+      targetLightingState.fogColor.set(t.fogColor);
+      targetLightingState.fogDensity = t.fogDensity;
 
       cloudMat.color.set(t.cloudColor);
-      scene.fog.color.set(t.fogColor);
-      scene.fog.density = t.fogDensity;
-
       hemiLight.color.set(t.hemiSky);
       hemiLight.groundColor.set(t.hemiGround);
 
       dirLight.color.set(t.dirColor);
-      dirLight.intensity = t.dirIntensity;
+      targetLightingState.dirIntensity = t.dirIntensity;
+      targetLightingState.hemiIntensity = 0.85;
       dirLight.position.set(t.dirPos[0], t.dirPos[1], t.dirPos[2]);
 
       // Update Toon Cel-Shading Ramp to reflect atmospheric shadow hue (never black!)
@@ -2981,41 +3116,41 @@
 
       // Back Atmosphere Light illuminating backs of characters with sky horizon tone
       backAtmosphereLight.color.set(t.backAtmoColor);
-      backAtmosphereLight.intensity = t.backAtmoIntensity;
+      targetLightingState.backAtmoIntensity = t.backAtmoIntensity;
 
       // Ambient Fill Light wrapping entire scene
       ambientFillLight.color.set(t.ambientFillColor);
-      ambientFillLight.intensity = t.ambientFillIntensity;
+      targetLightingState.ambientFillIntensity = t.ambientFillIntensity;
 
       celestialMat.color.set(t.celestialColor);
       celestialMesh.position.set(t.celestialPos[0], t.celestialPos[1], t.celestialPos[2]);
 
-      lanternLight.intensity = t.lanternIntensity;
-      lanternGlassMat.color.set(t.isNight ? '#ffcc55' : '#ffeeaa');
-      starMat.opacity = t.starOpacity;
-      fireflyMat.opacity = (t.isNight && activeSeasonMode !== 'winter') ? 0.9 : 0.0;
+      targetLightingState.lanternIntensity = t.lanternIntensity;
+      targetLightingState.starOpacity = t.starOpacity;
+      targetLightingState.fireflyOpacity = (t.isNight && activeSeasonMode !== 'winter') ? 0.9 : 0.0;
+      targetLightingState.isNight = t.isNight;
 
       // Warm Face Focus Lighting and Soft Rim Lighting across Times of Day
       if (mode === 'morning') {
         faceFocusLight.color.set('#ffe8d0');
-        faceFocusLight.intensity = 1.6;
+        targetLightingState.faceFocusIntensity = 1.6;
         rimLight.color.set('#fff2db');
-        rimLight.intensity = 1.0;
+        targetLightingState.rimIntensity = 1.0;
       } else if (mode === 'afternoon') {
         faceFocusLight.color.set('#fff0e2');
-        faceFocusLight.intensity = 1.4;
+        targetLightingState.faceFocusIntensity = 1.4;
         rimLight.color.set('#ffffff');
-        rimLight.intensity = 1.1;
+        targetLightingState.rimIntensity = 1.1;
       } else if (mode === 'sunset') {
         faceFocusLight.color.set('#ffd5b8');
-        faceFocusLight.intensity = 2.0;
+        targetLightingState.faceFocusIntensity = 2.0;
         rimLight.color.set('#ffa668');
-        rimLight.intensity = 1.4;
+        targetLightingState.rimIntensity = 1.4;
       } else if (mode === 'night') {
         faceFocusLight.color.set('#ffe2c6');
-        faceFocusLight.intensity = 2.2;
+        targetLightingState.faceFocusIntensity = 2.2;
         rimLight.color.set('#8aa8d8');
-        rimLight.intensity = 0.95;
+        targetLightingState.rimIntensity = 0.95;
       }
 
       // Campfire & Smoke active during Night and Sunset
@@ -3029,6 +3164,8 @@
         campfireGroup.visible = false;
         campfireLight.intensity = 0.0;
       }
+
+      syncMysteriousAtmosphere(0);
 
       // Update button active styling
       document.querySelectorAll('#timePillOptions .pill-opt').forEach(btn => {
@@ -3138,6 +3275,7 @@
       btn.addEventListener('click', () => {
         isAutoDetect = false;
         autoDetectBtn.classList.remove('active');
+        triggerMistReveal(false);
         applyTimeOfDay(btn.dataset.time);
       });
     });
@@ -3146,6 +3284,7 @@
       btn.addEventListener('click', () => {
         isAutoDetect = false;
         autoDetectBtn.classList.remove('active');
+        triggerMistReveal(false);
         applySeason(btn.dataset.season);
       });
     });
@@ -3228,10 +3367,29 @@
       floatingHeart.position.y = 0.32 + Math.sin(elapsedTime * 2.0) * 0.015;
       floatingHeart.rotation.y = Math.sin(elapsedTime * 1.1) * 0.2;
 
-      // Romantic Lantern Flicker (Sunset / Night)
-      if (lanternLight.intensity > 0.5) {
-        lanternLight.intensity = TIME_PRESETS[activeTimeMode].lanternIntensity + (Math.sin(elapsedTime * 8) + Math.cos(elapsedTime * 14)) * 0.15;
+      // Mysterious Opening Unveil Progression & Lantern Bloom (wall-clock synced with reveal screen)
+      if (mistRevealProgress < mistRevealTarget) {
+        if (mistRevealStartTime >= 0) {
+          mistRevealProgress = Math.min(1.0, (performance.now() - mistRevealStartTime) / 3200);
+        } else {
+          mistRevealProgress = mistRevealTarget;
+        }
+        if (!userDraggedCamera) {
+          const ease = THREE.MathUtils.smoothstep(mistRevealProgress, 0.0, 1.0);
+          const targetDist = THREE.MathUtils.lerp(10.08, 8.46, ease);
+          tempCamDir.subVectors(camera.position, controls.target);
+          const curDist = tempCamDir.length();
+          if (curDist > 0.1) {
+            tempCamDir.normalize().multiplyScalar(THREE.MathUtils.lerp(curDist, targetDist, 0.12));
+            camera.position.copy(controls.target).add(tempCamDir);
+          }
+        }
       }
+      if (mistRevealStartTime >= 0) {
+        const elapsedSinceReveal = (performance.now() - mistRevealStartTime) / 1000;
+        lanternSurgeTimer = elapsedSinceReveal <= 2.2 ? elapsedSinceReveal : -1;
+      }
+      syncMysteriousAtmosphere(elapsedTime);
 
       // Campfire Flame Dancing, Light Flicker & Smoke Particles
       if (campfireGroup.visible) {
