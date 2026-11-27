@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>વ્હાલમ આવો ને • એક રોમેન્ટિક 3D સફર</title>
+  <title>વ્હાલમ આવો ને</title>
 
   <!-- Google Fonts: Gujarati Typography & Clean Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -79,16 +79,15 @@
       touch-action: none;
     }
 
-    /* Mysterious Twilight Mist Vignette (Lifts smoothly when Play / Lantern is tapped) */
+    /* Full-Screen Dark Veil (Hides scene until Play is tapped for a soft reveal) */
     .mist-veil {
       position: fixed;
       inset: 0;
       z-index: 1;
       pointer-events: none;
-      background:
-        radial-gradient(circle at 50% 47%, rgba(16, 20, 38, 0.04) 0%, rgba(10, 14, 28, 0.54) 36%, rgba(4, 7, 16, 0.88) 78%);
+      background: radial-gradient(circle at 50% 50%, #070912 0%, #030408 68%, #000000 100%);
       opacity: 1;
-      transition: opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 3.2s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .mist-veil.lifted {
@@ -143,11 +142,18 @@
       top: calc(env(safe-area-inset-top, 20px) + 12px);
       left: clamp(14px, 3.5vw, 24px);
       z-index: 10;
-      pointer-events: auto;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.8s ease 0.9s;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
+    }
+
+    .scene-preview-wrapper.revealed {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .scene-toggle-pill {
@@ -315,7 +321,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: auto 0 0 0;
+      margin: auto 0;
       width: 100%;
       pointer-events: auto;
     }
@@ -747,6 +753,8 @@
 
     /* Floating Controls Row */
     .controls-buttons {
+      position: relative;
+      z-index: 2;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -754,6 +762,8 @@
     }
 
     .btn-skip {
+      position: relative;
+      z-index: 2;
       background: transparent;
       border: none;
       color: #FFFFFF;
@@ -764,7 +774,7 @@
       justify-content: center;
       cursor: pointer;
       border-radius: 50%;
-      transition: all 0.2s ease;
+      transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
       filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.7));
     }
 
@@ -775,6 +785,8 @@
     }
 
     .btn-master-play {
+      position: relative;
+      z-index: 2;
       width: clamp(54px, 14vw, 64px);
       height: clamp(54px, 14vw, 64px);
       border-radius: 50%;
@@ -785,7 +797,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s ease;
       color: var(--accent-gold-primary);
     }
 
@@ -883,7 +895,7 @@
       justify-content: center;
       gap: 10px;
       text-decoration: none;
-      transition: all 0.25s ease;
+      transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
       border: none;
     }
 
@@ -922,7 +934,7 @@
   <div class="scene-preview-wrapper" id="sceneControlsWrapper">
     <button id="sceneToggleBtn" class="scene-toggle-pill" aria-label="વાતાવરણ બદલો">
       <span class="scene-icon">✨</span>
-      <span id="sceneToggleLabel" class="scene-label">વાતાવરણ (3D)</span>
+      <span id="sceneToggleLabel" class="scene-label">વાતાવરણ</span>
     </button>
     <div id="sceneTray" class="scene-tray">
       <div class="scene-group">
@@ -1159,44 +1171,53 @@
      */
     const LYRICS_DATA = [
       { time: 0.00, text: "" },
-      { time: 16.56, text: "સુની છે આંખો, સૂના છે આંસુ..." },
-      { time: 20.24, text: "જોવે છે મિલનની વાટ રે વ્હાલમિયા..." },
-      { time: 29.03, text: "છોડીને ચાલ્યા ના જાવો..." },
-      { time: 34.16, text: "જોઉં વ્હાલમ તારી વાટ..." },
-      { time: 37.52, text: "રે વ્હેલા આવો, પ્રીતડી..." },
-      { time: 42.48, text: "નિભાવો, હૈયું ભૂલ્યું છે હવે ભાન રે..." },
-      { time: 49.68, text: "સાજણના સંભારણા યાદ બહુ આવે..." },
-      { time: 56.16, text: "સાજણ તારી યાદ જી રે..." },
-      { time: 59.03, text: "જી રે નણદલના..." },
-      { time: 62.00, text: "નણદલના વીર વિના એકલાં હો જી રે..." },
-      { time: 71.60, text: "નણદલના વીર વિના એકલાં હો જી રે..." },
-      { time: 78.79, text: "સૂના મંદિર થાવા જાય હો જી રે..." },
-      { time: 88.42, text: "કેદુની જોઉં તમારી વાટ..." },
-      { time: 92.88, text: "વ્હેલા વ્હાલમ ઘેરે આવજો..." },
-      { time: 98.56, text: "કેદુની જોઉં તમારી વાટ..." },
-      { time: 101.20, text: "વ્હેલા વ્હાલમ ઘેરે આવજો..." },
-      { time: 106.50, text: "" },
-      { time: 134.64, text: "હાથ થામી દીધા મારા કોલ યાદ છે..." },
-      { time: 141.36, text: "પરદેશ હોવા છતાં હૈયું તારે કાજ છે..." },
-      { time: 146.31, text: "આવવાના ઓરતા તો બાકી રહી જાય છે..." },
-      { time: 153.84, text: "માયા લાગી એવી હૈયું ભાન ભૂલી જાય છે..." },
-      { time: 159.92, text: "વ્હેલા વ્હેલા આવું છું, તને જોવા માંગું છું..." },
-      { time: 166.31, text: "રહેવા તારા હૈયે, તારો પ્રાણ બની આવું છું..." },
-      { time: 173.04, text: "ઉતારા દેશું તમને ઓરડા હો જી રે..." },
-      { time: 197.04, text: "દેશું મેડી કેરા મોલ હો જી રે..." },
-      { time: 206.00, text: "કેદુની જોઉં તમારી વાટ..." },
-      { time: 210.50, text: "વ્હેલા વ્હાલમ ઘેરે આવજો..." },
-      { time: 221.59, text: "અણિયાળી આંખ યાદ આવતી હો જી રે..." },
-      { time: 227.20, text: "દલડે લાગી છે આગ હો જી રે..." },
-      { time: 235.80, text: "આવું છું મળવા તારે કાજ..." },
-      { time: 240.20, text: "હે તે વ્હાલમિયા વધાવજો..." },
-      { time: 251.43, text: "ભવોભવ સાથ દેવા વેણ આપ્યાં હો જી રે..." },
-      { time: 261.28, text: "દીધેલા કોલ યાદ આવતા હો જી રે..." },
-      { time: 269.04, text: "કેદુની જોઉં તમારી વાટ..." },
-      { time: 273.50, text: "વ્હેલા વ્હાલમ ઘેરે આવજો..." },
-      { time: 278.63, text: "આવું છું મળવા તારે કાજ..." },
-      { time: 282.00, text: "હે તે વ્હાલમિયા વધાવજો..." },
-      { time: 286.50, text: "" }
+      { time: 16.00, text: "♪ સુની છે આંખો સુના છે આંસુ ♪" },
+      { time: 22.00, text: "♪ જોવે છે મિલનની વાટ રે ♪" },
+      { time: 27.39, text: "♪ વાલમિયા છોડીને ચાલ્યા ના જાવો ♪" },
+      { time: 33.00, text: "♪ જોવું વાલમ તારી વાટ રે ♪" },
+      { time: 38.30, text: "♪ વેલા આવો પ્રીતડી નિભાવો ♪" },
+      { time: 44.00, text: "♪ હૈયું ભૂલ્યું છે હવે ભાન રે ♪" },
+      { time: 49.30, text: "♪ સાજણના સંભારણા યાદ બહુ આવે ♪" },
+      { time: 55.30, text: "♪ આવે સાજણ તારી યાદ રે ♪" },
+      { time: 60.30, text: "♪ નણદલના વીર વિના એકલા હોજી રે ♪" },
+      { time: 71.30, text: "♪ નણદલના વીરવીના એકલા હોજી રે ♪" },
+      { time: 77.00, text: "♪ નણદલના વીરવીના એકલા હોજી રે ♪" },
+      { time: 83.00, text: "♪ સુના મંદિર થાવા જાય હોજી રે ♪" },
+      { time: 89.00, text: "♪ કેદુની જોવ તમારી વાત ♪" },
+      { time: 93.00, text: "♪ વેલા વાલમ ઘેરે આવજો ♪" },
+      { time: 96.30, text: "♪ કેદુની જોવ તમારી વાત ♪" },
+      { time: 101.30, text: "♪ વેલા વાલમ ઘેરે આવજો ♪" },
+      { time: 108.00, text: "" },
+      { time: 135.00, text: "♪ ઓ હાથ થામી દીધા મારા કોલ યાદ છે ♪" },
+      { time: 140.00, text: "♪ પરદેશ હોવા છતા હૈયું તારે કાજ છે ♪" },
+      { time: 146.00, text: "♪ આવવાના ઓરતા તો બાકી રહી જાય છે ♪" },
+      { time: 152.00, text: "♪ માયા લાગી એવી હૈયું ભાન ભૂલી જાય છે ♪" },
+      { time: 157.00, text: "♪ વેલા વેલા આવું છું ♪" },
+      { time: 160.00, text: "♪ તને જોવા માગુ છું ♪" },
+      { time: 163.00, text: "♪ રહેવા તારા હૈએ તારો પ્રાણ બની આવું છું ♪" },
+      { time: 173.00, text: "♪ હા ઉતારા દેશું તમને ઓરડા હોજી રે ♪" },
+      { time: 185.00, text: "♪ ઉતારા દેશું તમને ઓરડા હોજી રે ♪" },
+      { time: 191.00, text: "♪ ઉતારા દેશું ઓરડા હોજી રે ♪" },
+      { time: 196.00, text: "♪ દેશું મેડી કેરા મોલ હોજી રે ♪" },
+      { time: 202.00, text: "♪ કેદુની જોઉ તમારી વાટ ♪" },
+      { time: 206.00, text: "♪ વેલા વાલમ ઘેરે આવજો ♪" },
+      { time: 210.00, text: "♪ કેદુની જોઉ તમારી વાટ ♪" },
+      { time: 214.00, text: "♪ વેલા વાલમ ઘેરે આવજો ♪" },
+      { time: 218.00, text: "♪ અણિયારી આંખ યાદ આવતી હોજી રે ♪" },
+      { time: 223.00, text: "♪ એ અણિયારી આંખ યાદ આવતી હોજી રે ♪" },
+      { time: 229.00, text: "♪ દલડે લાગી છે આગ હોજી રે ♪" },
+      { time: 235.00, text: "♪ આવું છું મળવા તારે કાજ ♪" },
+      { time: 239.00, text: "♪ હેતે વાલમિયા વધાવજો ♪" },
+      { time: 243.00, text: "♪ આવું છું મળવા તારે કાજ ♪" },
+      { time: 247.00, text: "♪ હેતે વાલમિયા વધાવજો ♪" },
+      { time: 251.00, text: "♪ ભવો ભવ સાથે વેણ આપ્યા હોજી રે ♪" },
+      { time: 256.30, text: "♪ ભવો ભવ સાથે વેણ આપ્યા જી રે ♪" },
+      { time: 262.00, text: "♪ દીધેલા કોલ યાદ આવતા હોજી રે ♪" },
+      { time: 268.00, text: "♪ કેદુની જોઉ તમારી વાટ ♪" },
+      { time: 273.30, text: "♪ વેલા વાલમ ઘેરે આવજો ♪" },
+      { time: 277.30, text: "♪ આવું છું મળવા તારે કાજ ♪" },
+      { time: 282.00, text: "♪ હેતે વાલમિયા વધાવજો ♪" },
+      { time: 288.50, text: "" }
     ];
 
     /**
@@ -1209,6 +1230,7 @@
     const playerScreen = document.getElementById('playerScreen');
     const endingScreen = document.getElementById('endingScreen');
     const mistVeilOverlay = document.getElementById('mistVeilOverlay');
+    const sceneControlsWrapper = document.getElementById('sceneControlsWrapper');
 
     const mainPlayBtn = document.getElementById('mainPlayBtn');
     const audioPlayer = document.getElementById('audioPlayer');
@@ -1337,6 +1359,7 @@
     function triggerMistReveal(animated = true) {
       mistRevealTarget = 1.0;
       if (mistVeilOverlay) mistVeilOverlay.classList.add('lifted');
+      if (sceneControlsWrapper) sceneControlsWrapper.classList.add('revealed');
       if (animated) {
         mistRevealStartTime = performance.now();
         lanternSurgeTimer = 0;
@@ -2011,12 +2034,108 @@
       flatShading: true
     });
 
-    const trunkLowerGeo = new THREE.CylinderGeometry(0.72, 1.15, 2.2, 9);
+    const trunkLowerSegs = 12;
+    const trunkStartAngle = -Math.PI / trunkLowerSegs;
+    const trunkLowerGeo = new THREE.CylinderGeometry(0.72, 1.15, 2.2, trunkLowerSegs, 1, false, trunkStartAngle);
     trunkLowerGeo.translate(0, 1.1, 0);
     const trunkLower = new THREE.Mesh(trunkLowerGeo, trunkMat);
     trunkLower.castShadow = true;
     trunkLower.receiveShadow = true;
     treeGroup.add(trunkLower);
+
+    // Raw Hand-Carved Tree Bark Engraving ("vicky ♥ mimi") flush on the front bark facets (no plate)
+    const carvingCanvas = document.createElement('canvas');
+    carvingCanvas.width = 1024;
+    carvingCanvas.height = 512;
+    const cCtx = carvingCanvas.getContext('2d');
+    cCtx.clearRect(0, 0, carvingCanvas.width, carvingCanvas.height);
+
+    // Upright crisp lettering with explicit character spacing so every glyph of "vicky" & "mimi" stays unmistakable
+    cCtx.font = '700 124px "Segoe UI", Arial, sans-serif';
+    cCtx.textBaseline = 'middle';
+    cCtx.textAlign = 'left';
+    cCtx.lineJoin = 'round';
+    cCtx.miterLimit = 2;
+
+    const drawRawTrackedText = (txt, centerX, y, tracking) => {
+      const chars = [...txt];
+      const widths = chars.map(ch => cCtx.measureText(ch).width);
+      const totalWidth = widths.reduce((a, b) => a + b, 0) + tracking * (chars.length - 1);
+      let cursorX = centerX - totalWidth / 2;
+      chars.forEach((ch, idx) => {
+        // Subtle sunlit bottom-right chisel bevel
+        cCtx.fillStyle = 'rgba(255, 228, 192, 0.26)';
+        cCtx.fillText(ch, cursorX + 1.5, y + 1.5);
+        // Thin dark carved bark groove edge
+        cCtx.strokeStyle = 'rgba(24, 10, 3, 0.92)';
+        cCtx.lineWidth = 6;
+        cCtx.strokeText(ch, cursorX, y);
+        // Raw exposed warm inner sapwood fill
+        cCtx.fillStyle = '#eed2a4';
+        cCtx.fillText(ch, cursorX, y);
+        cursorX += widths[idx] + tracking;
+      });
+    };
+    drawRawTrackedText('vicky', 512, 126, 8);
+    drawRawTrackedText('mimi', 512, 390, 8);
+
+    // Small raw carved heart centered between vicky & mimi
+    cCtx.save();
+    cCtx.translate(512, 260);
+    cCtx.scale(1.15, 1.15);
+    cCtx.beginPath();
+    cCtx.moveTo(0, 26);
+    cCtx.bezierCurveTo(-38, 5, -38, -28, -17, -28);
+    cCtx.bezierCurveTo(-5, -28, 0, -15, 0, -11);
+    cCtx.bezierCurveTo(0, -15, 5, -28, 17, -28);
+    cCtx.bezierCurveTo(38, -28, 38, 5, 0, 26);
+    cCtx.closePath();
+    cCtx.lineJoin = 'round';
+    cCtx.lineWidth = 5;
+    cCtx.strokeStyle = 'rgba(24, 10, 3, 0.92)';
+    cCtx.stroke();
+    cCtx.fillStyle = '#ff6b86';
+    cCtx.fill();
+    cCtx.restore();
+
+    const carvingTexture = new THREE.CanvasTexture(carvingCanvas);
+    carvingTexture.colorSpace = THREE.SRGBColorSpace;
+    carvingTexture.anisotropy = 4;
+
+    // 3-segment curved bark patch aligned vertex-for-vertex with trunkLower front facets
+    const carvingSegs = 3;
+    const segAngle = (Math.PI * 2) / trunkLowerSegs;
+    const carvingStartAngle = -segAngle * 1.5;
+    const carvingThetaLen = segAngle * carvingSegs;
+    const carvingY = 1.66;
+    const carvingH = 0.62;
+    const trunkRadiusAt = (y) => 1.15 + (0.72 - 1.15) * (y / 2.2);
+    const carvingGeo = new THREE.CylinderGeometry(
+      trunkRadiusAt(carvingY + carvingH / 2) + 0.002,
+      trunkRadiusAt(carvingY - carvingH / 2) + 0.002,
+      carvingH,
+      carvingSegs,
+      1,
+      true,
+      carvingStartAngle,
+      carvingThetaLen
+    );
+    const carvingMat = new THREE.MeshStandardMaterial({
+      map: carvingTexture,
+      transparent: true,
+      roughness: 0.92,
+      metalness: 0.0,
+      emissive: '#6e4522',
+      emissiveMap: carvingTexture,
+      emissiveIntensity: 0.16,
+      depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2
+    });
+    const carvingMesh = new THREE.Mesh(carvingGeo, carvingMat);
+    carvingMesh.position.set(0, carvingY, 0);
+    treeGroup.add(carvingMesh);
 
     // Trunk Root Flutes anchoring gracefully into the grassy knoll
     const rootGeo = new THREE.ConeGeometry(0.22, 0.9, 5);
@@ -2348,6 +2467,40 @@
       return mesh;
     }
 
+    /**
+     * Helper: Builds seamless shoulder -> sleeve -> wrist cuff -> hand alignment
+     * Guarantees wrist and hand never detach at any arm angle
+     */
+    function createArmWithHand(parentGroup, shoulderPos, handPos, sleeveRadius, handRadius, sleeveMat, skinMat, cuffMat) {
+      const armDir = new THREE.Vector3().subVectors(handPos, shoulderPos);
+      const totalDist = armDir.length();
+      const unitDir = armDir.clone().normalize();
+      const upAxis = new THREE.Vector3(0, 1, 0);
+
+      // Sleeve extends cleanly from shoulder to wrist (~78% along arm)
+      const sleeveLen = Math.max(0.03, totalDist * 0.72 - sleeveRadius * 0.8);
+      const sleeveGeo = new THREE.CapsuleGeometry(sleeveRadius, sleeveLen, 8, 12);
+      const sleeveMesh = new THREE.Mesh(sleeveGeo, sleeveMat);
+      sleeveMesh.position.copy(shoulderPos).addScaledVector(unitDir, totalDist * 0.38);
+      sleeveMesh.quaternion.setFromUnitVectors(upAxis, unitDir);
+      sleeveMesh.castShadow = true;
+      parentGroup.add(sleeveMesh);
+
+      // Neat wrist cuff bridging sleeve end to hand smoothly
+      const cuffGeo = new THREE.TorusGeometry(sleeveRadius * 0.82, sleeveRadius * 0.24, 8, 14);
+      const cuffMesh = new THREE.Mesh(cuffGeo, cuffMat);
+      cuffMesh.position.copy(shoulderPos).addScaledVector(unitDir, totalDist * 0.78);
+      cuffMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), unitDir);
+      parentGroup.add(cuffMesh);
+
+      // Soft rounded hand placed cleanly at wrist end
+      const handMesh = new THREE.Mesh(new THREE.SphereGeometry(handRadius, 12, 10), skinMat);
+      handMesh.position.copy(handPos);
+      handMesh.castShadow = true;
+      parentGroup.add(handMesh);
+      return handMesh;
+    }
+
     // ==========================================
     // --- THE BOY (Shy & Cute Seated Chibi) ---
     // ==========================================
@@ -2390,27 +2543,29 @@
       boyGroup.add(shoe);
     });
 
-    // Outer Left Arm resting bashfully on his knee
-    const boyArmL = new THREE.Mesh(new THREE.CapsuleGeometry(0.044, 0.13, 8, 12), boyCardiganMat);
-    boyArmL.position.set(-0.145, 0.17, 0.06);
-    boyArmL.rotation.set(-0.42, 0, 0.22);
-    boyArmL.castShadow = true;
-    boyGroup.add(boyArmL);
-
-    const boyHandL = new THREE.Mesh(new THREE.SphereGeometry(0.042, 12, 10), boySkinMat);
-    boyHandL.position.set(-0.135, 0.125, 0.145);
-    boyGroup.add(boyHandL);
+    // Outer Left Arm resting naturally forward on his left knee/thigh
+    const boyHandL = createArmWithHand(
+      boyGroup,
+      new THREE.Vector3(-0.125, 0.265, 0.015),
+      new THREE.Vector3(-0.105, 0.118, 0.145),
+      0.042,
+      0.039,
+      boyCardiganMat,
+      boySkinMat,
+      creamWhiteMat
+    );
 
     // Inner Right Arm reaching gently onto the blanket toward the girl
-    const boyArmR = new THREE.Mesh(new THREE.CapsuleGeometry(0.044, 0.13, 8, 12), boyCardiganMat);
-    boyArmR.position.set(0.155, 0.16, 0.04);
-    boyArmR.rotation.set(-0.32, 0, -0.45);
-    boyArmR.castShadow = true;
-    boyGroup.add(boyArmR);
-
-    const boyHandR = new THREE.Mesh(new THREE.SphereGeometry(0.04, 12, 10), boySkinMat);
-    boyHandR.position.set(0.225, 0.07, 0.095);
-    boyGroup.add(boyHandR);
+    const boyHandR = createArmWithHand(
+      boyGroup,
+      new THREE.Vector3(0.125, 0.265, 0.015),
+      new THREE.Vector3(0.24, 0.078, 0.095),
+      0.042,
+      0.039,
+      boyCardiganMat,
+      boySkinMat,
+      creamWhiteMat
+    );
 
     // Boy Head Pivot
     const boyHeadPivot = new THREE.Group();
@@ -2514,27 +2669,29 @@
       girlGroup.add(shoe);
     });
 
-    // Outer Right Arm resting sweetly beside her lap
-    const girlArmR = new THREE.Mesh(new THREE.CapsuleGeometry(0.038, 0.12, 8, 12), girlDressMat);
-    girlArmR.position.set(0.135, 0.17, 0.04);
-    girlArmR.rotation.set(-0.35, 0, -0.24);
-    girlArmR.castShadow = true;
-    girlGroup.add(girlArmR);
-
-    const girlHandR = new THREE.Mesh(new THREE.SphereGeometry(0.036, 10, 10), girlSkinMat);
-    girlHandR.position.set(0.155, 0.1, 0.105);
-    girlGroup.add(girlHandR);
+    // Outer Right Arm resting sweetly forward on her skirt lap
+    const girlHandR = createArmWithHand(
+      girlGroup,
+      new THREE.Vector3(0.095, 0.262, 0.015),
+      new THREE.Vector3(0.12, 0.12, 0.135),
+      0.036,
+      0.035,
+      girlDressMat,
+      girlSkinMat,
+      creamWhiteMat
+    );
 
     // Inner Left Arm reaching tenderly to hold the boy's hand
-    const girlArmL = new THREE.Mesh(new THREE.CapsuleGeometry(0.038, 0.13, 8, 12), girlDressMat);
-    girlArmL.position.set(-0.15, 0.16, 0.04);
-    girlArmL.rotation.set(-0.35, 0, 0.48);
-    girlArmL.castShadow = true;
-    girlGroup.add(girlArmL);
-
-    const girlHandL = new THREE.Mesh(new THREE.SphereGeometry(0.038, 10, 10), girlSkinMat);
-    girlHandL.position.set(-0.215, 0.07, 0.095);
-    girlGroup.add(girlHandL);
+    const girlHandL = createArmWithHand(
+      girlGroup,
+      new THREE.Vector3(-0.115, 0.268, 0.015),
+      new THREE.Vector3(-0.228, 0.078, 0.088),
+      0.036,
+      0.036,
+      girlDressMat,
+      girlSkinMat,
+      creamWhiteMat
+    );
 
     // Girl Head Pivot (tilted lovingly toward boy's shoulder)
     const girlHeadPivot = new THREE.Group();
@@ -3476,8 +3633,8 @@
         const activeIdx = findLyricIndexForTime(curr);
         updateSingleLyric(activeIdx, false);
 
-        // Climax Haptic Feedback at 134.64s
-        if (curr >= 134.64 && curr < 140.0 && !hasTriggeredClimaxHaptic) {
+        // Climax Haptic Feedback at 135.00s
+        if (curr >= 135.00 && curr < 141.0 && !hasTriggeredClimaxHaptic) {
           hasTriggeredClimaxHaptic = true;
           triggerHeartbeat([50, 120, 75]);
         }
